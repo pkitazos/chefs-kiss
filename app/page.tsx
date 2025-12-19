@@ -1,6 +1,8 @@
 import { AuthExample } from "@/components/auth-example";
 import { TRPCExample } from "@/components/trpc-example";
 import { FormExample } from "@/components/form-example";
+import { UploadExample } from "@/components/upload-example";
+import { MultiUploadExample } from "@/components/multi-upload-example";
 
 export default function Page() {
   return (
@@ -8,13 +10,16 @@ export default function Page() {
       <div className="space-y-2">
         <h1 className="text-4xl font-bold">Chefs Kiss</h1>
         <p className="text-lg text-muted-foreground">
-          A production-ready Next.js stack with authentication, type-safe APIs, and modern tooling
+          A production-ready Next.js stack with authentication, type-safe APIs,
+          and modern tooling
         </p>
       </div>
 
       <AuthExample />
       <TRPCExample />
       <FormExample />
+      <UploadExample />
+      <MultiUploadExample />
     </div>
   );
 }

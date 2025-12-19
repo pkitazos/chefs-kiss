@@ -3,7 +3,13 @@
 import { useState } from "react";
 import { useUploadThing } from "@/lib/uploadthing/client";
 import { Button } from "./ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 import { Input } from "./ui/input";
 import { FieldGroup, FieldLabel } from "./ui/field";
 
@@ -53,9 +59,7 @@ export function UploadExample() {
             onChange={handleFileChange}
             disabled={isUploading}
           />
-          <p className="text-sm text-muted-foreground">
-            Max file size: 4MB
-          </p>
+          <p className="text-sm text-muted-foreground">Max file size: 4MB</p>
         </FieldGroup>
 
         {files.length > 0 && (
@@ -90,11 +94,7 @@ export function UploadExample() {
                     className="rounded-lg max-h-64 object-cover"
                   />
                   <div className="flex items-center gap-2">
-                    <Input
-                      value={url}
-                      readOnly
-                      className="text-xs"
-                    />
+                    <Input value={url} readOnly className="text-xs" />
                     <Button
                       variant="outline"
                       size="sm"

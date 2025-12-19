@@ -1,5 +1,12 @@
 {
-  "cSpell.words": ["Ayia", "Neue", "treeify", "Ultrabold", "Uploadthing"],
+  "cSpell.words": [
+    "Ayia",
+    "doesn",
+    "Neue",
+    "treeify",
+    "Ultrabold",
+    "Uploadthing"
+  ],
   "material-icon-theme.folders.associations": {
     "uploadthing": "upload",
     "trpc": "api"

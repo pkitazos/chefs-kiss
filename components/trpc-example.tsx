@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 import { Input } from "./ui/input";
 import { trpc } from "@/lib/trpc/client";
 
@@ -22,7 +28,7 @@ export function TRPCExample() {
         <CardHeader>
           <CardTitle>Public tRPC Query</CardTitle>
           <CardDescription>
-            Test a public endpoint that doesn't require authentication
+            Test a public endpoint that doesn&apos;t require authentication
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -57,7 +63,9 @@ export function TRPCExample() {
           </Button>
           {secretQuery.data && (
             <div className="rounded-lg bg-primary/10 p-4">
-              <p className="font-medium text-primary">{secretQuery.data.message}</p>
+              <p className="font-medium text-primary">
+                {secretQuery.data.message}
+              </p>
             </div>
           )}
           {secretQuery.error && (

@@ -1,7 +1,13 @@
 "use client";
 
 import { Button } from "./ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 import { signIn, signOut, useSession } from "@/lib/auth/client";
 
 export function AuthExample() {
@@ -31,7 +37,9 @@ export function AuthExample() {
             <div className="rounded-lg bg-muted p-4">
               <p className="text-sm font-medium">Signed in as:</p>
               <p className="text-lg font-semibold">{session.user.name}</p>
-              <p className="text-sm text-muted-foreground">{session.user.email}</p>
+              <p className="text-sm text-muted-foreground">
+                {session.user.email}
+              </p>
             </div>
             <Button onClick={() => signOut()} variant="outline">
               Sign Out

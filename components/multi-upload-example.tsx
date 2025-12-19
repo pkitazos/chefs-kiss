@@ -3,7 +3,13 @@
 import { useState } from "react";
 import { useUploadThing } from "@/lib/uploadthing/client";
 import { Button } from "./ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 import { Input } from "./ui/input";
 import { Badge } from "./ui/badge";
 
@@ -75,11 +81,7 @@ export function MultiUploadExample() {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <p className="text-sm font-medium">Selected Files:</p>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setFiles([])}
-              >
+              <Button variant="ghost" size="sm" onClick={() => setFiles([])}>
                 Clear all
               </Button>
             </div>
@@ -118,7 +120,9 @@ export function MultiUploadExample() {
           disabled={files.length === 0 || isUploading}
           className="w-full"
         >
-          {isUploading ? "Uploading..." : `Upload ${files.length} file${files.length !== 1 ? "s" : ""}`}
+          {isUploading
+            ? "Uploading..."
+            : `Upload ${files.length} file${files.length !== 1 ? "s" : ""}`}
         </Button>
 
         {uploadedFiles.length > 0 && (
