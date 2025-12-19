@@ -84,8 +84,9 @@
   --color-orange-700: var(--orange-700);
 
   /* Fonts */
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-pp-neue-machina);
+  --font-sans: var(--font-manrope);
+  --font-mono: ui-monospace, monospace;
 
   /* Radius */
   --radius-sm: calc(var(--radius) - 4px);
@@ -255,7 +256,69 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+
+  /* Typography defaults based on brand guidelines */
+  h1 {
+    @apply font-display text-[40pt] leading-[40pt] tracking-normal;
+    /* Title: PP Neue Machina Ultrabold, 40pt, leading same, tracking 0 */
+  }
+
+  h2 {
+    @apply font-sans font-bold text-[25pt] leading-9;
+    letter-spacing: 0.025em; /* tracking 25 */
+    /* Subtitle: Manrope Bold, 25pt, leading +2pt, tracking 25 */
+  }
+
+  p {
+    @apply font-sans font-normal text-[12pt] leading-[16pt];
+    letter-spacing: 0.05em; /* tracking 50 */
+    /* Main Text: Manrope Regular, 12pt, leading +4pt, tracking 50 */
+  }
+
+  /* Optional: h3-h6 defaults using responsive scaling */
+  h3 {
+    @apply font-sans font-bold text-xl leading-tight;
+    letter-spacing: 0.025em;
+  }
+
+  h4 {
+    @apply font-sans font-bold text-lg leading-tight;
+    letter-spacing: 0.025em;
+  }
+
+  h5,
+  h6 {
+    @apply font-sans font-bold text-base leading-tight;
+    letter-spacing: 0.025em;
+  }
+}
+
+/* Brand Typography Utility Classes */
+@layer utilities {
+  /* Title - Large display headings */
+  .text-brand-title {
+    @apply font-display text-[40pt] leading-[40pt] tracking-normal;
+  }
+
+  /* Subtitle - Section headings */
+  .text-brand-subtitle {
+    @apply font-sans font-bold text-[25pt] leading-9;
+    letter-spacing: 0.025em;
+  }
+
+  /* Header - Small overline/eyebrow labels (all caps) */
+  .text-brand-header {
+    @apply font-sans font-extrabold text-[10pt] leading-4 uppercase;
+    letter-spacing: 0.1em; /* tracking 100 */
+  }
+
+  /* Main Text - Body copy */
+  .text-brand-body {
+    @apply font-sans font-normal text-[12pt] leading-[16pt];
+    letter-spacing: 0.05em;
   }
 }
