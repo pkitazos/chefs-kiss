@@ -1,24 +1,25 @@
 import { z } from "zod";
 
 /**
- * Environment variable validation schema
+ * Server-side environment variable validation schema
  *
- * This file validates all environment variables at startup and provides
- * type-safe access throughout the application.
+ * This file validates server-only environment variables.
+ * Import this ONLY in server-side code (API routes, server components, etc.)
  *
  */
 
-const envSchema = z.object({
+const serverEnvSchema = z.object({
   // Node Environment
   NODE_ENV: z
     .enum(["development", "production", "test"])
     .default("development"),
 
   // Database
-  DATABASE_URL: z.url().min(1, "DATABASE_URL is required"),
+  DATABASE_URL: z.string().url().min(1, "DATABASE_URL is required"),
 
   // App URLs
   NEXT_PUBLIC_APP_URL: z
+    .string()
     .url()
     .default("http://localhost:3000")
     .describe("Public URL of the application"),
@@ -31,6 +32,7 @@ const envSchema = z.object({
       "Secret key for BetterAuth (generate with: openssl rand -base64 32)"
     ),
   BETTER_AUTH_URL: z
+    .string()
     .url()
     .default("http://localhost:3000")
     .describe("URL for BetterAuth callbacks"),
@@ -46,46 +48,46 @@ const envSchema = z.object({
     .describe("Google OAuth Client Secret from Google Cloud Console"),
 
   // Resend (Email)
-  RESEND_API_KEY: z.string().describe("Resend API key for sending emails"),
+  RESEND_API_KEY: z.string().min(1).describe("Resend API key for sending emails"),
   RESEND_FROM_EMAIL: z
+    .string()
     .email()
     .describe("Default from email address for Resend"),
 
   // Uploadthing (File Upload)
-  UPLOADTHING_TOKEN: z.string().describe("Uploadthing token for file uploads"),
+  UPLOADTHING_TOKEN: z.string().min(1).describe("Uploadthing token for file uploads"),
 });
 
 /**
- * Validates and parses environment variables
+ * Validates and parses server-side environment variables
  * Throws an error with detailed messages if validation fails
  */
-function validateEnv() {
-  const parsed = envSchema.safeParse(process.env);
+function validateServerEnv() {
+  const parsed = serverEnvSchema.safeParse(process.env);
 
   if (!parsed.success) {
     console.error(
-      "❌ Invalid environment variables:",
-      JSON.stringify(z.treeifyError(parsed.error), null, 2)
+      "❌ Invalid server environment variables:",
+      JSON.stringify(parsed.error.format(), null, 2)
     );
-    throw new Error("Invalid environment variables");
+    throw new Error("Invalid server environment variables");
   }
 
   return parsed.data;
 }
 
 /**
- * Validated and type-safe environment variables
- * Import this instead of using process.env directly
+ * Validated and type-safe server environment variables
+ * Import this ONLY in server-side code
  *
  * @example
- * import { env } from "@/lib/env";
+ * import { env } from "@/lib/env.server";
  *
  * const dbUrl = env.DATABASE_URL; // Type-safe, guaranteed to exist
  */
-export const env = validateEnv();
+export const env = validateServerEnv();
 
 /**
- * Type of the validated environment variables
- * Useful for dependency injection or testing
+ * Type of the validated server environment variables
  */
-export type Env = z.infer<typeof envSchema>;
+export type ServerEnv = z.infer<typeof serverEnvSchema>;

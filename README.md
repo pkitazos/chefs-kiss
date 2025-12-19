@@ -48,7 +48,9 @@ Detailed guides for all features:
     /schema             - Drizzle schema definitions
     /migrations         - Database migrations
   /email                - Email utilities & templates
-  /env.ts               - Environment variable validation
+  /env                  - Environment variable validation
+    /server.ts          - Server-only env vars
+    /client.ts          - Client-safe env vars
   /trpc                 - tRPC configuration
     /routers            - tRPC API routers
   /uploadthing          - File upload configuration
@@ -155,13 +157,18 @@ Instead of `process.env`, import the validated `env` object:
 const dbUrl = process.env.DATABASE_URL!;
 
 // New way (type-safe, guaranteed to exist)
-import { env } from "@/lib/env";
+// Server-side code
+import { env } from "@/lib/env/server";
 const dbUrl = env.DATABASE_URL;
+
+// Client-side code
+import { env } from "@/lib/env/client";
+const appUrl = env.NEXT_PUBLIC_APP_URL;
 ```
 
 The app will fail to start if required env vars are missing, showing you exactly what needs to be configured.
 
-See [lib/env.ts](lib/env.ts) for the full validation schema.
+See [lib/env/server.ts](lib/env/server.ts) and [lib/env/client.ts](lib/env/client.ts) for the full validation schemas.
 
 ## Available Scripts
 
