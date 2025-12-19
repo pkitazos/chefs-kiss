@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
+import { env } from "@/lib/env";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -13,11 +14,11 @@ export const auth = betterAuth({
   },
   socialProviders: {
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
     },
   },
-  trustedOrigins: [process.env.NEXT_PUBLIC_APP_URL!],
+  trustedOrigins: [env.NEXT_PUBLIC_APP_URL],
 });
 
 export type Session = typeof auth.$Infer.Session;

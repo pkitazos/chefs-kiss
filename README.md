@@ -17,6 +17,20 @@ A production-ready Next.js stack with modern tooling, type-safe APIs, and authen
 - **File Upload**: [Uploadthing](https://uploadthing.com)
 - **Package Manager**: pnpm
 
+## Documentation
+
+**[Full Documentation](docs/README.md)**
+
+Detailed guides for all features:
+- [Setup Guide](docs/setup.md) - Get started quickly
+- [Authentication](docs/authentication.md) - BetterAuth with Google OAuth
+- [Database](docs/database.md) - Drizzle ORM and PostgreSQL
+- [tRPC API Layer](docs/trpc.md) - Type-safe API development
+- [File Uploads](docs/uploadthing.md) - Uploadthing configuration
+- [Email](docs/email.md) - Resend email service
+- [Forms & Validation](docs/forms-validation.md) - React Hook Form + Zod
+- [Environment Variables](docs/environment-variables.md) - Env validation guide
+
 ## Project Structure
 
 ```
@@ -27,12 +41,14 @@ A production-ready Next.js stack with modern tooling, type-safe APIs, and authen
     /uploadthing        - Uploadthing file upload handler
 /components             - React components
   /ui                   - ShadCN UI components
+/docs                   - Documentation for all features
 /lib
   /auth                 - Authentication config & client
   /db                   - Database schema & client
     /schema             - Drizzle schema definitions
     /migrations         - Database migrations
   /email                - Email utilities & templates
+  /env.ts               - Environment variable validation
   /trpc                 - tRPC configuration
     /routers            - tRPC API routers
   /uploadthing          - File upload configuration
@@ -86,13 +102,13 @@ Add it to `BETTER_AUTH_SECRET` in `.env.local`.
 6. Add authorized redirect URI: `http://localhost:3000/api/auth/callback/google`
 7. Copy the Client ID and Client Secret to `.env.local`
 
-#### Resend (Optional)
+#### Resend
 1. Sign up at [Resend](https://resend.com)
 2. Get your API key from the dashboard
 3. Add it to `RESEND_API_KEY` in `.env.local`
 4. Update `RESEND_FROM_EMAIL` with your verified domain
 
-#### Uploadthing (Optional)
+#### Uploadthing
 1. Sign up at [Uploadthing](https://uploadthing.com)
 2. Create a new app in the dashboard
 3. Copy your app token
@@ -121,6 +137,32 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) to see your app.
 
+## Environment Variable Validation
+
+This project uses Zod to validate all environment variables at startup. Benefits:
+
+- **Fail fast** with clear error messages if env vars are missing/invalid
+- **Type-safe** access to env vars with autocomplete
+- **No more `!` assertions** or `??` operators everywhere
+- Single source of truth for all environment configuration
+
+### Usage
+
+Instead of `process.env`, import the validated `env` object:
+
+```typescript
+// Old way (not type-safe, might be undefined)
+const dbUrl = process.env.DATABASE_URL!;
+
+// New way (type-safe, guaranteed to exist)
+import { env } from "@/lib/env";
+const dbUrl = env.DATABASE_URL;
+```
+
+The app will fail to start if required env vars are missing, showing you exactly what needs to be configured.
+
+See [lib/env.ts](lib/env.ts) for the full validation schema.
+
 ## Available Scripts
 
 - `pnpm dev` - Start development server
@@ -134,33 +176,21 @@ Open [http://localhost:3000](http://localhost:3000) to see your app.
 
 ## Key Features
 
+> **Tip**: See the [docs](docs/) directory for detailed guides on each feature.
+
 ### Authentication (BetterAuth)
 
-- Google OAuth sign-in
-- Session management
-- Protected routes and API endpoints
-
-Example usage:
+Google OAuth authentication with session management. [Full guide →](docs/authentication.md)
 
 ```tsx
 import { signIn, signOut, useSession } from "@/lib/auth/client";
 
-function MyComponent() {
-  const { data: session } = useSession();
-
-  return session ? (
-    <button onClick={() => signOut()}>Sign Out</button>
-  ) : (
-    <button onClick={() => signIn.social({ provider: "google" })}>
-      Sign in with Google
-    </button>
-  );
-}
+const { data: session } = useSession();
 ```
 
 ### Type-Safe APIs (tRPC)
 
-Create type-safe API endpoints with automatic TypeScript inference:
+End-to-end type safety with automatic TypeScript inference. [Full guide →](docs/trpc.md)
 
 ```tsx
 // Server: lib/trpc/routers/example.ts
@@ -181,78 +211,40 @@ function MyComponent() {
 }
 ```
 
-### Form Validation
+### Database (Drizzle ORM)
 
-React Hook Form with Zod schema validation:
+Type-safe database queries with PostgreSQL. [Full guide →](docs/database.md)
 
 ```tsx
-const schema = z.object({
-  email: z.string().email(),
-  name: z.string().min(2),
-});
+import { db } from "@/lib/db";
+import { users } from "@/lib/db/schema";
 
-function MyForm() {
-  const { register, handleSubmit } = useForm({
-    resolver: zodResolver(schema),
-  });
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register("email")} />
-      <input {...register("name")} />
-    </form>
-  );
-}
+const allUsers = await db.select().from(users);
 ```
 
-### Email Sending
+### Forms & Validation
 
-Send transactional emails with Resend:
+React Hook Form with Zod schema validation. [Full guide →](docs/forms-validation.md)
 
 ```tsx
-import { sendEmail } from "@/lib/email";
-import { welcomeEmail } from "@/lib/email/templates";
-
-await sendEmail({
-  to: "user@example.com",
-  subject: "Welcome!",
-  html: welcomeEmail("John"),
-});
+const form = useForm({ resolver: zodResolver(schema) });
 ```
 
 ### File Uploads
 
-Upload files with Uploadthing (type-safe with authentication):
+Uploadthing for type-safe file uploads. [Full guide →](docs/uploadthing.md)
 
 ```tsx
-import { useUploadThing } from "@/lib/uploadthing/client";
-
-function MyComponent() {
-  const { startUpload, isUploading } = useUploadThing("imageUploader", {
-    onClientUploadComplete: (res) => {
-      console.log("Files uploaded:", res);
-    },
-  });
-
-  const handleUpload = async (files: File[]) => {
-    await startUpload(files);
-  };
-
-  return (
-    <input
-      type="file"
-      onChange={(e) => handleUpload(Array.from(e.target.files || []))}
-      disabled={isUploading}
-    />
-  );
-}
+const { startUpload } = useUploadThing("imageUploader");
 ```
 
-Available upload endpoints (see [lib/uploadthing/core.ts](lib/uploadthing/core.ts)):
-- `imageUploader` - Single image (4MB max, requires auth)
-- `multipleFileUploader` - Multiple images/PDFs (requires auth)
-- `publicUploader` - Public uploads (2MB max)
-- `avatarUploader` - User avatar (2MB max, requires auth)
+### Email
+
+Resend for transactional emails. [Full guide →](docs/email.md)
+
+```tsx
+await sendEmail({ to, subject, html });
+```
 
 ## Database Management
 
