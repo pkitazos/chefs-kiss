@@ -1,0 +1,141 @@
+# Color Palette Reference
+# Generated from colors.t.txt using pastel CLI tool
+# Reference: https://oklch.com for understanding OKLCH values
+
+## Gray Scale (50-950)
+gray-50         oklch(0.9911 0.0001 271.152)
+gray-100        oklch(0.9791 0.0001 271.152)
+gray-200        oklch(0.9493 0.0028 84.3107)
+gray-300        oklch(0.9097 0.0041 91.464)
+gray-400        oklch(0.85 0.0067 106.7677)
+gray-500        oklch(0.7007 0.0085 106.7677)
+gray-600        oklch(0.5508 0.0106 100.1843)
+gray-700        oklch(0.4509 0.0163 120.7438)
+gray-800        oklch(0.3507 0.0203 130.904)
+gray-900        oklch(0.2483 0.0248 135.4192)
+gray-950        oklch(0.2891 0.0313 139.4864) <- Brand black #232F20
+
+## Brand Colors (Tailwind Naming)
+
+### Magenta (Primary Brand Color)
+magenta-400     oklch(0.4589 0.1535 5.0659)    <- Dark    #98244C
+magenta-500     oklch(0.5388 0.1946 10.4216)   <- Medium  #C42353 (Primary)
+magenta-600     oklch(0.5959 0.2077 4.6726)    <- Light   #DB316F
+
+### Rose (Red - Destructive/Logo)
+rose-500        oklch(0.6047 0.233 25.2717)    <- #ED1E2E (Brand red)
+rose-600        oklch(0.6047 0.233 25.2717)    <- Same as 500 for now
+
+### Sky (Light Blue - Info)
+sky-400         oklch(0.5272 0.1024 248.1058)  <- Dark    #356FA3
+sky-500         oklch(0.5806 0.1157 240.7349)  <- Medium  #2B82B8
+sky-600         oklch(0.6464 0.1137 233.3299)  <- Light   #3699C8 (Info)
+
+### Slate (Dark Blue - Secondary)
+slate-600       oklch(0.3608 0.065 256.6335)   <- Darkest #263E5F
+slate-700       oklch(0.4535 0.0814 257.2448)  <- Medium  #385783 (Secondary)
+slate-800       oklch(0.5272 0.1024 248.1058)  <- Light   #356FA3
+
+### Amber (Yellow - Warning)
+amber-400       oklch(0.6884 0.1251 77.9757)   <- Dark    #C59031
+amber-500       oklch(0.8088 0.1573 80.8799)   <- Medium  #F4B429 (Warning)
+amber-600       oklch(0.8158 0.129 78.4145)    <- Light   #F0B859
+
+### Pink (Accent)
+pink-400        oklch(0.6046 0.1383 356.1047)  <- Dark    #C05A84
+pink-500        oklch(0.7341 0.1256 356.2755)  <- Medium  #E786AB (Accent)
+pink-600        oklch(0.8152 0.0784 353.8945)  <- Light   #ECAEC6
+
+### Orange (Use Sparingly)
+orange-500      oklch(0.56 0.17 32.3431)       <- Darkest #C4422B
+orange-600      oklch(0.6189 0.1846 35.5445)   <- Medium  #DE502A
+orange-700      oklch(0.7035 0.1404 42.152)    <- Light   #E77F55
+
+## Semantic Color Mapping (shadcn/ui)
+
+### Light Mode
+background:              gray-50
+foreground:              gray-950
+card:                    pure white
+card-foreground:         gray-950
+primary:                 magenta-500
+primary-foreground:      white
+secondary:               slate-700
+secondary-foreground:    white
+muted:                   gray-100
+muted-foreground:        gray-600
+accent:                  pink-500
+accent-foreground:       gray-950
+destructive:             rose-600
+destructive-foreground:  white
+border:                  gray-300
+input:                   gray-300
+ring:                    magenta-500
+
+### Dark Mode
+background:              gray-950
+foreground:              gray-50
+card:                    slate-600
+card-foreground:         gray-50
+primary:                 magenta-600 (brighter)
+primary-foreground:      white
+secondary:               sky-400 (brighter)
+secondary-foreground:    white
+muted:                   slate-600
+muted-foreground:        gray-400
+accent:                  pink-600 (brighter)
+accent-foreground:       gray-950
+destructive:             rose-500
+destructive-foreground:  white
+border:                  slate-700
+input:                   slate-700
+ring:                    magenta-600
+
+## Original Client Colors (Reference)
+
+BLACK           #232F20 -> gray-950
+RED             #ED1E2E -> rose-500/600
+
+L BLUE D        #356FA3 -> sky-400
+L BLUE M        #2B82B8 -> sky-500
+L BLUE L        #3699C8 -> sky-600
+
+D BLUE D        #263E5F -> slate-600
+D BLUE M        #385783 -> slate-700
+D BLUE L        #356FA3 -> slate-800 (same as sky-400)
+
+MAGENTA D       #98244C -> magenta-400
+MAGENTA M       #C42353 -> magenta-500
+MAGENTA L       #DB316F -> magenta-600
+
+YELLOW D        #C59031 -> amber-400
+YELLOW M        #F4B429 -> amber-500
+YELLOW L        #F0B859 -> amber-600
+
+PINK D          #C05A84 -> pink-400
+PINK M          #E786AB -> pink-500
+PINK L          #ECAEC6 -> pink-600
+
+ORANGE D        #C4422B -> orange-500
+ORANGE M        #DE502A -> orange-600
+ORANGE L        #E77F55 -> orange-700
+
+GRAY D          #C1C0BC -> (replaced by full gray scale)
+GRAY M          #EAE9E3 -> (replaced by full gray scale)
+GRAY L          #F6F6F5 -> (replaced by full gray scale)
+
+## Usage Notes
+
+- **Prefer semantic colors** (primary, secondary, etc.) over direct brand colors
+- **Gray scale** provides full range for neutrals, borders, text hierarchy
+- **Brand colors** use Tailwind naming for familiarity (magenta-500, sky-600, etc.)
+- **No default Tailwind colors** - only these custom colors are available
+- **Dark mode** - semantic colors adapt automatically, brand colors stay the same
+
+## Adding Colors
+
+To add a new color:
+1. Convert to OKLCH: `pastel format oklch "#hexcode"`
+2. Add to app/globals.css following Tailwind number conventions
+3. Update this reference file
+4. Update lib/colors-usage.md
