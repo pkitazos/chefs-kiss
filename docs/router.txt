@@ -1,0 +1,55 @@
+# Pages Structure
+
+## Overview
+- Root-level pages implicitly refer to the current/upcoming event
+- Past events explicitly live under /events/[slug]
+- Pages are manually enabled/disabled through the event lifecycle via rebuilds
+
+## Event Lifecycle Phases
+1. Post-event (1-2 weeks): Shows recent past event info
+2. Hibernation: "Coming soon" homepage
+3. Vendor applications open
+4. Vendors finalized → vendor list goes live
+5. Workshops finalized → workshop pages go live
+6. Event details finalized → map, dishes, schedule go live
+
+## Route Structure
+
+.
+├── /                                   # Homepage (current event overview + state handling)
+
+# Current Event Pages (root level - implicitly "current event")
+├── map                                 # Venue map (enabled when finalized)
+├── schedule                            # Event schedule/timetable (enabled when finalized)
+├── venue                               # Venue information (enabled when finalized)
+
+# Vendors
+├── vendors                             # Browse all vendors (enabled when finalized)
+│   ├── apply                           # Vendor application form (open during application period)
+│   │   └── success                     # Application confirmation
+│   └── [slug]                          # Individual vendor page
+
+# Dishes
+├── dishes                              # Browse all dishes with filters (enabled when finalized)
+
+# Workshops
+├── workshops                           # Browse all workshops (enabled when finalized)
+│   └── [slug]                          # Individual workshop page
+│       └── register                    # Workshop registration form (open when slots available)
+│           └── success                 # Registration confirmation
+
+# Past Events Archive
+├── events                              # Past events archive/gallery overview
+│   └── [slug]                          # Individual past event gallery page (photos only)
+
+# Static Pages
+├── about                               # About the festival organization
+├── faq                                 # FAQ page
+├── contact                             # Contact information
+
+# Admin
+└── admin                               # Admin dashboard overview
+    ├── login                           # Admin login page
+    ├── applications                    # Vendor applications management
+    ├── registrations                   # Workshop registrations management
+    └── analytics                       # Event analytics
