@@ -19,7 +19,6 @@ const serverEnvSchema = z.object({
 
   // App URLs
   NEXT_PUBLIC_APP_URL: z
-    .string()
     .url()
     .default("http://localhost:3000")
     .describe("Public URL of the application"),
@@ -32,7 +31,6 @@ const serverEnvSchema = z.object({
       "Secret key for BetterAuth (generate with: openssl rand -base64 32)"
     ),
   BETTER_AUTH_URL: z
-    .string()
     .url()
     .default("http://localhost:3000")
     .describe("URL for BetterAuth callbacks"),
@@ -48,14 +46,28 @@ const serverEnvSchema = z.object({
     .describe("Google OAuth Client Secret from Google Cloud Console"),
 
   // Resend (Email)
-  RESEND_API_KEY: z.string().min(1).describe("Resend API key for sending emails"),
-  RESEND_FROM_EMAIL: z
+  RESEND_API_KEY: z
     .string()
+    .min(1)
+    .describe("Resend API key for sending emails"),
+  RESEND_FROM_EMAIL: z
     .email()
     .describe("Default from email address for Resend"),
 
   // Uploadthing (File Upload)
-  UPLOADTHING_TOKEN: z.string().min(1).describe("Uploadthing token for file uploads"),
+  UPLOADTHING_TOKEN: z
+    .string()
+    .min(1)
+    .describe("Uploadthing token for file uploads"),
+
+  // Admin Authentication
+  ADMIN_EMAILS: z
+    .string()
+    .transform((xs) => xs.split(",").map((x) => x.trim().toLowerCase()))
+    .default([])
+    .describe(
+      "Comma-separated list of admin emails allowed to access the system"
+    ),
 });
 
 /**
