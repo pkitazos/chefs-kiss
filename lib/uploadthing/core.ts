@@ -100,6 +100,106 @@ export const uploadRouter = {
       console.log("Avatar updated for user:", metadata.userId);
       return { url: file.url };
     }),
+
+  // Vendor Application Documents
+  vendorBusinessLicense: f({
+    pdf: { maxFileSize: "8MB", maxFileCount: 1 },
+  })
+    .middleware(async () => {
+      // Public uploader - no auth required for vendor applications
+      return {
+        uploadType: "business_license",
+        uploadedAt: new Date().toISOString(),
+      };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Business license uploaded:", file.url);
+      return { url: file.url, uploadType: metadata.uploadType };
+    }),
+
+  vendorHygieneCert: f({
+    pdf: { maxFileSize: "8MB", maxFileCount: 1 },
+  })
+    .middleware(async () => {
+      return {
+        uploadType: "hygiene_cert",
+        uploadedAt: new Date().toISOString(),
+      };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Hygiene cert uploaded:", file.url);
+      return { url: file.url, uploadType: metadata.uploadType };
+    }),
+
+  vendorLiabilityInsurance: f({
+    pdf: { maxFileSize: "8MB", maxFileCount: 1 },
+  })
+    .middleware(async () => {
+      return {
+        uploadType: "liability_insurance",
+        uploadedAt: new Date().toISOString(),
+      };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Liability insurance uploaded:", file.url);
+      return { url: file.url, uploadType: metadata.uploadType };
+    }),
+
+  vendorTruckPhoto: f({
+    image: { maxFileSize: "4MB", maxFileCount: 1 },
+  })
+    .middleware(async () => {
+      return {
+        uploadType: "truck_photo",
+        uploadedAt: new Date().toISOString(),
+      };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Truck photo uploaded:", file.url);
+      return { url: file.url, uploadType: metadata.uploadType };
+    }),
+
+  vendorTruckLicense: f({
+    pdf: { maxFileSize: "8MB", maxFileCount: 1 },
+  })
+    .middleware(async () => {
+      return {
+        uploadType: "truck_license",
+        uploadedAt: new Date().toISOString(),
+      };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Truck license uploaded:", file.url);
+      return { url: file.url, uploadType: metadata.uploadType };
+    }),
+
+  vendorEmployeeHealthCert: f({
+    pdf: { maxFileSize: "8MB", maxFileCount: 10 }, // Support multiple employees
+  })
+    .middleware(async () => {
+      return {
+        uploadType: "employee_health_cert",
+        uploadedAt: new Date().toISOString(),
+      };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Employee health cert uploaded:", file.url);
+      return { url: file.url, uploadType: metadata.uploadType };
+    }),
+
+  vendorEmployeeSocialInsurance: f({
+    pdf: { maxFileSize: "8MB", maxFileCount: 10 }, // Support multiple employees
+  })
+    .middleware(async () => {
+      return {
+        uploadType: "employee_social_insurance",
+        uploadedAt: new Date().toISOString(),
+      };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Employee social insurance uploaded:", file.url);
+      return { url: file.url, uploadType: metadata.uploadType };
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof uploadRouter;
