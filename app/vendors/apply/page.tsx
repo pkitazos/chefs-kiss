@@ -1,0 +1,38 @@
+import type { Metadata } from "next";
+import { VendorApplicationForm } from "./vendor-application-form";
+
+export const metadata: Metadata = {
+  title: "Vendor Application | Chef's Kiss Festival",
+  description:
+    "Apply to become a vendor at Chef's Kiss Festival. Submit your application with business information, menu details, and required documents.",
+};
+
+export default function VendorApplicationPage() {
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+        {/* Header Section */}
+        <div className="mb-8 space-y-4">
+          <h1 className="text-4xl font-bold tracking-tight">
+            Vendor Application
+          </h1>
+          <p className="text-muted-foreground text-lg">
+            Join Chef&apos;s Kiss Festival as a food vendor. Complete the
+            application below with your business information, menu offerings,
+            and all required documentation.
+          </p>
+          <div className="border-l-4 border-primary bg-primary/5 p-4">
+            <p className="text-sm">
+              <strong>Important:</strong> All fields marked with an asterisk (*)
+              are required. Please ensure all documents are in PDF format and
+              all images are clear and legible.
+            </p>
+          </div>
+        </div>
+
+        {/* Application Form */}
+        <VendorApplicationForm />
+      </div>
+    </div>
+  );
+}

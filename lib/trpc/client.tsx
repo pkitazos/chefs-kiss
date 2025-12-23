@@ -7,7 +7,7 @@ import { useState } from "react";
 import superjson from "superjson";
 import type { AppRouter } from "./routers/_app";
 
-export const trpc = createTRPCReact<AppRouter>();
+export const api = createTRPCReact<AppRouter>();
 
 function getBaseUrl() {
   if (typeof window !== "undefined") return "";
@@ -17,7 +17,7 @@ function getBaseUrl() {
 export function TRPCProvider({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
-    trpc.createClient({
+    api.createClient({
       links: [
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,
@@ -28,8 +28,8 @@ export function TRPCProvider({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+    <api.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    </trpc.Provider>
+    </api.Provider>
   );
 }

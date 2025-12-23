@@ -37,7 +37,7 @@ export const vendorFormSchema = z
                 .min(1, "Dish name is required")
                 .describe("The name of the dish."),
               price: z.coerce
-                .number()
+                .number<number>()
                 .positive("Price must be positive")
                 .describe("Price in EUR"),
             })
@@ -62,7 +62,9 @@ export const vendorFormSchema = z
         .array(
           z.object({
             device: z.string().min(1, "Device name is required"),
-            wattage: z.coerce.number().positive("Wattage must be positive"),
+            wattage: z.coerce
+              .number<number>()
+              .positive("Wattage must be positive"),
           })
         )
         .optional()
@@ -88,15 +90,15 @@ export const vendorFormSchema = z
       truckDimensions: z
         .object({
           length: z.coerce
-            .number()
+            .number<number>()
             .positive("Length must be positive")
             .optional(),
           width: z.coerce
-            .number()
+            .number<number>()
             .positive("Width must be positive")
             .optional(),
           height: z.coerce
-            .number()
+            .number<number>()
             .positive("Height must be positive")
             .optional(),
         })

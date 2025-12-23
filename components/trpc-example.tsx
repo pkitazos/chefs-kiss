@@ -10,15 +10,15 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Input } from "./ui/input";
-import { trpc } from "@/lib/trpc/client";
+import { api } from "@/lib/trpc/client";
 
 export function TRPCExample() {
   const [name, setName] = useState("");
-  const helloQuery = trpc.example.hello.useQuery(
+  const helloQuery = api.example.hello.useQuery(
     { name },
     { enabled: name.length > 0 }
   );
-  const secretQuery = trpc.example.getSecretMessage.useQuery(undefined, {
+  const secretQuery = api.example.getSecretMessage.useQuery(undefined, {
     retry: false,
   });
 
