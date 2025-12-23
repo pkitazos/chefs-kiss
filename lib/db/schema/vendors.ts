@@ -30,52 +30,49 @@ export const vendorTruckInfo = pgTable("vendor_truck_info", {
 });
 
 // Main vendor applications table
-export const vendorApplications = pgTable("vendor_applications", {
-  id: uuid("id").primaryKey().defaultRandom(),
+export const vendorApplications = pgTable(
+  "vendor_applications",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
 
-  // Status tracking with enum
-  status: applicationStatusEnum("status").notNull().default("pending"),
+    // Status tracking with enum
+    status: applicationStatusEnum("status").notNull().default("pending"),
 
-  // Business Info
-  businessName: text("business_name").notNull(),
-  contactPerson: text("contact_person").notNull(),
-  email: text("email").notNull(),
-  phoneNumber: text("phone_number").notNull(),
-  companyName: text("company_name").notNull(),
-  instagramHandle: text("instagram_handle"),
+    // Business Info
+    businessName: text("business_name").notNull(),
+    contactPerson: text("contact_person").notNull(),
+    email: text("email").notNull(),
+    phoneNumber: text("phone_number").notNull(),
+    companyName: text("company_name").notNull(),
+    instagramHandle: text("instagram_handle"),
 
-  // Special Requirements
-  specialRequirements: text("special_requirements"),
-  kitchenEquipment: text("kitchen_equipment"),
-  storage: text("storage"),
+    // Special Requirements
+    specialRequirements: text("special_requirements"),
+    kitchenEquipment: text("kitchen_equipment"),
+    storage: text("storage"),
 
-  // Document Files
-  businessLicenseUrl: text("business_license_url").notNull(),
-  hygieneInspectionCertificationUrl: text(
-    "hygiene_inspection_certification_url"
-  ).notNull(),
-  liabilityInsuranceUrl: text("liability_insurance_url").notNull(),
+    // Document Files
+    businessLicenseUrl: text("business_license_url").notNull(),
+    hygieneInspectionCertificationUrl: text(
+      "hygiene_inspection_certification_url"
+    ).notNull(),
+    liabilityInsuranceUrl: text("liability_insurance_url").notNull(),
 
-  // Optional reference to truck info
-  truckInfoId: uuid("truck_info_id").references(() => vendorTruckInfo.id, {
-    onDelete: "set null",
-  }),
+    // Optional reference to truck info
+    truckInfoId: uuid("truck_info_id").references(() => vendorTruckInfo.id, {
+      onDelete: "set null",
+    }),
 
-  // Timestamps
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
-});
-
-// Indexes for vendor_applications
-export const vendorApplicationsStatusIdx = index(
-  "vendor_applications_status_idx"
-).on(vendorApplications.status);
-export const vendorApplicationsCreatedAtIdx = index(
-  "vendor_applications_created_at_idx"
-).on(vendorApplications.createdAt);
-export const vendorApplicationsEmailIdx = index(
-  "vendor_applications_email_idx"
-).on(vendorApplications.email);
+    // Timestamps
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => [
+    index("vendor_applications_status_idx").on(table.status),
+    index("vendor_applications_created_at_idx").on(table.createdAt),
+    index("vendor_applications_email_idx").on(table.email),
+  ]
+);
 
 // Dishes offered by vendor
 export const vendorDishes = pgTable("vendor_dishes", {

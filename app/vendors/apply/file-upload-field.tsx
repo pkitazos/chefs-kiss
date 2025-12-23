@@ -44,9 +44,9 @@ export function FileUploadField({
 
   const { startUpload, isUploading } = useUploadThing(endpoint, {
     onClientUploadComplete: (res) => {
-      if (res?.[0]?.url) {
-        setUploadedUrl(res[0].url);
-        onUploadComplete(res[0].url);
+      if (res?.[0]?.ufsUrl) {
+        setUploadedUrl(res[0].ufsUrl);
+        onUploadComplete(res[0].ufsUrl);
         setSelectedFile(null);
       }
     },
