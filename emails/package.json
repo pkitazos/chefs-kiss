@@ -3,16 +3,20 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "email build --dir ."
+    "dev": "email dev",
+    "build": "email build --dir .",
+    "start": "email dev --port $PORT"
   },
   "dependencies": {
     "@react-email/components": "1.0.2",
     "react": "19.2.1",
     "react-dom": "19.2.1",
-    "react-email": "5.1.0"
+    "react-email": "5.1.0",
+    "tailwindcss": "^4"
   },
   "devDependencies": {
     "next": "16.0.10",
-    "@react-email/preview-server": "5.1.0"
+    "@react-email/preview-server": "5.1.0",
+    "@tailwindcss/postcss": "^4"
   }
 }
