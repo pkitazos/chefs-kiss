@@ -7,13 +7,8 @@ import { env } from "@/lib/env/server";
 import { isAdminEmail } from "./utils";
 
 export const auth = betterAuth({
-  database: drizzleAdapter(db, {
-    provider: "pg",
-    schema,
-  }),
-  emailAndPassword: {
-    enabled: false, // We're only using Google OAuth
-  },
+  database: drizzleAdapter(db, { provider: "pg", schema }),
+  emailAndPassword: { enabled: false },
   socialProviders: {
     google: {
       clientId: env.GOOGLE_CLIENT_ID,
