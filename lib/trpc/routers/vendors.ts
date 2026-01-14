@@ -1,15 +1,142 @@
-import { createTRPCRouter, publicProcedure } from "../init";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../init";
 import { vendorFormSchema } from "@/lib/validations/vendor-form";
 import {
+  applicationStatusEnum,
   vendorApplications,
   vendorDishes,
   vendorEmployees,
   vendorPowerRequirements,
   vendorTruckInfo,
 } from "@/lib/db/schema/vendors";
-import { sendVendorConfirmation } from "@/lib/email/vendor-emails";
+import {
+  sendVendorAcceptance,
+  sendVendorConfirmation,
+  sendVendorRejection,
+} from "@/lib/email/vendor-emails";
+import { desc, eq } from "drizzle-orm";
+import { z } from "zod";
 
 export const vendorsRouter = createTRPCRouter({
+  // Admin: Get all applications with related data
+  getAllApplications: protectedProcedure.query(async ({ ctx }) => {
+    const applications = await ctx.db
+      .select()
+      .from(vendorApplications)
+      .leftJoin(
+        vendorTruckInfo,
+        eq(vendorApplications.truckInfoId, vendorTruckInfo.id)
+      )
+      .orderBy(desc(vendorApplications.createdAt));
+
+    const result = await Promise.all(
+      applications.map(async (row) => {
+        const dishes = await ctx.db
+          .select()
+          .from(vendorDishes)
+          .where(eq(vendorDishes.vendorApplicationId, row.vendor_applications.id));
+
+        const employees = await ctx.db
+          .select()
+          .from(vendorEmployees)
+          .where(eq(vendorEmployees.vendorApplicationId, row.vendor_applications.id));
+
+        const powerRequirements = await ctx.db
+          .select()
+          .from(vendorPowerRequirements)
+          .where(eq(vendorPowerRequirements.vendorApplicationId, row.vendor_applications.id));
+
+        return {
+          ...row.vendor_applications,
+          truckInfo: row.vendor_truck_info,
+          dishes,
+          employees,
+          powerRequirements,
+        };
+      })
+    );
+
+    return result;
+  }),
+
+  // Admin: Get single application by ID
+  getApplicationById: protectedProcedure
+    .input(z.object({ id: z.string().uuid() }))
+    .query(async ({ ctx, input }) => {
+      const [row] = await ctx.db
+        .select()
+        .from(vendorApplications)
+        .leftJoin(
+          vendorTruckInfo,
+          eq(vendorApplications.truckInfoId, vendorTruckInfo.id)
+        )
+        .where(eq(vendorApplications.id, input.id));
+
+      if (!row) {
+        return null;
+      }
+
+      const dishes = await ctx.db
+        .select()
+        .from(vendorDishes)
+        .where(eq(vendorDishes.vendorApplicationId, input.id));
+
+      const employees = await ctx.db
+        .select()
+        .from(vendorEmployees)
+        .where(eq(vendorEmployees.vendorApplicationId, input.id));
+
+      const powerRequirements = await ctx.db
+        .select()
+        .from(vendorPowerRequirements)
+        .where(eq(vendorPowerRequirements.vendorApplicationId, input.id));
+
+      return {
+        ...row.vendor_applications,
+        truckInfo: row.vendor_truck_info,
+        dishes,
+        employees,
+        powerRequirements,
+      };
+    }),
+
+  // Admin: Update application status
+  updateApplicationStatus: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().uuid(),
+        status: z.enum(applicationStatusEnum.enumValues),
+        reason: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const [updated] = await ctx.db
+        .update(vendorApplications)
+        .set({ status: input.status, updatedAt: new Date() })
+        .where(eq(vendorApplications.id, input.id))
+        .returning();
+
+      if (!updated) {
+        throw new Error("Application not found");
+      }
+
+      // Send appropriate email based on status
+      if (input.status === "approved") {
+        await sendVendorAcceptance({
+          email: updated.email,
+          businessName: updated.businessName,
+          applicationId: updated.id,
+        });
+      } else if (input.status === "rejected") {
+        await sendVendorRejection({
+          email: updated.email,
+          businessName: updated.businessName,
+          reason: input.reason,
+        });
+      }
+
+      return updated;
+    }),
+
   submitApplication: publicProcedure
     .input(vendorFormSchema)
     .mutation(async ({ input, ctx }) => {
@@ -86,7 +213,6 @@ export const vendorsRouter = createTRPCRouter({
 
       await sendVendorConfirmation({
         email: input.businessInfo.email,
-        contactPerson: input.businessInfo.contactPerson,
         businessName: input.businessInfo.businessName,
         applicationId,
       });
