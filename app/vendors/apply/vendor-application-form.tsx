@@ -147,7 +147,9 @@ export function VendorApplicationForm() {
         </CardHeader>
         <CardContent className="space-y-4">
           <FieldGroup>
-            <FieldLabel htmlFor="businessName">Business Name *</FieldLabel>
+            <FieldLabel htmlFor="businessName" required>
+              Business Name
+            </FieldLabel>
             <FieldDescription>
               How you want to appear in marketing
             </FieldDescription>
@@ -167,7 +169,9 @@ export function VendorApplicationForm() {
           </FieldGroup>
 
           <FieldGroup>
-            <FieldLabel htmlFor="contactPerson">Contact Person *</FieldLabel>
+            <FieldLabel htmlFor="contactPerson" required>
+              Contact Person
+            </FieldLabel>
             <FieldDescription>
               Primary contact for your business
             </FieldDescription>
@@ -187,7 +191,9 @@ export function VendorApplicationForm() {
           </FieldGroup>
 
           <FieldGroup>
-            <FieldLabel htmlFor="email">Email *</FieldLabel>
+            <FieldLabel htmlFor="email" required>
+              Email
+            </FieldLabel>
             <FieldDescription>
               We&apos;ll use this for all communications
             </FieldDescription>
@@ -206,7 +212,9 @@ export function VendorApplicationForm() {
           </FieldGroup>
 
           <FieldGroup>
-            <FieldLabel htmlFor="phoneNumber">Phone Number *</FieldLabel>
+            <FieldLabel htmlFor="phoneNumber" required>
+              Phone Number
+            </FieldLabel>
             <FieldDescription>Include country code</FieldDescription>
             <Field>
               <Input
@@ -223,7 +231,9 @@ export function VendorApplicationForm() {
           </FieldGroup>
 
           <FieldGroup>
-            <FieldLabel htmlFor="companyName">Company Name *</FieldLabel>
+            <FieldLabel htmlFor="companyName" required>
+              Company Name
+            </FieldLabel>
             <FieldDescription>Registered company name</FieldDescription>
             <Field>
               <Input
@@ -284,8 +294,8 @@ export function VendorApplicationForm() {
               </div>
 
               <FieldGroup>
-                <FieldLabel htmlFor={`dish-name-${index}`}>
-                  Dish Name *
+                <FieldLabel htmlFor={`dish-name-${index}`} required>
+                  Dish Name
                 </FieldLabel>
                 <Field>
                   <Input
@@ -305,8 +315,8 @@ export function VendorApplicationForm() {
               </FieldGroup>
 
               <FieldGroup>
-                <FieldLabel htmlFor={`dish-price-${index}`}>
-                  Price (EUR) *
+                <FieldLabel htmlFor={`dish-price-${index}`} required>
+                  Price (EUR)
                 </FieldLabel>
                 <Field>
                   <Input
@@ -425,8 +435,8 @@ export function VendorApplicationForm() {
                 </div>
 
                 <FieldGroup>
-                  <FieldLabel htmlFor={`power-device-${index}`}>
-                    Device Name *
+                  <FieldLabel htmlFor={`power-device-${index}`} required>
+                    Device Name
                   </FieldLabel>
                   <Field>
                     <Input
@@ -452,8 +462,8 @@ export function VendorApplicationForm() {
                 </FieldGroup>
 
                 <FieldGroup>
-                  <FieldLabel htmlFor={`power-wattage-${index}`}>
-                    Wattage *
+                  <FieldLabel htmlFor={`power-wattage-${index}`} required>
+                    Wattage
                   </FieldLabel>
                   <Field>
                     <Input
@@ -546,23 +556,26 @@ export function VendorApplicationForm() {
           {ownTruck && (
             <div className="space-y-4 rounded-lg border p-4">
               <FileUploadField
-                label="Truck Photo *"
+                label="Truck Photo"
                 description="Upload a clear exterior photo of your food truck during service or setup."
                 endpoint="vendorTruckPhoto"
                 accept="image"
                 value={watch("truck.truckPhotoUrl")}
                 onUploadComplete={(url) => setValue("truck.truckPhotoUrl", url)}
                 error={errors.truck?.truckPhotoUrl?.message}
+                required
               />
 
               <div>
-                <FieldLabel>Truck Dimensions (meters) *</FieldLabel>
+                <FieldLabel required>Truck Dimensions (meters)</FieldLabel>
                 <FieldDescription>
                   Provide the dimensions of your food truck
                 </FieldDescription>
                 <div className="mt-2 grid grid-cols-3 gap-4">
                   <FieldGroup>
-                    <FieldLabel htmlFor="truckLength">Length *</FieldLabel>
+                    <FieldLabel htmlFor="truckLength" required>
+                      Length
+                    </FieldLabel>
                     <Field>
                       <Input
                         id="truckLength"
@@ -581,7 +594,9 @@ export function VendorApplicationForm() {
                   </FieldGroup>
 
                   <FieldGroup>
-                    <FieldLabel htmlFor="truckWidth">Width *</FieldLabel>
+                    <FieldLabel htmlFor="truckWidth" required>
+                      Width
+                    </FieldLabel>
                     <Field>
                       <Input
                         id="truckWidth"
@@ -600,7 +615,9 @@ export function VendorApplicationForm() {
                   </FieldGroup>
 
                   <FieldGroup>
-                    <FieldLabel htmlFor="truckHeight">Height *</FieldLabel>
+                    <FieldLabel htmlFor="truckHeight" required>
+                      Height
+                    </FieldLabel>
                     <Field>
                       <Input
                         id="truckHeight"
@@ -621,7 +638,7 @@ export function VendorApplicationForm() {
               </div>
 
               <FileUploadField
-                label="Electro-Mechanical License *"
+                label="Electro-Mechanical License"
                 description="Provide a valid electro-mechanical license issued by local authorities."
                 endpoint="vendorTruckLicense"
                 accept="pdf"
@@ -630,6 +647,7 @@ export function VendorApplicationForm() {
                   setValue("truck.electroMechanicalLicenseUrl", url)
                 }
                 error={errors.truck?.electroMechanicalLicenseUrl?.message}
+                required
               />
             </div>
           )}
@@ -646,17 +664,18 @@ export function VendorApplicationForm() {
         </CardHeader>
         <CardContent className="space-y-4">
           <FileUploadField
-            label="Business License *"
+            label="Business License"
             description="Your official business license"
             endpoint="vendorBusinessLicense"
             accept="pdf"
             value={watch("files.businessLicense")}
             onUploadComplete={(url) => setValue("files.businessLicense", url)}
             error={errors.files?.businessLicense?.message}
+            required
           />
 
           <FileUploadField
-            label="Hygiene Inspection Certificate *"
+            label="Hygiene Inspection Certificate"
             description="Current hygiene inspection certification"
             endpoint="vendorHygieneCert"
             accept="pdf"
@@ -665,10 +684,11 @@ export function VendorApplicationForm() {
               setValue("files.hygieneInspectionCertification", url)
             }
             error={errors.files?.hygieneInspectionCertification?.message}
+            required
           />
 
           <FileUploadField
-            label="Liability Insurance *"
+            label="Liability Insurance"
             description="Proof of liability insurance"
             endpoint="vendorLiabilityInsurance"
             accept="pdf"
@@ -677,6 +697,7 @@ export function VendorApplicationForm() {
               setValue("files.liabilityInsurance", url)
             }
             error={errors.files?.liabilityInsurance?.message}
+            required
           />
         </CardContent>
       </Card>
@@ -707,8 +728,8 @@ export function VendorApplicationForm() {
               </div>
 
               <FieldGroup>
-                <FieldLabel htmlFor={`employee-name-${index}`}>
-                  Employee Name *
+                <FieldLabel htmlFor={`employee-name-${index}`} required>
+                  Employee Name
                 </FieldLabel>
                 <Field>
                   <Input
@@ -726,10 +747,11 @@ export function VendorApplicationForm() {
               </FieldGroup>
 
               <FileUploadField
-                label="Health Certificate *"
+                label="Health Certificate"
                 description="Valid employee health certificate for food handling."
                 endpoint="vendorEmployeeHealthCert"
                 accept="pdf"
+                // eslint-disable-next-line react-hooks/incompatible-library
                 value={watch(`files.employees.${index}.healthCertificate`)}
                 onUploadComplete={(url) =>
                   setValue(`files.employees.${index}.healthCertificate`, url)
@@ -737,10 +759,11 @@ export function VendorApplicationForm() {
                 error={
                   errors.files?.employees?.[index]?.healthCertificate?.message
                 }
+                required
               />
 
               <FileUploadField
-                label="Social Insurance *"
+                label="Social Insurance"
                 description="Proof of social insurance registration."
                 endpoint="vendorEmployeeSocialInsurance"
                 accept="pdf"
@@ -751,6 +774,7 @@ export function VendorApplicationForm() {
                 error={
                   errors.files?.employees?.[index]?.socialInsurance?.message
                 }
+                required
               />
             </div>
           ))}
