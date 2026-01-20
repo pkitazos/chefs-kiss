@@ -127,13 +127,13 @@ export function FileUploadField({
         <div className="space-y-3">
           {/* Upload Success State */}
           {uploadedUrl && (
-            <div className="flex items-center justify-between rounded-md border border-green-200 bg-green-50 p-3 dark:border-green-900 dark:bg-green-950">
+            <div className="flex items-center justify-between rounded-md border border-sky-600/30 bg-sky-600/10 p-3 dark:border-sky-400/30 dark:bg-sky-400/10">
               <div className="flex items-center gap-2">
-                <IconCircleCheck className="h-4 w-4 text-green-600 dark:text-green-400" />
-                <div className="flex flex-col">
+                <IconCircleCheck className="size-5 text-sky-600 dark:text-sky-400" />
+                <div className="flex flex-col gap-1">
                   <Badge
                     variant="outline"
-                    className="w-fit border-green-600 text-green-700 dark:border-green-400 dark:text-green-300"
+                    className="w-fit border-sky-600 text-sky-600 dark:border-sky-400 dark:text-sky-400"
                   >
                     Uploaded
                   </Badge>
@@ -141,7 +141,7 @@ export function FileUploadField({
                     href={uploadedUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-blue-600 hover:underline dark:text-blue-400"
+                    className="ml-1 text-xs text-sky-600 hover:underline dark:text-sky-400"
                   >
                     View file
                   </a>
@@ -170,7 +170,7 @@ export function FileUploadField({
                   accept={ACCEPTED_FILE_TYPES}
                   onChange={handleFileSelect}
                   disabled={isUploading}
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:rounded-md file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-medium file:text-primary-foreground hover:file:bg-primary/90 disabled:opacity-50"
+                  className="block w-full text-sm text-muted-foreground file:mr-4 file:rounded-md file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-medium file:text-primary-foreground hover:file:bg-primary/90 disabled:opacity-50"
                 />
               </div>
 

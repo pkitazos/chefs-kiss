@@ -34,6 +34,15 @@ import {
   IconLoader2,
 } from "@tabler/icons-react";
 
+const DISH_PLACEHOLDERS = [
+  "Chef's Kiss Signature Smash Burger",
+  "Crispy Hand-Cut Fries",
+  "Buffalo Hot Wings",
+  "Gourmet Hot Dog with Caramelized Onions",
+  "Loaded Nachos with Jalapeños & Sour Cream",
+  "Fresh-Baked Artisan Donuts",
+];
+
 export function VendorApplicationForm() {
   // Track which file fields have a file selected but not uploaded
   const [pendingUploads, setPendingUploads] = useState<Record<string, boolean>>(
@@ -164,8 +173,10 @@ export function VendorApplicationForm() {
     },
     onError: (error) => {
       toast.error("Submission Failed", {
-        description: error.message,
+        description:
+          "Something went wrong while submitting your application. Please try again.",
       });
+      console.error("Submission error:", error);
     },
   });
 
@@ -427,7 +438,9 @@ export function VendorApplicationForm() {
                 <Field>
                   <Input
                     id={`dish-name-${index}`}
-                    placeholder="Chef's Kiss Signature Smash Burger"
+                    placeholder={
+                      DISH_PLACEHOLDERS[index] || "Chef's Kiss Signature Dish"
+                    }
                     {...register(`productsOffered.dishes.${index}.name`)}
                     aria-invalid={
                       !!errors.productsOffered?.dishes?.[index]?.name

@@ -1,5 +1,6 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../init";
 import { vendorFormSchema } from "@/lib/validations/vendor-form";
+import { eventSchema, type Event } from "@/lib/validations/event";
 import {
   applicationStatusEnum,
   vendorApplications,
@@ -13,8 +14,19 @@ import {
   sendVendorConfirmation,
   sendVendorRejection,
 } from "@/lib/email/vendor-emails";
-import { desc, eq } from "drizzle-orm";
+import { count, desc, eq } from "drizzle-orm";
 import { z } from "zod";
+import { generateId } from "@/lib/utils/construct-id";
+
+// TODO: Move to configuration/database when supporting multiple events
+const CURRENT_EVENT: Event = {
+  date: {
+    start: new Date("2026-04-15"),
+    end: new Date("2026-04-17"),
+  },
+  location: "Ayia Napa Marina",
+  locationCode: "ANM",
+};
 
 export const vendorsRouter = createTRPCRouter({
   // Admin: Get all applications with related data
@@ -24,7 +36,7 @@ export const vendorsRouter = createTRPCRouter({
       .from(vendorApplications)
       .leftJoin(
         vendorTruckInfo,
-        eq(vendorApplications.truckInfoId, vendorTruckInfo.id)
+        eq(vendorApplications.truckInfoId, vendorTruckInfo.id),
       )
       .orderBy(desc(vendorApplications.createdAt));
 
@@ -33,17 +45,26 @@ export const vendorsRouter = createTRPCRouter({
         const dishes = await ctx.db
           .select()
           .from(vendorDishes)
-          .where(eq(vendorDishes.vendorApplicationId, row.vendor_applications.id));
+          .where(
+            eq(vendorDishes.vendorApplicationId, row.vendor_applications.id),
+          );
 
         const employees = await ctx.db
           .select()
           .from(vendorEmployees)
-          .where(eq(vendorEmployees.vendorApplicationId, row.vendor_applications.id));
+          .where(
+            eq(vendorEmployees.vendorApplicationId, row.vendor_applications.id),
+          );
 
         const powerRequirements = await ctx.db
           .select()
           .from(vendorPowerRequirements)
-          .where(eq(vendorPowerRequirements.vendorApplicationId, row.vendor_applications.id));
+          .where(
+            eq(
+              vendorPowerRequirements.vendorApplicationId,
+              row.vendor_applications.id,
+            ),
+          );
 
         return {
           ...row.vendor_applications,
@@ -52,7 +73,7 @@ export const vendorsRouter = createTRPCRouter({
           employees,
           powerRequirements,
         };
-      })
+      }),
     );
 
     return result;
@@ -60,14 +81,14 @@ export const vendorsRouter = createTRPCRouter({
 
   // Admin: Get single application by ID
   getApplicationById: protectedProcedure
-    .input(z.object({ id: z.string().uuid() }))
+    .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const [row] = await ctx.db
         .select()
         .from(vendorApplications)
         .leftJoin(
           vendorTruckInfo,
-          eq(vendorApplications.truckInfoId, vendorTruckInfo.id)
+          eq(vendorApplications.truckInfoId, vendorTruckInfo.id),
         )
         .where(eq(vendorApplications.id, input.id));
 
@@ -103,10 +124,10 @@ export const vendorsRouter = createTRPCRouter({
   updateApplicationStatus: protectedProcedure
     .input(
       z.object({
-        id: z.string().uuid(),
+        id: z.string(),
         status: z.enum(applicationStatusEnum.enumValues),
         reason: z.string().optional(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const [updated] = await ctx.db
@@ -140,7 +161,14 @@ export const vendorsRouter = createTRPCRouter({
   submitApplication: publicProcedure
     .input(vendorFormSchema)
     .mutation(async ({ input, ctx }) => {
-      const applicationId = await ctx.db.transaction(async (tx) => {
+      // Generate custom application ID
+      const [countResult] = await ctx.db
+        .select({ count: count() })
+        .from(vendorApplications);
+      const applicationNumber = (countResult?.count ?? 0) + 1;
+      const applicationId = generateId(CURRENT_EVENT, applicationNumber, "VE");
+
+      await ctx.db.transaction(async (tx) => {
         let truckInfoId: string | null = null;
         if (input.truck.ownTruck) {
           const [truckInfo] = await tx
@@ -157,42 +185,39 @@ export const vendorsRouter = createTRPCRouter({
           truckInfoId = truckInfo.id;
         }
 
-        const [application] = await tx
-          .insert(vendorApplications)
-          .values({
-            businessName: input.businessInfo.businessName,
-            contactPerson: input.businessInfo.contactPerson,
-            email: input.businessInfo.email,
-            phoneNumber: input.businessInfo.phoneNumber,
-            companyName: input.businessInfo.companyName,
-            instagramHandle: input.businessInfo.instagramHandle ?? null,
-            specialRequirements: input.specialRequirements.requirements ?? null,
-            kitchenEquipment:
-              input.specialRequirements.kitchenEquipment ?? null,
-            storage: input.specialRequirements.storage ?? null,
-            businessLicenseUrl: input.files.businessLicense,
-            hygieneInspectionCertificationUrl:
-              input.files.hygieneInspectionCertification,
-            liabilityInsuranceUrl: input.files.liabilityInsurance,
-            truckInfoId,
-          })
-          .returning({ id: vendorApplications.id });
+        await tx.insert(vendorApplications).values({
+          id: applicationId,
+          businessName: input.businessInfo.businessName,
+          contactPerson: input.businessInfo.contactPerson,
+          email: input.businessInfo.email,
+          phoneNumber: input.businessInfo.phoneNumber,
+          companyName: input.businessInfo.companyName,
+          instagramHandle: input.businessInfo.instagramHandle ?? null,
+          specialRequirements: input.specialRequirements.requirements ?? null,
+          kitchenEquipment: input.specialRequirements.kitchenEquipment ?? null,
+          storage: input.specialRequirements.storage ?? null,
+          businessLicenseUrl: input.files.businessLicense,
+          hygieneInspectionCertificationUrl:
+            input.files.hygieneInspectionCertification,
+          liabilityInsuranceUrl: input.files.liabilityInsurance,
+          truckInfoId,
+        });
 
         await tx.insert(vendorDishes).values(
           input.productsOffered.dishes.map((dish) => ({
-            vendorApplicationId: application.id,
+            vendorApplicationId: applicationId,
             name: dish.name,
             price: dish.price.toString(),
-          }))
+          })),
         );
 
         await tx.insert(vendorEmployees).values(
           input.files.employees.map((employee) => ({
-            vendorApplicationId: application.id,
+            vendorApplicationId: applicationId,
             name: employee.name,
             healthCertificateUrl: employee.healthCertificate,
             socialInsuranceUrl: employee.socialInsurance,
-          }))
+          })),
         );
 
         if (
@@ -201,14 +226,12 @@ export const vendorsRouter = createTRPCRouter({
         ) {
           await tx.insert(vendorPowerRequirements).values(
             input.specialRequirements.powerSupply.map((power) => ({
-              vendorApplicationId: application.id,
+              vendorApplicationId: applicationId,
               device: power.device,
               wattage: power.wattage,
-            }))
+            })),
           );
         }
-
-        return application.id;
       });
 
       await sendVendorConfirmation({
@@ -223,5 +246,18 @@ export const vendorsRouter = createTRPCRouter({
         message:
           "Your application has been submitted successfully. You will receive a confirmation email shortly.",
       };
+    }),
+
+  // Admin: Generate a new vendor application ID
+  generateApplicationId: protectedProcedure
+    .input(eventSchema)
+    .mutation(async ({ ctx, input }) => {
+      const [result] = await ctx.db
+        .select({ count: count() })
+        .from(vendorApplications);
+
+      const applicationNumber = (result?.count ?? 0) + 1;
+
+      return generateId(input, applicationNumber, "VE");
     }),
 });

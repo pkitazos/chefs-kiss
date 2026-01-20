@@ -8,6 +8,13 @@
       "when": 1766410031556,
       "tag": "0000_condemned_vanisher",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1768914482022,
+      "tag": "0001_violet_titania",
+      "breakpoints": true
     }
   ]
 }

@@ -33,7 +33,7 @@ export const vendorTruckInfo = pgTable("vendor_truck_info", {
 export const vendorApplications = pgTable(
   "vendor_applications",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
+    id: text("id").primaryKey(),
 
     // Status tracking with enum
     status: applicationStatusEnum("status").notNull().default("pending"),
@@ -77,7 +77,7 @@ export const vendorApplications = pgTable(
 // Dishes offered by vendor
 export const vendorDishes = pgTable("vendor_dishes", {
   id: uuid("id").primaryKey().defaultRandom(),
-  vendorApplicationId: uuid("vendor_application_id")
+  vendorApplicationId: text("vendor_application_id")
     .notNull()
     .references(() => vendorApplications.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
@@ -88,7 +88,7 @@ export const vendorDishes = pgTable("vendor_dishes", {
 // Power supply requirements
 export const vendorPowerRequirements = pgTable("vendor_power_requirements", {
   id: uuid("id").primaryKey().defaultRandom(),
-  vendorApplicationId: uuid("vendor_application_id")
+  vendorApplicationId: text("vendor_application_id")
     .notNull()
     .references(() => vendorApplications.id, { onDelete: "cascade" }),
   device: text("device").notNull(),
@@ -99,7 +99,7 @@ export const vendorPowerRequirements = pgTable("vendor_power_requirements", {
 // Employee documents
 export const vendorEmployees = pgTable("vendor_employees", {
   id: uuid("id").primaryKey().defaultRandom(),
-  vendorApplicationId: uuid("vendor_application_id")
+  vendorApplicationId: text("vendor_application_id")
     .notNull()
     .references(() => vendorApplications.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
