@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { ReactNode } from "react";
+import { SignOutButton } from "./sign-out-button";
 
 export default async function AdminLayout({
   children,
@@ -21,14 +22,15 @@ export default async function AdminLayout({
       <header className="border-b">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <h1 className="text-xl font-semibold">Chef&apos;s Kiss Admin</h1>
-          <p className="text-sm text-muted-foreground">
-            {session.user.email}
-          </p>
+          <div className="flex flex-row items-center gap-2">
+            <p className="text-sm text-muted-foreground">
+              {session.user.email}
+            </p>
+            <SignOutButton />
+          </div>
         </div>
       </header>
-      <main className="container mx-auto p-4">
-        {children}
-      </main>
+      <main className="container mx-auto p-4">{children}</main>
     </div>
   );
 }

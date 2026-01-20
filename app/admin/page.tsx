@@ -1,20 +1,10 @@
 "use client";
 
-import { useSession, signOut } from "@/lib/auth/client";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { IconLogout } from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useSession } from "@/lib/auth/client";
 
 export default function AdminPage() {
-  const router = useRouter();
-  const { data: session, isPending } = useSession();
+  const { isPending } = useSession();
 
   if (isPending) {
     return (
@@ -35,6 +25,16 @@ export default function AdminPage() {
 
       <Card>
         <CardHeader>
+          <CardTitle>Your Events</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p>You currently have no events to manage.</p>
+          {/* <Button>Create Event</Button> */}
+        </CardContent>
+      </Card>
+
+      {/* <Card>
+        <CardHeader>
           <CardTitle>Your Profile</CardTitle>
           <CardDescription>Logged in administrator account</CardDescription>
         </CardHeader>
@@ -47,21 +47,10 @@ export default function AdminPage() {
             <p className="text-sm font-medium text-muted-foreground">Email</p>
             <p className="text-lg">{session?.user.email}</p>
           </div>
-          <Button
-            onClick={() => {
-              signOut();
-              router.replace("/login");
-            }}
-            variant="outline"
-            className="mt-4"
-          >
-            <IconLogout className="mr-2 h-4 w-4" />
-            Sign Out
-          </Button>
         </CardContent>
-      </Card>
+      </Card> */}
 
-      <Card>
+      {/* <Card>
         <CardHeader>
           <CardTitle>Coming Soon</CardTitle>
           <CardDescription>
@@ -76,7 +65,7 @@ export default function AdminPage() {
             <li>Registration Overview</li>
           </ul>
         </CardContent>
-      </Card>
+      </Card> */}
     </div>
   );
 }

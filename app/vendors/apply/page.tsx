@@ -22,9 +22,10 @@ export default function VendorApplicationPage() {
           </p>
           <div className="border-l-4 border-primary bg-primary/5 p-4">
             <p className="text-sm">
-              <strong>Important:</strong> All fields marked with an asterisk (*)
-              are required. Please ensure all documents are in PDF format and
-              all images are clear and legible.
+              <strong>Important:</strong> All fields marked with an asterisk (
+              <span className="text-accent text-sm font-medium">*</span>) are
+              required. Please ensure all documents are in PDF format and all
+              images are clear and legible.
             </p>
           </div>
         </div>

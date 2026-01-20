@@ -28,6 +28,7 @@ type FileUploadFieldProps = {
   onUploadComplete: (url: string) => void;
   error?: string;
   value?: string;
+  required?: boolean;
 };
 
 export function FileUploadField({
@@ -38,6 +39,7 @@ export function FileUploadField({
   onUploadComplete,
   error,
   value,
+  required,
 }: FileUploadFieldProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadedUrl, setUploadedUrl] = useState<string | undefined>(value);
@@ -86,7 +88,9 @@ export function FileUploadField({
   return (
     <FieldGroup>
       <Field>
-        <FieldLabel>{label}</FieldLabel>
+        <div className="w-max">
+          <FieldLabel required={required}>{label}</FieldLabel>
+        </div>
         {description && <FieldDescription>{description}</FieldDescription>}
 
         <div className="space-y-3">
