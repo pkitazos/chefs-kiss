@@ -13,19 +13,29 @@ import {
   FieldError,
 } from "@/components/ui/field";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
   IconFileDescription,
   IconCircleCheck,
   IconX,
   IconUpload,
   IconLoader2,
+  IconInfoCircle,
 } from "@tabler/icons-react";
+
+// Unified file types accepted by all vendor upload fields
+const ACCEPTED_FILE_TYPES =
+  ".pdf,.doc,.docx,.png,.jpg,.jpeg,.heic,.webp,image/heic";
 
 type FileUploadFieldProps = {
   label: string;
   description?: string;
   endpoint: keyof OurFileRouter;
-  accept: "pdf" | "image";
   onUploadComplete: (url: string) => void;
+  onFileSelect?: (hasFile: boolean) => void;
   error?: string;
   value?: string;
   required?: boolean;
@@ -35,8 +45,8 @@ export function FileUploadField({
   label,
   description,
   endpoint,
-  accept,
   onUploadComplete,
+  onFileSelect,
   error,
   value,
   required,
@@ -50,6 +60,7 @@ export function FileUploadField({
         setUploadedUrl(res[0].ufsUrl);
         onUploadComplete(res[0].ufsUrl);
         setSelectedFile(null);
+        onFileSelect?.(false);
       }
     },
     onUploadError: (error) => {
@@ -61,6 +72,7 @@ export function FileUploadField({
     const file = e.target.files?.[0];
     if (file) {
       setSelectedFile(file);
+      onFileSelect?.(true);
     }
   };
 
@@ -73,6 +85,7 @@ export function FileUploadField({
     setUploadedUrl(undefined);
     setSelectedFile(null);
     onUploadComplete("");
+    onFileSelect?.(false);
   };
 
   const formatFileSize = (bytes: number) => {
@@ -83,13 +96,31 @@ export function FileUploadField({
     return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
   };
 
-  const acceptTypes = accept === "pdf" ? ".pdf" : "image/*";
-
   return (
     <FieldGroup>
       <Field>
-        <div className="w-max">
+        <div className="flex w-max items-center gap-1.5">
           <FieldLabel required={required}>{label}</FieldLabel>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                className="ml-1.5 text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="Upload help"
+              >
+                <IconInfoCircle className="h-4 w-4" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="max-w-xs">
+              <p>
+                Select a file, then click Upload.
+                <br />
+                <span className="text-muted-foreground">
+                  Accepts: PDF, Word, PNG, JPG, HEIC, WebP
+                </span>
+              </p>
+            </TooltipContent>
+          </Tooltip>
         </div>
         {description && <FieldDescription>{description}</FieldDescription>}
 
@@ -136,7 +167,7 @@ export function FileUploadField({
               <div className="flex items-center gap-2">
                 <input
                   type="file"
-                  accept={acceptTypes}
+                  accept={ACCEPTED_FILE_TYPES}
                   onChange={handleFileSelect}
                   disabled={isUploading}
                   className="block w-full text-sm text-gray-500 file:mr-4 file:rounded-md file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-medium file:text-primary-foreground hover:file:bg-primary/90 disabled:opacity-50"

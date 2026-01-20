@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -34,6 +35,40 @@ import {
 } from "@tabler/icons-react";
 
 export function VendorApplicationForm() {
+  // Track which file fields have a file selected but not uploaded
+  const [pendingUploads, setPendingUploads] = useState<Record<string, boolean>>(
+    {},
+  );
+  // Custom error messages for "forgot to upload" scenario
+  const [uploadErrors, setUploadErrors] = useState<Record<string, string>>({});
+
+  const handleFileSelect = (fieldKey: string, hasFile: boolean) => {
+    setPendingUploads((prev) => ({ ...prev, [fieldKey]: hasFile }));
+    // Clear the error when user interacts with the field
+    if (hasFile) {
+      setUploadErrors((prev) => {
+        const next = { ...prev };
+        delete next[fieldKey];
+        return next;
+      });
+    }
+  };
+
+  const handleUploadComplete = (
+    fieldKey: string,
+    fieldName: string,
+    url: string,
+  ) => {
+    setValue(fieldName as keyof VendorFormData, url as never);
+    // Clear pending state and error when upload completes
+    setPendingUploads((prev) => ({ ...prev, [fieldKey]: false }));
+    setUploadErrors((prev) => {
+      const next = { ...prev };
+      delete next[fieldKey];
+      return next;
+    });
+  };
+
   const {
     register,
     control,
@@ -42,6 +77,7 @@ export function VendorApplicationForm() {
     watch,
     setValue,
     reset,
+    getValues,
   } = useForm<VendorFormData>({
     resolver: zodResolver(vendorFormSchema),
     defaultValues: {
@@ -122,6 +158,8 @@ export function VendorApplicationForm() {
         description: `Application ID: ${data.applicationId}`,
       });
       reset();
+      setPendingUploads({});
+      setUploadErrors({});
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
     onError: (error) => {
@@ -135,8 +173,95 @@ export function VendorApplicationForm() {
     submitMutation.mutate(data);
   };
 
+  // Custom submit handler that checks for pending uploads before validation
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const values = getValues();
+    const newUploadErrors: Record<string, string> = {};
+
+    // Check required file fields for pending uploads
+    const fileFieldsToCheck = [
+      {
+        key: "files.businessLicense",
+        value: values.files.businessLicense,
+        label: "Business License",
+      },
+      {
+        key: "files.hygieneInspectionCertification",
+        value: values.files.hygieneInspectionCertification,
+        label: "Hygiene Inspection Certificate",
+      },
+      {
+        key: "files.liabilityInsurance",
+        value: values.files.liabilityInsurance,
+        label: "Liability Insurance",
+      },
+    ];
+
+    // Add truck fields if truck is owned
+    if (values.truck.ownTruck) {
+      fileFieldsToCheck.push(
+        {
+          key: "truck.truckPhotoUrl",
+          value: values.truck.truckPhotoUrl ?? "",
+          label: "Truck Photo",
+        },
+        {
+          key: "truck.electroMechanicalLicenseUrl",
+          value: values.truck.electroMechanicalLicenseUrl ?? "",
+          label: "Electro-Mechanical License",
+        },
+      );
+    }
+
+    // Add employee document fields
+    values.files.employees.forEach((employee, index) => {
+      fileFieldsToCheck.push(
+        {
+          key: `files.employees.${index}.healthCertificate`,
+          value: employee.healthCertificate,
+          label: `Employee ${index + 1} Health Certificate`,
+        },
+        {
+          key: `files.employees.${index}.socialInsurance`,
+          value: employee.socialInsurance,
+          label: `Employee ${index + 1} Social Insurance`,
+        },
+      );
+    });
+
+    // Check each field
+    let hasPendingUpload = false;
+    for (const field of fileFieldsToCheck) {
+      if (pendingUploads[field.key] && !field.value) {
+        newUploadErrors[field.key] =
+          "Looks like you forgot to upload your file. Click the Upload button.";
+        hasPendingUpload = true;
+      }
+    }
+
+    if (hasPendingUpload) {
+      setUploadErrors(newUploadErrors);
+      toast.error("Please upload your selected files", {
+        description:
+          "Some files have been selected but not uploaded. Click the Upload button for each file.",
+      });
+      return;
+    }
+
+    // Clear any previous upload errors and proceed with normal validation
+    setUploadErrors({});
+    handleSubmit(onSubmit)();
+  };
+
+  // Helper to get the combined error message (zod error or upload error)
+  const getFieldError = (fieldKey: string, zodError?: string) => {
+    return uploadErrors[fieldKey] || zodError;
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleFormSubmit} className="space-y-6">
       {/* Section 1: Business Information */}
       <Card>
         <CardHeader>
@@ -561,10 +686,21 @@ export function VendorApplicationForm() {
                 label="Truck Photo"
                 description="Upload a clear exterior photo of your food truck during service or setup."
                 endpoint="vendorTruckPhoto"
-                accept="image"
                 value={watch("truck.truckPhotoUrl")}
-                onUploadComplete={(url) => setValue("truck.truckPhotoUrl", url)}
-                error={errors.truck?.truckPhotoUrl?.message}
+                onUploadComplete={(url) =>
+                  handleUploadComplete(
+                    "truck.truckPhotoUrl",
+                    "truck.truckPhotoUrl",
+                    url,
+                  )
+                }
+                onFileSelect={(hasFile) =>
+                  handleFileSelect("truck.truckPhotoUrl", hasFile)
+                }
+                error={getFieldError(
+                  "truck.truckPhotoUrl",
+                  errors.truck?.truckPhotoUrl?.message,
+                )}
                 required
               />
 
@@ -643,12 +779,21 @@ export function VendorApplicationForm() {
                 label="Electro-Mechanical License"
                 description="Provide a valid electro-mechanical license issued by local authorities."
                 endpoint="vendorTruckLicense"
-                accept="pdf"
                 value={watch("truck.electroMechanicalLicenseUrl")}
                 onUploadComplete={(url) =>
-                  setValue("truck.electroMechanicalLicenseUrl", url)
+                  handleUploadComplete(
+                    "truck.electroMechanicalLicenseUrl",
+                    "truck.electroMechanicalLicenseUrl",
+                    url,
+                  )
                 }
-                error={errors.truck?.electroMechanicalLicenseUrl?.message}
+                onFileSelect={(hasFile) =>
+                  handleFileSelect("truck.electroMechanicalLicenseUrl", hasFile)
+                }
+                error={getFieldError(
+                  "truck.electroMechanicalLicenseUrl",
+                  errors.truck?.electroMechanicalLicenseUrl?.message,
+                )}
                 required
               />
             </div>
@@ -669,10 +814,21 @@ export function VendorApplicationForm() {
             label="Business License"
             description="Your official business license"
             endpoint="vendorBusinessLicense"
-            accept="pdf"
             value={watch("files.businessLicense")}
-            onUploadComplete={(url) => setValue("files.businessLicense", url)}
-            error={errors.files?.businessLicense?.message}
+            onUploadComplete={(url) =>
+              handleUploadComplete(
+                "files.businessLicense",
+                "files.businessLicense",
+                url,
+              )
+            }
+            onFileSelect={(hasFile) =>
+              handleFileSelect("files.businessLicense", hasFile)
+            }
+            error={getFieldError(
+              "files.businessLicense",
+              errors.files?.businessLicense?.message,
+            )}
             required
           />
 
@@ -680,12 +836,21 @@ export function VendorApplicationForm() {
             label="Hygiene Inspection Certificate"
             description="Current hygiene inspection certification"
             endpoint="vendorHygieneCert"
-            accept="pdf"
             value={watch("files.hygieneInspectionCertification")}
             onUploadComplete={(url) =>
-              setValue("files.hygieneInspectionCertification", url)
+              handleUploadComplete(
+                "files.hygieneInspectionCertification",
+                "files.hygieneInspectionCertification",
+                url,
+              )
             }
-            error={errors.files?.hygieneInspectionCertification?.message}
+            onFileSelect={(hasFile) =>
+              handleFileSelect("files.hygieneInspectionCertification", hasFile)
+            }
+            error={getFieldError(
+              "files.hygieneInspectionCertification",
+              errors.files?.hygieneInspectionCertification?.message,
+            )}
             required
           />
 
@@ -693,12 +858,21 @@ export function VendorApplicationForm() {
             label="Liability Insurance"
             description="Proof of liability insurance"
             endpoint="vendorLiabilityInsurance"
-            accept="pdf"
             value={watch("files.liabilityInsurance")}
             onUploadComplete={(url) =>
-              setValue("files.liabilityInsurance", url)
+              handleUploadComplete(
+                "files.liabilityInsurance",
+                "files.liabilityInsurance",
+                url,
+              )
             }
-            error={errors.files?.liabilityInsurance?.message}
+            onFileSelect={(hasFile) =>
+              handleFileSelect("files.liabilityInsurance", hasFile)
+            }
+            error={getFieldError(
+              "files.liabilityInsurance",
+              errors.files?.liabilityInsurance?.message,
+            )}
             required
           />
         </CardContent>
@@ -752,15 +926,24 @@ export function VendorApplicationForm() {
                 label="Health Certificate"
                 description="Valid employee health certificate for food handling."
                 endpoint="vendorEmployeeHealthCert"
-                accept="pdf"
-                // eslint-disable-next-line react-hooks/incompatible-library
                 value={watch(`files.employees.${index}.healthCertificate`)}
                 onUploadComplete={(url) =>
-                  setValue(`files.employees.${index}.healthCertificate`, url)
+                  handleUploadComplete(
+                    `files.employees.${index}.healthCertificate`,
+                    `files.employees.${index}.healthCertificate`,
+                    url,
+                  )
                 }
-                error={
-                  errors.files?.employees?.[index]?.healthCertificate?.message
+                onFileSelect={(hasFile) =>
+                  handleFileSelect(
+                    `files.employees.${index}.healthCertificate`,
+                    hasFile,
+                  )
                 }
+                error={getFieldError(
+                  `files.employees.${index}.healthCertificate`,
+                  errors.files?.employees?.[index]?.healthCertificate?.message,
+                )}
                 required
               />
 
@@ -768,14 +951,24 @@ export function VendorApplicationForm() {
                 label="Social Insurance"
                 description="Proof of social insurance registration."
                 endpoint="vendorEmployeeSocialInsurance"
-                accept="pdf"
                 value={watch(`files.employees.${index}.socialInsurance`)}
                 onUploadComplete={(url) =>
-                  setValue(`files.employees.${index}.socialInsurance`, url)
+                  handleUploadComplete(
+                    `files.employees.${index}.socialInsurance`,
+                    `files.employees.${index}.socialInsurance`,
+                    url,
+                  )
                 }
-                error={
-                  errors.files?.employees?.[index]?.socialInsurance?.message
+                onFileSelect={(hasFile) =>
+                  handleFileSelect(
+                    `files.employees.${index}.socialInsurance`,
+                    hasFile,
+                  )
                 }
+                error={getFieldError(
+                  `files.employees.${index}.socialInsurance`,
+                  errors.files?.employees?.[index]?.socialInsurance?.message,
+                )}
                 required
               />
             </div>
