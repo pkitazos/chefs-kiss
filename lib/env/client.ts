@@ -11,7 +11,6 @@ import { z } from "zod";
 const clientEnvSchema = z.object({
   // App URLs - Available on client side
   NEXT_PUBLIC_APP_URL: z
-    .string()
     .url()
     .default("http://localhost:3000")
     .describe("Public URL of the application"),
@@ -28,7 +27,7 @@ function validateClientEnv() {
   if (!parsed.success) {
     console.error(
       "❌ Invalid client environment variables:",
-      JSON.stringify(parsed.error.format(), null, 2)
+      JSON.stringify(z.treeifyError(parsed.error), null, 2),
     );
     throw new Error("Invalid client environment variables");
   }

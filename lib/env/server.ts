@@ -15,7 +15,7 @@ const serverEnvSchema = z.object({
     .default("development"),
 
   // Database
-  DATABASE_URL: z.string().url().min(1, "DATABASE_URL is required"),
+  DATABASE_URL: z.url().min(1, "DATABASE_URL is required"),
 
   // App URLs
   NEXT_PUBLIC_APP_URL: z
@@ -28,7 +28,7 @@ const serverEnvSchema = z.object({
     .string()
     .min(32, "BETTER_AUTH_SECRET must be at least 32 characters")
     .describe(
-      "Secret key for BetterAuth (generate with: openssl rand -base64 32)"
+      "Secret key for BetterAuth (generate with: openssl rand -base64 32)",
     ),
   BETTER_AUTH_URL: z
     .url()
@@ -66,7 +66,7 @@ const serverEnvSchema = z.object({
     .transform((xs) => xs.split(",").map((x) => x.trim().toLowerCase()))
     .default([])
     .describe(
-      "Comma-separated list of admin emails allowed to access the system"
+      "Comma-separated list of admin emails allowed to access the system",
     ),
 });
 
@@ -80,7 +80,7 @@ function validateServerEnv() {
   if (!parsed.success) {
     console.error(
       "❌ Invalid server environment variables:",
-      JSON.stringify(parsed.error.format(), null, 2)
+      JSON.stringify(parsed.error.format(), null, 2),
     );
     throw new Error("Invalid server environment variables");
   }
