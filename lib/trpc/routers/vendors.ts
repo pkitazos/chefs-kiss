@@ -1,6 +1,7 @@
+import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../init";
 import { vendorFormSchema } from "@/lib/validations/vendor-form";
-import { eventSchema, type Event } from "@/lib/validations/event";
+import { type Event } from "@/lib/validations/event";
 import {
   applicationStatusEnum,
   vendorApplications,
@@ -9,6 +10,7 @@ import {
   vendorPowerRequirements,
   vendorTruckInfo,
 } from "@/lib/db/schema/vendors";
+import { events } from "@/lib/db/schema/events";
 import {
   sendVendorAcceptance,
   sendVendorConfirmation,
@@ -18,27 +20,24 @@ import { count, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 import { generateId } from "@/lib/utils/construct-id";
 
-// TODO: Move to configuration/database when supporting multiple events
-const CURRENT_EVENT: Event = {
-  date: {
-    start: new Date("2026-04-15"),
-    end: new Date("2026-04-17"),
-  },
-  location: "Ayia Napa Marina",
-  locationCode: "ANM",
-};
-
 export const vendorsRouter = createTRPCRouter({
-  // Admin: Get all applications with related data
-  getAllApplications: protectedProcedure.query(async ({ ctx }) => {
-    const applications = await ctx.db
-      .select()
-      .from(vendorApplications)
-      .leftJoin(
-        vendorTruckInfo,
-        eq(vendorApplications.truckInfoId, vendorTruckInfo.id),
-      )
-      .orderBy(desc(vendorApplications.createdAt));
+  // Admin: Get all applications with related data (optionally filtered by event)
+  getAllApplications: protectedProcedure
+    .input(z.object({ eventId: z.string().uuid().optional() }).optional())
+    .query(async ({ ctx, input }) => {
+      const baseQuery = ctx.db
+        .select()
+        .from(vendorApplications)
+        .leftJoin(
+          vendorTruckInfo,
+          eq(vendorApplications.truckInfoId, vendorTruckInfo.id),
+        );
+
+      const applications = input?.eventId
+        ? await baseQuery
+            .where(eq(vendorApplications.eventId, input.eventId))
+            .orderBy(desc(vendorApplications.createdAt))
+        : await baseQuery.orderBy(desc(vendorApplications.createdAt));
 
     const result = await Promise.all(
       applications.map(async (row) => {
@@ -161,12 +160,37 @@ export const vendorsRouter = createTRPCRouter({
   submitApplication: publicProcedure
     .input(vendorFormSchema)
     .mutation(async ({ input, ctx }) => {
-      // Generate custom application ID
+      // Get the active event from database
+      const [activeEvent] = await ctx.db
+        .select()
+        .from(events)
+        .where(eq(events.isActive, true))
+        .limit(1);
+
+      if (!activeEvent) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "No active event found. Applications are currently closed.",
+        });
+      }
+
+      // Build Event object for ID generation
+      const eventForId: Event = {
+        date: {
+          start: activeEvent.startDate,
+          end: activeEvent.endDate,
+        },
+        location: activeEvent.location,
+        locationCode: activeEvent.locationCode,
+      };
+
+      // Generate custom application ID (count only applications for this event)
       const [countResult] = await ctx.db
         .select({ count: count() })
-        .from(vendorApplications);
+        .from(vendorApplications)
+        .where(eq(vendorApplications.eventId, activeEvent.id));
       const applicationNumber = (countResult?.count ?? 0) + 1;
-      const applicationId = generateId(CURRENT_EVENT, applicationNumber, "VE");
+      const applicationId = generateId(eventForId, applicationNumber, "VE");
 
       await ctx.db.transaction(async (tx) => {
         let truckInfoId: string | null = null;
@@ -187,6 +211,7 @@ export const vendorsRouter = createTRPCRouter({
 
         await tx.insert(vendorApplications).values({
           id: applicationId,
+          eventId: activeEvent.id,
           businessName: input.businessInfo.businessName,
           contactPerson: input.businessInfo.contactPerson,
           email: input.businessInfo.email,
@@ -248,16 +273,4 @@ export const vendorsRouter = createTRPCRouter({
       };
     }),
 
-  // Admin: Generate a new vendor application ID
-  generateApplicationId: protectedProcedure
-    .input(eventSchema)
-    .mutation(async ({ ctx, input }) => {
-      const [result] = await ctx.db
-        .select({ count: count() })
-        .from(vendorApplications);
-
-      const applicationNumber = (result?.count ?? 0) + 1;
-
-      return generateId(input, applicationNumber, "VE");
-    }),
 });

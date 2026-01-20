@@ -15,6 +15,13 @@
       "when": 1768914482022,
       "tag": "0001_violet_titania",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1768918520573,
+      "tag": "0002_busy_victor_mancha",
+      "breakpoints": true
     }
   ]
 }

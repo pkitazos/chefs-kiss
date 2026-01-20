@@ -8,6 +8,7 @@ import {
   pgEnum,
   uuid,
 } from "drizzle-orm/pg-core";
+import { events } from "./events";
 
 // Enum for application status
 export const applicationStatusEnum = pgEnum("application_status", [
@@ -63,6 +64,11 @@ export const vendorApplications = pgTable(
       onDelete: "set null",
     }),
 
+    // Event reference
+    eventId: uuid("event_id")
+      .notNull()
+      .references(() => events.id, { onDelete: "restrict" }),
+
     // Timestamps
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
@@ -71,6 +77,7 @@ export const vendorApplications = pgTable(
     index("vendor_applications_status_idx").on(table.status),
     index("vendor_applications_created_at_idx").on(table.createdAt),
     index("vendor_applications_email_idx").on(table.email),
+    index("vendor_applications_event_id_idx").on(table.eventId),
   ]
 );
 
