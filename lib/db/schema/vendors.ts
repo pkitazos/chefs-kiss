@@ -8,6 +8,7 @@ import {
   pgEnum,
   uuid,
 } from "drizzle-orm/pg-core";
+import { events } from "./events";
 
 // Enum for application status
 export const applicationStatusEnum = pgEnum("application_status", [
@@ -33,7 +34,7 @@ export const vendorTruckInfo = pgTable("vendor_truck_info", {
 export const vendorApplications = pgTable(
   "vendor_applications",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
+    id: text("id").primaryKey(),
 
     // Status tracking with enum
     status: applicationStatusEnum("status").notNull().default("pending"),
@@ -63,6 +64,11 @@ export const vendorApplications = pgTable(
       onDelete: "set null",
     }),
 
+    // Event reference
+    eventId: uuid("event_id")
+      .notNull()
+      .references(() => events.id, { onDelete: "restrict" }),
+
     // Timestamps
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
@@ -71,13 +77,14 @@ export const vendorApplications = pgTable(
     index("vendor_applications_status_idx").on(table.status),
     index("vendor_applications_created_at_idx").on(table.createdAt),
     index("vendor_applications_email_idx").on(table.email),
+    index("vendor_applications_event_id_idx").on(table.eventId),
   ]
 );
 
 // Dishes offered by vendor
 export const vendorDishes = pgTable("vendor_dishes", {
   id: uuid("id").primaryKey().defaultRandom(),
-  vendorApplicationId: uuid("vendor_application_id")
+  vendorApplicationId: text("vendor_application_id")
     .notNull()
     .references(() => vendorApplications.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
@@ -88,7 +95,7 @@ export const vendorDishes = pgTable("vendor_dishes", {
 // Power supply requirements
 export const vendorPowerRequirements = pgTable("vendor_power_requirements", {
   id: uuid("id").primaryKey().defaultRandom(),
-  vendorApplicationId: uuid("vendor_application_id")
+  vendorApplicationId: text("vendor_application_id")
     .notNull()
     .references(() => vendorApplications.id, { onDelete: "cascade" }),
   device: text("device").notNull(),
@@ -99,7 +106,7 @@ export const vendorPowerRequirements = pgTable("vendor_power_requirements", {
 // Employee documents
 export const vendorEmployees = pgTable("vendor_employees", {
   id: uuid("id").primaryKey().defaultRandom(),
-  vendorApplicationId: uuid("vendor_application_id")
+  vendorApplicationId: text("vendor_application_id")
     .notNull()
     .references(() => vendorApplications.id, { onDelete: "cascade" }),
   name: text("name").notNull(),

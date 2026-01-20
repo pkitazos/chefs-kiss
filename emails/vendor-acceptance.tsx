@@ -14,16 +14,12 @@ interface VendorAcceptanceEmailProps {
   businessName: string;
   applicationId: string;
   festivalDate: string;
-  setupTime: string;
-  boothLocation?: string;
 }
 
 export default function VendorAcceptanceEmail({
   businessName,
   applicationId,
   festivalDate,
-  setupTime,
-  boothLocation,
 }: VendorAcceptanceEmailProps) {
   return (
     <Html lang="en">
@@ -73,15 +69,15 @@ export default function VendorAcceptanceEmail({
                         {festivalDate}
                       </td>
                     </tr>
-                    <tr>
+                    {/* <tr>
                       <td className="py-2 text-sm text-gray-500">
                         Setup Time:
                       </td>
                       <td className="py-2 text-sm font-semibold">
                         {setupTime}
                       </td>
-                    </tr>
-                    {boothLocation && (
+                    </tr> */}
+                    {/* {boothLocation && (
                       <tr>
                         <td className="py-2 text-sm text-gray-500">
                           Booth Location:
@@ -90,14 +86,17 @@ export default function VendorAcceptanceEmail({
                           {boothLocation}
                         </td>
                       </tr>
-                    )}
+                    )} */}
                   </tbody>
                 </table>
               </Section>
 
+              <Text className="mb-3.75 text-base">Payment</Text>
+
               <Text className="mb-3.75 text-base">
                 If you have any questions or need assistance, please don&apos;t
-                hesitate to contact us.
+                hesitate to contact us at{" "}
+                <span className="text-[#98244c]">info@chefskiss.com.cy</span>.
               </Text>
 
               <Text className="mb-3.75 text-base">

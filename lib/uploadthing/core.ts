@@ -102,8 +102,18 @@ export const uploadRouter = {
     }),
 
   // Vendor Application Documents
+  // All vendor endpoints accept: PDF, Word docs, and images for maximum user convenience
   vendorBusinessLicense: f({
-    pdf: { maxFileSize: "8MB", maxFileCount: 1 },
+    "application/pdf": { maxFileSize: "8MB", maxFileCount: 1 },
+    "application/msword": { maxFileSize: "8MB", maxFileCount: 1 },
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
+      maxFileSize: "8MB",
+      maxFileCount: 1,
+    },
+    "image/png": { maxFileSize: "8MB", maxFileCount: 1 },
+    "image/jpeg": { maxFileSize: "8MB", maxFileCount: 1 },
+    "image/heic": { maxFileSize: "8MB", maxFileCount: 1 },
+    "image/webp": { maxFileSize: "8MB", maxFileCount: 1 },
   })
     .middleware(async () => {
       // Public uploader - no auth required for vendor applications
@@ -118,7 +128,16 @@ export const uploadRouter = {
     }),
 
   vendorHygieneCert: f({
-    pdf: { maxFileSize: "8MB", maxFileCount: 1 },
+    "application/pdf": { maxFileSize: "8MB", maxFileCount: 1 },
+    "application/msword": { maxFileSize: "8MB", maxFileCount: 1 },
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
+      maxFileSize: "8MB",
+      maxFileCount: 1,
+    },
+    "image/png": { maxFileSize: "8MB", maxFileCount: 1 },
+    "image/jpeg": { maxFileSize: "8MB", maxFileCount: 1 },
+    "image/heic": { maxFileSize: "8MB", maxFileCount: 1 },
+    "image/webp": { maxFileSize: "8MB", maxFileCount: 1 },
   })
     .middleware(async () => {
       return {
@@ -132,7 +151,16 @@ export const uploadRouter = {
     }),
 
   vendorLiabilityInsurance: f({
-    pdf: { maxFileSize: "8MB", maxFileCount: 1 },
+    "application/pdf": { maxFileSize: "8MB", maxFileCount: 1 },
+    "application/msword": { maxFileSize: "8MB", maxFileCount: 1 },
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
+      maxFileSize: "8MB",
+      maxFileCount: 1,
+    },
+    "image/png": { maxFileSize: "8MB", maxFileCount: 1 },
+    "image/jpeg": { maxFileSize: "8MB", maxFileCount: 1 },
+    "image/heic": { maxFileSize: "8MB", maxFileCount: 1 },
+    "image/webp": { maxFileSize: "8MB", maxFileCount: 1 },
   })
     .middleware(async () => {
       return {
@@ -146,7 +174,16 @@ export const uploadRouter = {
     }),
 
   vendorTruckPhoto: f({
-    image: { maxFileSize: "4MB", maxFileCount: 1 },
+    "application/pdf": { maxFileSize: "8MB", maxFileCount: 1 },
+    "application/msword": { maxFileSize: "8MB", maxFileCount: 1 },
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
+      maxFileSize: "8MB",
+      maxFileCount: 1,
+    },
+    "image/png": { maxFileSize: "8MB", maxFileCount: 1 },
+    "image/jpeg": { maxFileSize: "8MB", maxFileCount: 1 },
+    "image/heic": { maxFileSize: "8MB", maxFileCount: 1 },
+    "image/webp": { maxFileSize: "8MB", maxFileCount: 1 },
   })
     .middleware(async () => {
       return {
@@ -160,7 +197,16 @@ export const uploadRouter = {
     }),
 
   vendorTruckLicense: f({
-    pdf: { maxFileSize: "8MB", maxFileCount: 1 },
+    "application/pdf": { maxFileSize: "8MB", maxFileCount: 1 },
+    "application/msword": { maxFileSize: "8MB", maxFileCount: 1 },
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
+      maxFileSize: "8MB",
+      maxFileCount: 1,
+    },
+    "image/png": { maxFileSize: "8MB", maxFileCount: 1 },
+    "image/jpeg": { maxFileSize: "8MB", maxFileCount: 1 },
+    "image/heic": { maxFileSize: "8MB", maxFileCount: 1 },
+    "image/webp": { maxFileSize: "8MB", maxFileCount: 1 },
   })
     .middleware(async () => {
       return {
@@ -174,7 +220,16 @@ export const uploadRouter = {
     }),
 
   vendorEmployeeHealthCert: f({
-    pdf: { maxFileSize: "8MB", maxFileCount: 10 }, // Support multiple employees
+    "application/pdf": { maxFileSize: "8MB", maxFileCount: 10 },
+    "application/msword": { maxFileSize: "8MB", maxFileCount: 10 },
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
+      maxFileSize: "8MB",
+      maxFileCount: 10,
+    },
+    "image/png": { maxFileSize: "8MB", maxFileCount: 10 },
+    "image/jpeg": { maxFileSize: "8MB", maxFileCount: 10 },
+    "image/heic": { maxFileSize: "8MB", maxFileCount: 10 },
+    "image/webp": { maxFileSize: "8MB", maxFileCount: 10 },
   })
     .middleware(async () => {
       return {
@@ -188,7 +243,16 @@ export const uploadRouter = {
     }),
 
   vendorEmployeeSocialInsurance: f({
-    pdf: { maxFileSize: "8MB", maxFileCount: 10 }, // Support multiple employees
+    "application/pdf": { maxFileSize: "8MB", maxFileCount: 10 },
+    "application/msword": { maxFileSize: "8MB", maxFileCount: 10 },
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
+      maxFileSize: "8MB",
+      maxFileCount: 10,
+    },
+    "image/png": { maxFileSize: "8MB", maxFileCount: 10 },
+    "image/jpeg": { maxFileSize: "8MB", maxFileCount: 10 },
+    "image/heic": { maxFileSize: "8MB", maxFileCount: 10 },
+    "image/webp": { maxFileSize: "8MB", maxFileCount: 10 },
   })
     .middleware(async () => {
       return {

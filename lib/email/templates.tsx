@@ -17,30 +17,24 @@ export const vendorConfirmationEmail = ({
       businessName={businessName}
       applicationId={applicationId}
       submissionDate={submissionDate}
-    />
+    />,
   );
 
 export const vendorAcceptanceEmail = ({
   businessName,
   applicationId,
   festivalDate,
-  setupTime,
-  boothLocation,
 }: {
   businessName: string;
   applicationId: string;
   festivalDate: string;
-  setupTime: string;
-  boothLocation?: string;
 }) =>
   render(
     <VendorAcceptanceEmail
       businessName={businessName}
       applicationId={applicationId}
       festivalDate={festivalDate}
-      setupTime={setupTime}
-      boothLocation={boothLocation}
-    />
+    />,
   );
 
 export const vendorRejectionEmail = ({

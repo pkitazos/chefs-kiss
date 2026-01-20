@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   Table,
   TableBody,
@@ -10,25 +11,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  IconDotsVertical,
-  IconDownload,
-  IconEye,
-  IconEyeOff,
-  IconLoader2,
-} from "@tabler/icons-react";
+import { IconLoader2 } from "@tabler/icons-react";
 import { api } from "@/lib/trpc/client";
 import { ApplicationActions } from "./application-actions";
 import { ApplicationDialog } from "./application-dialog";
-import { exportApplicationsToCSV } from "./utils/export-csv";
-import { cn } from "@/lib/utils";
 
 const statusVariants = {
   pending: "secondary",
@@ -42,12 +28,10 @@ function formatDate(date: Date) {
   }).format(new Date(date));
 }
 
-function truncateId(id: string) {
-  return id.slice(0, 8) + "...";
-}
-
 export function ApplicationsTable() {
-  const [wrappedView, setWrappedView] = useState(false);
+  const searchParams = useSearchParams();
+  const eventId = searchParams.get("eventId") ?? undefined;
+
   const [selectedApplicationId, setSelectedApplicationId] = useState<
     string | null
   >(null);
@@ -56,13 +40,9 @@ export function ApplicationsTable() {
     data: applications,
     isLoading,
     error,
-  } = api.vendors.getAllApplications.useQuery();
-
-  const handleExportCSV = () => {
-    if (applications) {
-      exportApplicationsToCSV(applications);
-    }
-  };
+  } = api.vendors.getAllApplications.useQuery(
+    eventId ? { eventId } : undefined,
+  );
 
   if (isLoading) {
     return (
@@ -97,23 +77,6 @@ export function ApplicationsTable() {
           {applications.length} application
           {applications.length !== 1 ? "s" : ""}
         </p>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setWrappedView(!wrappedView)}
-        >
-          {wrappedView ? (
-            <>
-              <IconEyeOff className="size-4" />
-              Truncate
-            </>
-          ) : (
-            <>
-              <IconEye className="size-4" />
-              Expand
-            </>
-          )}
-        </Button>
       </div>
 
       <div className="rounded-lg border">
@@ -126,21 +89,6 @@ export function ApplicationsTable() {
               <TableHead>Email</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Created</TableHead>
-              <TableHead className="w-12.5">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon-xs">
-                      <IconDotsVertical className="size-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={handleExportCSV}>
-                      <IconDownload />
-                      Download all as CSV
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -151,35 +99,23 @@ export function ApplicationsTable() {
                     onClick={() => setSelectedApplicationId(app.id)}
                     className="font-mono text-primary hover:underline"
                   >
-                    {truncateId(app.id)}
+                    {app.id}
                   </button>
                 </TableCell>
                 <TableCell
-                  className={cn(
-                    wrappedView
-                      ? "whitespace-normal wrap-break-word max-w-50"
-                      : "truncate max-w-37.5"
-                  )}
+                  className="whitespace-normal wrap-break-word max-w-50"
                   title={app.businessName}
                 >
                   {app.businessName}
                 </TableCell>
                 <TableCell
-                  className={cn(
-                    wrappedView
-                      ? "whitespace-normal wrap-break-word max-w-37.5"
-                      : "truncate max-w-30"
-                  )}
+                  className="whitespace-normal wrap-break-word max-w-50"
                   title={app.contactPerson}
                 >
                   {app.contactPerson}
                 </TableCell>
                 <TableCell
-                  className={cn(
-                    wrappedView
-                      ? "whitespace-normal wrap-break-word max-w-50"
-                      : "truncate max-w-37.5"
-                  )}
+                  className="whitespace-normal wrap-break-word max-w-50"
                   title={app.email}
                 >
                   {app.email}

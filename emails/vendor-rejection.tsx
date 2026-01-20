@@ -41,10 +41,10 @@ export default function VendorRejectionEmail({
               </Text>
               {reason && <Text className="mb-3.75 text-base">{reason}</Text>}
 
-              <Text className="mb-3.75 text-base">
-                We truly appreciate your interest in the Chef&apos;s Kiss
-                Festival and wish you all the best with your business.
-              </Text>
+              {/* <Text className="mb-3.75 text-base">
+                We truly appreciate your interest in the Chef&apos;s Kiss Food
+                Festival.
+              </Text> */}
 
               <Signature closing="Warm regards" />
             </div>
@@ -58,9 +58,6 @@ export default function VendorRejectionEmail({
 VendorRejectionEmail.PreviewProps = {
   businessName: "[Vendor Business Name]",
   reason: `
-  Please note that this decision was difficult, as we received a
-  high volume of exceptional applications. We had to make tough
-  choices to ensure a diverse and balanced vendor lineup for the
-  festival.
+
   `,
 } as VendorRejectionEmailProps;

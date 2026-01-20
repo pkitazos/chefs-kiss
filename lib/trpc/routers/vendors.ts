@@ -1,5 +1,7 @@
+import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../init";
 import { vendorFormSchema } from "@/lib/validations/vendor-form";
+import { type Event } from "@/lib/validations/event";
 import {
   applicationStatusEnum,
   vendorApplications,
@@ -8,42 +10,60 @@ import {
   vendorPowerRequirements,
   vendorTruckInfo,
 } from "@/lib/db/schema/vendors";
+import { events } from "@/lib/db/schema/events";
 import {
   sendVendorAcceptance,
   sendVendorConfirmation,
   sendVendorRejection,
 } from "@/lib/email/vendor-emails";
-import { desc, eq } from "drizzle-orm";
+import { count, desc, eq } from "drizzle-orm";
 import { z } from "zod";
+import { generateId } from "@/lib/utils/construct-id";
 
 export const vendorsRouter = createTRPCRouter({
-  // Admin: Get all applications with related data
-  getAllApplications: protectedProcedure.query(async ({ ctx }) => {
-    const applications = await ctx.db
-      .select()
-      .from(vendorApplications)
-      .leftJoin(
-        vendorTruckInfo,
-        eq(vendorApplications.truckInfoId, vendorTruckInfo.id)
-      )
-      .orderBy(desc(vendorApplications.createdAt));
+  // Admin: Get all applications with related data (optionally filtered by event)
+  getAllApplications: protectedProcedure
+    .input(z.object({ eventId: z.string().uuid().optional() }).optional())
+    .query(async ({ ctx, input }) => {
+      const baseQuery = ctx.db
+        .select()
+        .from(vendorApplications)
+        .leftJoin(
+          vendorTruckInfo,
+          eq(vendorApplications.truckInfoId, vendorTruckInfo.id),
+        );
+
+      const applications = input?.eventId
+        ? await baseQuery
+            .where(eq(vendorApplications.eventId, input.eventId))
+            .orderBy(desc(vendorApplications.createdAt))
+        : await baseQuery.orderBy(desc(vendorApplications.createdAt));
 
     const result = await Promise.all(
       applications.map(async (row) => {
         const dishes = await ctx.db
           .select()
           .from(vendorDishes)
-          .where(eq(vendorDishes.vendorApplicationId, row.vendor_applications.id));
+          .where(
+            eq(vendorDishes.vendorApplicationId, row.vendor_applications.id),
+          );
 
         const employees = await ctx.db
           .select()
           .from(vendorEmployees)
-          .where(eq(vendorEmployees.vendorApplicationId, row.vendor_applications.id));
+          .where(
+            eq(vendorEmployees.vendorApplicationId, row.vendor_applications.id),
+          );
 
         const powerRequirements = await ctx.db
           .select()
           .from(vendorPowerRequirements)
-          .where(eq(vendorPowerRequirements.vendorApplicationId, row.vendor_applications.id));
+          .where(
+            eq(
+              vendorPowerRequirements.vendorApplicationId,
+              row.vendor_applications.id,
+            ),
+          );
 
         return {
           ...row.vendor_applications,
@@ -52,7 +72,7 @@ export const vendorsRouter = createTRPCRouter({
           employees,
           powerRequirements,
         };
-      })
+      }),
     );
 
     return result;
@@ -60,14 +80,14 @@ export const vendorsRouter = createTRPCRouter({
 
   // Admin: Get single application by ID
   getApplicationById: protectedProcedure
-    .input(z.object({ id: z.string().uuid() }))
+    .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const [row] = await ctx.db
         .select()
         .from(vendorApplications)
         .leftJoin(
           vendorTruckInfo,
-          eq(vendorApplications.truckInfoId, vendorTruckInfo.id)
+          eq(vendorApplications.truckInfoId, vendorTruckInfo.id),
         )
         .where(eq(vendorApplications.id, input.id));
 
@@ -103,10 +123,10 @@ export const vendorsRouter = createTRPCRouter({
   updateApplicationStatus: protectedProcedure
     .input(
       z.object({
-        id: z.string().uuid(),
+        id: z.string(),
         status: z.enum(applicationStatusEnum.enumValues),
         reason: z.string().optional(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const [updated] = await ctx.db
@@ -140,7 +160,39 @@ export const vendorsRouter = createTRPCRouter({
   submitApplication: publicProcedure
     .input(vendorFormSchema)
     .mutation(async ({ input, ctx }) => {
-      const applicationId = await ctx.db.transaction(async (tx) => {
+      // Get the active event from database
+      const [activeEvent] = await ctx.db
+        .select()
+        .from(events)
+        .where(eq(events.isActive, true))
+        .limit(1);
+
+      if (!activeEvent) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "No active event found. Applications are currently closed.",
+        });
+      }
+
+      // Build Event object for ID generation
+      const eventForId: Event = {
+        date: {
+          start: activeEvent.startDate,
+          end: activeEvent.endDate,
+        },
+        location: activeEvent.location,
+        locationCode: activeEvent.locationCode,
+      };
+
+      // Generate custom application ID (count only applications for this event)
+      const [countResult] = await ctx.db
+        .select({ count: count() })
+        .from(vendorApplications)
+        .where(eq(vendorApplications.eventId, activeEvent.id));
+      const applicationNumber = (countResult?.count ?? 0) + 1;
+      const applicationId = generateId(eventForId, applicationNumber, "VE");
+
+      await ctx.db.transaction(async (tx) => {
         let truckInfoId: string | null = null;
         if (input.truck.ownTruck) {
           const [truckInfo] = await tx
@@ -157,42 +209,40 @@ export const vendorsRouter = createTRPCRouter({
           truckInfoId = truckInfo.id;
         }
 
-        const [application] = await tx
-          .insert(vendorApplications)
-          .values({
-            businessName: input.businessInfo.businessName,
-            contactPerson: input.businessInfo.contactPerson,
-            email: input.businessInfo.email,
-            phoneNumber: input.businessInfo.phoneNumber,
-            companyName: input.businessInfo.companyName,
-            instagramHandle: input.businessInfo.instagramHandle ?? null,
-            specialRequirements: input.specialRequirements.requirements ?? null,
-            kitchenEquipment:
-              input.specialRequirements.kitchenEquipment ?? null,
-            storage: input.specialRequirements.storage ?? null,
-            businessLicenseUrl: input.files.businessLicense,
-            hygieneInspectionCertificationUrl:
-              input.files.hygieneInspectionCertification,
-            liabilityInsuranceUrl: input.files.liabilityInsurance,
-            truckInfoId,
-          })
-          .returning({ id: vendorApplications.id });
+        await tx.insert(vendorApplications).values({
+          id: applicationId,
+          eventId: activeEvent.id,
+          businessName: input.businessInfo.businessName,
+          contactPerson: input.businessInfo.contactPerson,
+          email: input.businessInfo.email,
+          phoneNumber: input.businessInfo.phoneNumber,
+          companyName: input.businessInfo.companyName,
+          instagramHandle: input.businessInfo.instagramHandle ?? null,
+          specialRequirements: input.specialRequirements.requirements ?? null,
+          kitchenEquipment: input.specialRequirements.kitchenEquipment ?? null,
+          storage: input.specialRequirements.storage ?? null,
+          businessLicenseUrl: input.files.businessLicense,
+          hygieneInspectionCertificationUrl:
+            input.files.hygieneInspectionCertification,
+          liabilityInsuranceUrl: input.files.liabilityInsurance,
+          truckInfoId,
+        });
 
         await tx.insert(vendorDishes).values(
           input.productsOffered.dishes.map((dish) => ({
-            vendorApplicationId: application.id,
+            vendorApplicationId: applicationId,
             name: dish.name,
             price: dish.price.toString(),
-          }))
+          })),
         );
 
         await tx.insert(vendorEmployees).values(
           input.files.employees.map((employee) => ({
-            vendorApplicationId: application.id,
+            vendorApplicationId: applicationId,
             name: employee.name,
             healthCertificateUrl: employee.healthCertificate,
             socialInsuranceUrl: employee.socialInsurance,
-          }))
+          })),
         );
 
         if (
@@ -201,14 +251,12 @@ export const vendorsRouter = createTRPCRouter({
         ) {
           await tx.insert(vendorPowerRequirements).values(
             input.specialRequirements.powerSupply.map((power) => ({
-              vendorApplicationId: application.id,
+              vendorApplicationId: applicationId,
               device: power.device,
               wattage: power.wattage,
-            }))
+            })),
           );
         }
-
-        return application.id;
       });
 
       await sendVendorConfirmation({
@@ -224,4 +272,5 @@ export const vendorsRouter = createTRPCRouter({
           "Your application has been submitted successfully. You will receive a confirmation email shortly.",
       };
     }),
+
 });

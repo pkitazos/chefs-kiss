@@ -77,11 +77,8 @@ export default function VendorConfirmationEmail({
               </Heading>
               <ul className="pl-5 text-[15px] leading-loose">
                 <li>
-                  Our team will review your application within 5-7 business days
-                </li>
-                <li>
-                  We&apos;ll contact you via email with updates on your
-                  application status
+                  Our team will review your application and contact you via
+                  email with updates on your application status
                 </li>
                 <li>
                   If approved, you&apos;ll receive detailed information about
@@ -92,7 +89,8 @@ export default function VendorConfirmationEmail({
 
               <Text className="mb-3.75 text-base">
                 If you have any questions in the meantime, please don&apos;t
-                hesitate to reach out to us.
+                hesitate to reach out to us at{" "}
+                <span className="text-sky-400">info@chefskiss.com.cy</span>.
               </Text>
 
               <Text className="mb-3.75 text-base">
