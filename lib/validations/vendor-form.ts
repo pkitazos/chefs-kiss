@@ -44,7 +44,7 @@ export const vendorFormSchema = z
             })
           )
           .min(1, "At least one dish is required")
-          .max(4, "Maximum of 4 dishes allowed"),
+          .max(6, "Maximum of 6 dishes allowed"),
       })
       .describe("Your festival menu. List the dishes you plan to offer."),
 

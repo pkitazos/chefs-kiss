@@ -273,7 +273,9 @@ export function VendorApplicationForm() {
         <CardHeader>
           <CardTitle>Festival Menu</CardTitle>
           <CardDescription>
-            List the dishes you plan to offer (1-4 items)
+            List the dishes you plan to offer (1-6 items). Please note, no
+            drinks are allowed to be sold by vendors. The festival will be
+            selling drinks separately.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -443,7 +445,7 @@ export function VendorApplicationForm() {
                       id={`power-device-${index}`}
                       placeholder="Flat-top grill"
                       {...register(
-                        `specialRequirements.powerSupply.${index}.device`
+                        `specialRequirements.powerSupply.${index}.device`,
                       )}
                       aria-invalid={
                         !!errors.specialRequirements?.powerSupply?.[index]
@@ -472,7 +474,7 @@ export function VendorApplicationForm() {
                       step="1"
                       placeholder="3500"
                       {...register(
-                        `specialRequirements.powerSupply.${index}.wattage`
+                        `specialRequirements.powerSupply.${index}.wattage`,
                       )}
                       aria-invalid={
                         !!errors.specialRequirements?.powerSupply?.[index]
