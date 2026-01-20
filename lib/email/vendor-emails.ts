@@ -24,7 +24,7 @@ export async function sendVendorConfirmation({
         month: "long",
         year: "numeric",
       }),
-    })
+    }),
   );
 
   const result = await sendEmail({
@@ -37,7 +37,7 @@ export async function sendVendorConfirmation({
     console.error(
       "Failed to send vendor confirmation email:",
       { applicationId, email },
-      result.error
+      result.error,
     );
   }
 
@@ -60,8 +60,7 @@ export async function sendVendorAcceptance({
       businessName,
       applicationId,
       festivalDate: "May 16-17, 2026",
-      setupTime: "TBD",
-    })
+    }),
   );
 
   const result = await sendEmail({
@@ -74,7 +73,7 @@ export async function sendVendorAcceptance({
     console.error(
       "Failed to send vendor acceptance email:",
       { applicationId, email },
-      result.error
+      result.error,
     );
   }
 
@@ -96,7 +95,7 @@ export async function sendVendorRejection({
     VendorRejectionEmail({
       businessName,
       reason,
-    })
+    }),
   );
 
   const result = await sendEmail({
@@ -106,7 +105,11 @@ export async function sendVendorRejection({
   });
 
   if (!result.success) {
-    console.error("Failed to send vendor rejection email:", { email }, result.error);
+    console.error(
+      "Failed to send vendor rejection email:",
+      { email },
+      result.error,
+    );
   }
 
   return result;
