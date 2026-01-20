@@ -17,7 +17,7 @@ export const vendorConfirmationEmail = ({
       businessName={businessName}
       applicationId={applicationId}
       submissionDate={submissionDate}
-    />
+    />,
   );
 
 export const vendorAcceptanceEmail = ({
@@ -34,7 +34,7 @@ export const vendorAcceptanceEmail = ({
       businessName={businessName}
       applicationId={applicationId}
       festivalDate={festivalDate}
-    />
+    />,
   );
 
 export const vendorRejectionEmail = ({
