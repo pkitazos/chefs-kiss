@@ -11,7 +11,6 @@ export default function VendorApplicationPage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
-        {/* Header Section */}
         <div className="mb-8 space-y-4">
           <h1 className="text-4xl font-bold tracking-tight">
             Vendor Application
@@ -30,7 +29,6 @@ export default function VendorApplicationPage() {
           </div>
         </div>
 
-        {/* Application Form */}
         <VendorApplicationForm />
       </div>
     </div>

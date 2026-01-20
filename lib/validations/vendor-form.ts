@@ -23,6 +23,7 @@ export const vendorFormSchema = z
         .describe("The registered name of your company or business entity."),
       instagramHandle: z
         .string()
+        .transform((val) => (val && !val.startsWith("@") ? `@${val}` : val))
         .optional()
         .describe("Your business's Instagram profile handle."),
     }),
