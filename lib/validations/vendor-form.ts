@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+export const MAX_DISHES = 10;
+
 export const vendorFormSchema = z
   .object({
     businessInfo: z.object({
@@ -7,13 +9,13 @@ export const vendorFormSchema = z
         .string()
         .min(1, "Business name is required")
         .describe(
-          "The name of your restaurant, brand or food business as you want it to appear in our marketing campaigns."
+          "The name of your restaurant, brand or food business as you want it to appear in our marketing campaigns.",
         ),
       contactPerson: z
         .string()
         .min(1, "Contact person is required")
         .describe(
-          "The full name of the primary contact person for your business."
+          "The full name of the primary contact person for your business.",
         ),
       email: z.email("Invalid email address"),
       phoneNumber: z.string().min(1, "Phone number is required"),
@@ -41,10 +43,10 @@ export const vendorFormSchema = z
                 .number<number>()
                 .positive("Price must be positive")
                 .describe("Price in EUR"),
-            })
+            }),
           )
           .min(1, "At least one dish is required")
-          .max(6, "Maximum of 6 dishes allowed"),
+          .max(MAX_DISHES, `Maximum of ${MAX_DISHES} dishes allowed`),
       })
       .describe("Your festival menu. List the dishes you plan to offer."),
 
@@ -66,11 +68,11 @@ export const vendorFormSchema = z
             wattage: z.coerce
               .number<number>()
               .positive("Wattage must be positive"),
-          })
+          }),
         )
         .optional()
         .describe(
-          "List any power-consuming devices and their wattage requirements"
+          "List any power-consuming devices and their wattage requirements",
         ),
       storage: z
         .string()
@@ -82,7 +84,7 @@ export const vendorFormSchema = z
       ownTruck: z
         .boolean()
         .describe(
-          "Tick the box if you want to participate in the festival with your own food truck."
+          "Tick the box if you want to participate in the festival with your own food truck.",
         ),
       truckPhotoUrl: z
         .string()
@@ -119,14 +121,14 @@ export const vendorFormSchema = z
               .string()
               .min(1, "Health certificate is required"),
             socialInsurance: z.string().min(1, "Social insurance is required"),
-          })
+          }),
         )
         .min(1, "At least one employee is required"),
       businessLicense: z.string().min(1, "Business license is required"),
       hygieneInspectionCertification: z
         .string()
         .min(1, "Hygiene inspection certification is required"),
-      liabilityInsurance: z.string().min(1, "Liability insurance is required"),
+      liabilityInsurance: z.string().optional(),
     }),
   })
   .superRefine((data, ctx) => {

@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   vendorFormSchema,
   type VendorFormData,
+  MAX_DISHES,
 } from "@/lib/validations/vendor-form";
 import { api } from "@/lib/trpc/client";
 import { toast } from "sonner";
@@ -41,6 +42,10 @@ const DISH_PLACEHOLDERS = [
   "Gourmet Hot Dog with Caramelized Onions",
   "Loaded Nachos with Jalapeños & Sour Cream",
   "Fresh-Baked Artisan Donuts",
+  "Classic Margherita Pizza",
+  "Chocolate Lava Cake",
+  "Caesar Salad",
+  "BBQ Pulled Pork Sandwich",
 ];
 
 export function VendorApplicationForm() {
@@ -202,11 +207,6 @@ export function VendorApplicationForm() {
         key: "files.hygieneInspectionCertification",
         value: values.files.hygieneInspectionCertification,
         label: "Hygiene Inspection Certificate",
-      },
-      {
-        key: "files.liabilityInsurance",
-        value: values.files.liabilityInsurance,
-        label: "Liability Insurance",
       },
     ];
 
@@ -409,9 +409,9 @@ export function VendorApplicationForm() {
         <CardHeader>
           <CardTitle>Festival Menu</CardTitle>
           <CardDescription>
-            List the dishes you plan to offer (1-6 items). Please note, no
-            drinks are allowed to be sold by vendors. The festival will be
-            selling drinks separately.
+            List the dishes you plan to offer (1-{MAX_DISHES} items). Please
+            note, no drinks are allowed to be sold by vendors. The festival will
+            be selling drinks separately.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -468,6 +468,7 @@ export function VendorApplicationForm() {
                     aria-invalid={
                       !!errors.productsOffered?.dishes?.[index]?.price
                     }
+                    onWheel={(e) => e.currentTarget.blur()}
                   />
                 </Field>
                 {errors.productsOffered?.dishes?.[index]?.price && (
@@ -479,7 +480,7 @@ export function VendorApplicationForm() {
             </div>
           ))}
 
-          {dishFields.length < 4 && (
+          {dishFields.length < MAX_DISHES && (
             <Button
               type="button"
               variant="outline"
@@ -618,6 +619,7 @@ export function VendorApplicationForm() {
                         !!errors.specialRequirements?.powerSupply?.[index]
                           ?.wattage
                       }
+                      onWheel={(e) => e.currentTarget.blur()}
                     />
                   </Field>
                   {errors.specialRequirements?.powerSupply?.[index]
@@ -735,6 +737,7 @@ export function VendorApplicationForm() {
                         placeholder="4.5"
                         {...register("truck.truckDimensions.length")}
                         aria-invalid={!!errors.truck?.truckDimensions?.length}
+                        onWheel={(e) => e.currentTarget.blur()}
                       />
                     </Field>
                     {errors.truck?.truckDimensions?.length && (
@@ -756,6 +759,7 @@ export function VendorApplicationForm() {
                         placeholder="2.2"
                         {...register("truck.truckDimensions.width")}
                         aria-invalid={!!errors.truck?.truckDimensions?.width}
+                        onWheel={(e) => e.currentTarget.blur()}
                       />
                     </Field>
                     {errors.truck?.truckDimensions?.width && (
@@ -777,6 +781,7 @@ export function VendorApplicationForm() {
                         placeholder="2.8"
                         {...register("truck.truckDimensions.height")}
                         aria-invalid={!!errors.truck?.truckDimensions?.height}
+                        onWheel={(e) => e.currentTarget.blur()}
                       />
                     </Field>
                     {errors.truck?.truckDimensions?.height && (
@@ -814,12 +819,13 @@ export function VendorApplicationForm() {
         </CardContent>
       </Card>
 
-      {/* Section 5: Required Documents */}
+      {/* Section 5: Business Documents */}
       <Card>
         <CardHeader>
-          <CardTitle>Required Documents</CardTitle>
+          <CardTitle>Business Documents</CardTitle>
           <CardDescription>
-            Upload all required business documents
+            Upload your business license and hygiene certificate (liability
+            insurance is optional)
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -886,7 +892,6 @@ export function VendorApplicationForm() {
               "files.liabilityInsurance",
               errors.files?.liabilityInsurance?.message,
             )}
-            required
           />
         </CardContent>
       </Card>

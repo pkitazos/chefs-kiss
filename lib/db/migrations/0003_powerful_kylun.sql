@@ -1,0 +1,1 @@
+ALTER TABLE "vendor_applications" ALTER COLUMN "liability_insurance_url" DROP NOT NULL;

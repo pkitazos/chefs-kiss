@@ -55,9 +55,9 @@ export const vendorApplications = pgTable(
     // Document Files
     businessLicenseUrl: text("business_license_url").notNull(),
     hygieneInspectionCertificationUrl: text(
-      "hygiene_inspection_certification_url"
+      "hygiene_inspection_certification_url",
     ).notNull(),
-    liabilityInsuranceUrl: text("liability_insurance_url").notNull(),
+    liabilityInsuranceUrl: text("liability_insurance_url"),
 
     // Optional reference to truck info
     truckInfoId: uuid("truck_info_id").references(() => vendorTruckInfo.id, {
@@ -78,7 +78,7 @@ export const vendorApplications = pgTable(
     index("vendor_applications_created_at_idx").on(table.createdAt),
     index("vendor_applications_email_idx").on(table.email),
     index("vendor_applications_event_id_idx").on(table.eventId),
-  ]
+  ],
 );
 
 // Dishes offered by vendor
