@@ -794,7 +794,7 @@ export function VendorApplicationForm() {
               </div>
 
               <FileUploadField
-                label="Electro-Mechanical License"
+                label="Electro-Mechanical License (Πιστοποιητικό Ηλεκτρομηχανολογικής Καταλληλότητας)"
                 description="Provide a valid electro-mechanical license issued by local authorities."
                 endpoint="vendorTruckLicense"
                 value={watch("truck.electroMechanicalLicenseUrl")}
@@ -852,7 +852,7 @@ export function VendorApplicationForm() {
           />
 
           <FileUploadField
-            label="Hygiene Inspection Certificate"
+            label="Hygiene Inspection Certificate (Πιστοποιητικό Υγειονομικού Ελέγχου Επιχείρησης)"
             description="Current hygiene inspection certification"
             endpoint="vendorHygieneCert"
             value={watch("files.hygieneInspectionCertification")}
@@ -941,7 +941,7 @@ export function VendorApplicationForm() {
               </FieldGroup>
 
               <FileUploadField
-                label="Health Certificate"
+                label="Food Handler Health Certificate (Πιστοποιητικό Υγείας για Χειριστές Τροφίμων)"
                 description="Valid employee health certificate for food handling."
                 endpoint="vendorEmployeeHealthCert"
                 value={watch(`files.employees.${index}.healthCertificate`)}
@@ -966,7 +966,7 @@ export function VendorApplicationForm() {
               />
 
               <FileUploadField
-                label="Social Insurance"
+                label="Social Insurance (Πιστοποιητικό Κοινωνικών Ασφαλίσεων)"
                 description="Proof of social insurance registration."
                 endpoint="vendorEmployeeSocialInsurance"
                 value={watch(`files.employees.${index}.socialInsurance`)}

@@ -113,7 +113,7 @@ export function ApplicationDialog({
   const { data: application, isLoading } =
     api.vendors.getApplicationById.useQuery(
       { id: applicationId! },
-      { enabled: open && !!applicationId }
+      { enabled: open && !!applicationId },
     );
 
   return (
@@ -292,15 +292,17 @@ export function ApplicationDialog({
                     label="View"
                   />
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">
-                    Liability Insurance
-                  </span>
-                  <DocumentLink
-                    href={application.liabilityInsuranceUrl}
-                    label="View"
-                  />
-                </div>
+                {application.liabilityInsuranceUrl && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">
+                      Liability Insurance
+                    </span>
+                    <DocumentLink
+                      href={application.liabilityInsuranceUrl}
+                      label="View"
+                    />
+                  </div>
+                )}
               </Section>
 
               <Separator />
