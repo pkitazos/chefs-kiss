@@ -28,7 +28,6 @@ export const ROUTES = {
 
   vendors: true, // Browse all vendors (enable when finalized)
   "vendors/apply": true, // Vendor application form (enable during application period)
-  "vendors/apply/success": true, // Application confirmation page
 
   // Note: vendors/[slug] is a dynamic route and will be accessible if 'vendors' is enabled
 
@@ -43,6 +42,7 @@ export const ROUTES = {
   // ============================================================================
 
   workshops: true, // Browse all workshops (enable when finalized)
+  "workshops/apply": true, // Workshop application form (enable during application period)
 
   // Note: workshops/[slug] and workshops/[slug]/register are dynamic routes
   //       They will be accessible if 'workshops' is enabled
@@ -93,6 +93,7 @@ export const POST_EVENT_CONFIG = {
   "vendors/apply/success": false,
   dishes: true,
   workshops: true,
+  "workshops/apply": false,
   events: true,
   about: true,
   faq: true,
@@ -117,6 +118,7 @@ export const HIBERNATION_CONFIG = {
   "vendors/apply/success": false,
   dishes: false,
   workshops: false,
+  "workshops/apply": false,
   events: true, // Keep archive accessible
   about: true,
   faq: true,
@@ -141,6 +143,7 @@ export const VENDOR_APPLICATIONS_CONFIG = {
   "vendors/apply/success": true,
   dishes: false,
   workshops: false,
+  "workshops/apply": false,
   events: true,
   about: true,
   faq: true,
@@ -165,6 +168,7 @@ export const VENDORS_LIVE_CONFIG = {
   "vendors/apply/success": false,
   dishes: false,
   workshops: false,
+  "workshops/apply": false,
   events: true,
   about: true,
   faq: true,
@@ -189,6 +193,7 @@ export const WORKSHOPS_LIVE_CONFIG = {
   "vendors/apply/success": false,
   dishes: false,
   workshops: true, // Workshop list and registration now open
+  "workshops/apply": false, // Workshop applications closed
   events: true,
   about: true,
   faq: true,
@@ -213,6 +218,7 @@ export const FULL_EVENT_CONFIG = {
   "vendors/apply/success": false,
   dishes: true,
   workshops: true,
+  "workshops/apply": false, // Workshop applications closed
   events: true,
   about: true,
   faq: true,
