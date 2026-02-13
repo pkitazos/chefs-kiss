@@ -1,0 +1,1 @@
+ALTER TABLE "workshop_applications" ADD COLUMN "content_outline" text NOT NULL;

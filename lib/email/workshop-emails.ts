@@ -3,6 +3,7 @@ import { sendEmail } from "./index";
 import WorkshopConfirmationEmail from "@/emails/workshop-confirmation";
 import WorkshopAcceptanceEmail from "@/emails/workshop-acceptance";
 import WorkshopRejectionEmail from "@/emails/workshop-rejection";
+import { formatDateRange } from "@/lib/utils/format-date-range";
 
 type SendWorkshopConfirmationParams = {
   email: string;
@@ -52,7 +53,10 @@ type SendWorkshopAcceptanceParams = {
   contactPerson: string;
   workshopTitle: string;
   applicationId: string;
-  festivalDate: string;
+  festivalDateRange: {
+    startDate: Date;
+    endDate: Date;
+  };
 };
 
 export async function sendWorkshopAcceptance({
@@ -60,14 +64,17 @@ export async function sendWorkshopAcceptance({
   contactPerson,
   workshopTitle,
   applicationId,
-  festivalDate,
+  festivalDateRange,
 }: SendWorkshopAcceptanceParams) {
   const html = await render(
     WorkshopAcceptanceEmail({
       contactPerson,
       workshopTitle,
       applicationId,
-      festivalDate,
+      festivalDate: formatDateRange(
+        festivalDateRange.startDate,
+        festivalDateRange.endDate,
+      ),
     }),
   );
 

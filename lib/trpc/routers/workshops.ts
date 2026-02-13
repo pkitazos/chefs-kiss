@@ -1,14 +1,99 @@
-import { count, eq } from "drizzle-orm";
+import { desc, count, eq } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 
 import { workshopCreationFormSchema } from "@/lib/validations/workshop-creation-form";
-import { createTRPCRouter, publicProcedure } from "../init";
-import { events, workshopApplications } from "@/lib/db/schema";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../init";
+import {
+  applicationStatusEnum,
+  events,
+  workshopApplications,
+} from "@/lib/db/schema";
 import { type Event } from "@/lib/validations/event";
 import { generateId } from "@/lib/utils/construct-id";
-import { sendWorkshopConfirmation } from "@/lib/email/workshop-emails";
+import {
+  sendWorkshopAcceptance,
+  sendWorkshopConfirmation,
+  sendWorkshopRejection,
+} from "@/lib/email/workshop-emails";
+import { z } from "zod";
 
 export const workshopsRouter = createTRPCRouter({
+  getAllApplications: protectedProcedure
+    .input(z.object({ eventId: z.uuid().optional() }).optional())
+    .query(async ({ ctx, input }) => {
+      const baseQuery = ctx.db.select().from(workshopApplications);
+
+      const applications = input?.eventId
+        ? await baseQuery
+            .where(eq(workshopApplications.eventId, input.eventId))
+            .orderBy(desc(workshopApplications.createdAt))
+        : await baseQuery.orderBy(desc(workshopApplications.createdAt));
+
+      return applications;
+    }),
+
+  // Admin: Get single application by ID
+  getApplicationById: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const [row] = await ctx.db
+        .select()
+        .from(workshopApplications)
+
+        .where(eq(workshopApplications.id, input.id));
+
+      return row ?? null;
+    }),
+
+  // Admin: Update application status
+  updateApplicationStatus: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        status: z.enum(applicationStatusEnum.enumValues),
+        reason: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const [updated] = await ctx.db
+        .update(workshopApplications)
+        .set({ status: input.status, updatedAt: new Date() })
+        .where(eq(workshopApplications.id, input.id))
+        .returning();
+
+      if (!updated) {
+        throw new Error("Application not found");
+      }
+
+      const [event] = await ctx.db
+        .select()
+        .from(events)
+        .where(eq(events.id, updated.eventId))
+        .limit(1);
+
+      // Send appropriate email based on status
+      if (input.status === "approved") {
+        await sendWorkshopAcceptance({
+          email: updated.email,
+          applicationId: updated.id,
+          contactPerson: updated.contactPerson,
+          workshopTitle: updated.workshopTitle,
+          festivalDateRange: {
+            startDate: event.startDate,
+            endDate: event.endDate,
+          },
+        });
+      } else if (input.status === "rejected") {
+        await sendWorkshopRejection({
+          email: updated.email,
+          contactPerson: updated.contactPerson,
+          reason: input.reason,
+        });
+      }
+
+      return updated;
+    }),
+
   submitApplication: publicProcedure
     .input(workshopCreationFormSchema)
     .mutation(async ({ ctx, input }) => {
@@ -52,6 +137,7 @@ export const workshopsRouter = createTRPCRouter({
         instagramHandle: input.contactDetails.instagramHandle,
         workshopTitle: input.generalInfo.title,
         workshopDescription: input.generalInfo.description,
+        contentOutline: input.contentOutline,
         sessionDuration: input.sessionDetails.duration,
         participantsPerSession: input.sessionDetails.participantsPerSession,
         sessionsPerDay: input.sessionDetails.sessionsPerDay,

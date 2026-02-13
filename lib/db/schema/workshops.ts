@@ -22,6 +22,7 @@ export const workshopApplications = pgTable(
 
     workshopTitle: text("workshop_title").notNull(),
     workshopDescription: text("workshop_description").notNull(),
+    contentOutline: text("content_outline").notNull(),
 
     sessionDuration: integer("session_duration").notNull(),
     participantsPerSession: integer("participants_per_session").notNull(),

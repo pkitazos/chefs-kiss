@@ -44,7 +44,11 @@ export default function AdminPage() {
     );
   }
 
-  const { event: activeEvent, stats } = activeEventData ?? {};
+  const {
+    event: activeEvent,
+    vendorStats,
+    workshopStats,
+  } = activeEventData ?? {};
 
   return (
     <div className="space-y-6 py-8">
@@ -64,11 +68,16 @@ export default function AdminPage() {
                 <Badge variant="default" className="mb-2">
                   Active Event
                 </Badge>
-                <CardTitle className="text-xl">{activeEvent.name}</CardTitle>
+                <CardTitle className="mt-3 text-2xl">
+                  {activeEvent.name}
+                </CardTitle>
                 <CardDescription className="mt-2 flex items-center gap-4">
                   <span className="flex items-center gap-1">
                     <IconCalendar className="size-4" />
-                    {formatDateRange(activeEvent.startDate, activeEvent.endDate)}
+                    {formatDateRange(
+                      activeEvent.startDate,
+                      activeEvent.endDate,
+                    )}
                   </span>
                   <span className="flex items-center gap-1">
                     <IconMapPin className="size-4" />
@@ -79,40 +88,89 @@ export default function AdminPage() {
             </div>
           </CardHeader>
           <CardContent>
-            {stats && (
-              <div className="mb-4 grid grid-cols-4 gap-4">
-                <div className="rounded-lg bg-background p-3 text-center">
-                  <p className="text-2xl font-bold">{stats.total}</p>
-                  <p className="text-xs text-muted-foreground">
-                    Total Applications
-                  </p>
-                </div>
-                <div className="rounded-lg bg-background p-3 text-center">
-                  <p className="text-2xl font-bold text-yellow-600">
-                    {stats.pending}
-                  </p>
-                  <p className="text-xs text-muted-foreground">Pending</p>
-                </div>
-                <div className="rounded-lg bg-background p-3 text-center">
-                  <p className="text-2xl font-bold text-green-600">
-                    {stats.approved}
-                  </p>
-                  <p className="text-xs text-muted-foreground">Approved</p>
-                </div>
-                <div className="rounded-lg bg-background p-3 text-center">
-                  <p className="text-2xl font-bold text-red-600">
-                    {stats.rejected}
-                  </p>
-                  <p className="text-xs text-muted-foreground">Rejected</p>
-                </div>
+            <div className="flex flex-col">
+              <div className="flex justify-start items-center gap-2">
+                <h3 className="font-medium my-4">Vendors</h3>
+                <Link
+                  href={`/admin/vendor-applications?eventId=${activeEvent.id}`}
+                >
+                  <Button variant="link">
+                    <IconUsers className="mr-2 size-4" />
+                    View all Vendor Applications
+                  </Button>
+                </Link>
               </div>
-            )}
-            <Link href={`/admin/vendor-applications?eventId=${activeEvent.id}`}>
-              <Button>
-                <IconUsers className="mr-2 size-4" />
-                View Vendor Applications
-              </Button>
-            </Link>
+              {vendorStats && (
+                <div className="mb-4 grid grid-cols-4 gap-4">
+                  <div className="rounded-lg bg-background p-3 text-center">
+                    <p className="text-2xl font-bold">{vendorStats.total}</p>
+                    <p className="text-xs text-muted-foreground">
+                      Total Applications
+                    </p>
+                  </div>
+                  <div className="rounded-lg bg-background p-3 text-center">
+                    <p className="text-2xl font-bold text-yellow-600">
+                      {vendorStats.pending}
+                    </p>
+                    <p className="text-xs text-muted-foreground">Pending</p>
+                  </div>
+                  <div className="rounded-lg bg-background p-3 text-center">
+                    <p className="text-2xl font-bold text-green-600">
+                      {vendorStats.approved}
+                    </p>
+                    <p className="text-xs text-muted-foreground">Approved</p>
+                  </div>
+                  <div className="rounded-lg bg-background p-3 text-center">
+                    <p className="text-2xl font-bold text-red-600">
+                      {vendorStats.rejected}
+                    </p>
+                    <p className="text-xs text-muted-foreground">Rejected</p>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="flex flex-col">
+              <div className="flex justify-start items-center gap-2">
+                <h3 className="font-medium my-4">Workshops</h3>
+
+                <Link
+                  href={`/admin/workshop-applications?eventId=${activeEvent.id}`}
+                >
+                  <Button variant="link">
+                    <IconUsers className="mr-2 size-4" />
+                    View all Workshop Applications
+                  </Button>
+                </Link>
+              </div>
+              {workshopStats && (
+                <div className="mb-4 grid grid-cols-4 gap-4">
+                  <div className="rounded-lg bg-background p-3 text-center">
+                    <p className="text-2xl font-bold">{workshopStats.total}</p>
+                    <p className="text-xs text-muted-foreground">
+                      Total Applications
+                    </p>
+                  </div>
+                  <div className="rounded-lg bg-background p-3 text-center">
+                    <p className="text-2xl font-bold text-yellow-600">
+                      {workshopStats.pending}
+                    </p>
+                    <p className="text-xs text-muted-foreground">Pending</p>
+                  </div>
+                  <div className="rounded-lg bg-background p-3 text-center">
+                    <p className="text-2xl font-bold text-green-600">
+                      {workshopStats.approved}
+                    </p>
+                    <p className="text-xs text-muted-foreground">Approved</p>
+                  </div>
+                  <div className="rounded-lg bg-background p-3 text-center">
+                    <p className="text-2xl font-bold text-red-600">
+                      {workshopStats.rejected}
+                    </p>
+                    <p className="text-xs text-muted-foreground">Rejected</p>
+                  </div>
+                </div>
+              )}
+            </div>
           </CardContent>
         </Card>
       ) : (
@@ -129,7 +187,9 @@ export default function AdminPage() {
       <Card>
         <CardHeader>
           <CardTitle>Your Events</CardTitle>
-          <CardDescription>All past, present, and future events</CardDescription>
+          <CardDescription>
+            All past, present, and future events
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {allEvents && allEvents.length > 0 ? (
