@@ -6,28 +6,35 @@
       "idx": 0,
       "version": "7",
       "when": 1766410031556,
-      "tag": "0000_condemned_vanisher",
+      "tag": "0000_initial_schema",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "7",
       "when": 1768914482022,
-      "tag": "0001_violet_titania",
+      "tag": "0001_change_ids_to_text",
       "breakpoints": true
     },
     {
       "idx": 2,
       "version": "7",
       "when": 1768918520573,
-      "tag": "0002_busy_victor_mancha",
+      "tag": "0002_add_events_and_link_vendors",
       "breakpoints": true
     },
     {
       "idx": 3,
       "version": "7",
       "when": 1770629475057,
-      "tag": "0003_powerful_kylun",
+      "tag": "0003_make_insurance_optional",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1770985680358,
+      "tag": "0004_create_workshop_applications",
       "breakpoints": true
     }
   ]

@@ -5,17 +5,10 @@ import {
   decimal,
   integer,
   index,
-  pgEnum,
   uuid,
 } from "drizzle-orm/pg-core";
 import { events } from "./events";
-
-// Enum for application status
-export const applicationStatusEnum = pgEnum("application_status", [
-  "pending",
-  "approved",
-  "rejected",
-]);
+import { applicationStatusEnum } from "./applications";
 
 // Truck information (separate table for data integrity)
 export const vendorTruckInfo = pgTable("vendor_truck_info", {

@@ -1,24 +1,25 @@
 import { TRPCError } from "@trpc/server";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../init";
-import { vendorFormSchema } from "@/lib/validations/vendor-form";
-import { type Event } from "@/lib/validations/event";
+import { count, desc, eq } from "drizzle-orm";
+import { z } from "zod";
+
 import {
   applicationStatusEnum,
+  events,
   vendorApplications,
   vendorDishes,
   vendorEmployees,
   vendorPowerRequirements,
   vendorTruckInfo,
-} from "@/lib/db/schema/vendors";
-import { events } from "@/lib/db/schema/events";
+} from "@/lib/db/schema/";
 import {
   sendVendorAcceptance,
   sendVendorConfirmation,
   sendVendorRejection,
 } from "@/lib/email/vendor-emails";
-import { count, desc, eq } from "drizzle-orm";
-import { z } from "zod";
 import { generateId } from "@/lib/utils/construct-id";
+import { type Event } from "@/lib/validations/event";
+import { vendorFormSchema } from "@/lib/validations/vendor-form";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../init";
 
 export const vendorsRouter = createTRPCRouter({
   // Admin: Get all applications with related data (optionally filtered by event)
@@ -39,44 +40,47 @@ export const vendorsRouter = createTRPCRouter({
             .orderBy(desc(vendorApplications.createdAt))
         : await baseQuery.orderBy(desc(vendorApplications.createdAt));
 
-    const result = await Promise.all(
-      applications.map(async (row) => {
-        const dishes = await ctx.db
-          .select()
-          .from(vendorDishes)
-          .where(
-            eq(vendorDishes.vendorApplicationId, row.vendor_applications.id),
-          );
+      const result = await Promise.all(
+        applications.map(async (row) => {
+          const dishes = await ctx.db
+            .select()
+            .from(vendorDishes)
+            .where(
+              eq(vendorDishes.vendorApplicationId, row.vendor_applications.id),
+            );
 
-        const employees = await ctx.db
-          .select()
-          .from(vendorEmployees)
-          .where(
-            eq(vendorEmployees.vendorApplicationId, row.vendor_applications.id),
-          );
+          const employees = await ctx.db
+            .select()
+            .from(vendorEmployees)
+            .where(
+              eq(
+                vendorEmployees.vendorApplicationId,
+                row.vendor_applications.id,
+              ),
+            );
 
-        const powerRequirements = await ctx.db
-          .select()
-          .from(vendorPowerRequirements)
-          .where(
-            eq(
-              vendorPowerRequirements.vendorApplicationId,
-              row.vendor_applications.id,
-            ),
-          );
+          const powerRequirements = await ctx.db
+            .select()
+            .from(vendorPowerRequirements)
+            .where(
+              eq(
+                vendorPowerRequirements.vendorApplicationId,
+                row.vendor_applications.id,
+              ),
+            );
 
-        return {
-          ...row.vendor_applications,
-          truckInfo: row.vendor_truck_info,
-          dishes,
-          employees,
-          powerRequirements,
-        };
-      }),
-    );
+          return {
+            ...row.vendor_applications,
+            truckInfo: row.vendor_truck_info,
+            dishes,
+            employees,
+            powerRequirements,
+          };
+        }),
+      );
 
-    return result;
-  }),
+      return result;
+    }),
 
   // Admin: Get single application by ID
   getApplicationById: protectedProcedure
@@ -272,5 +276,4 @@ export const vendorsRouter = createTRPCRouter({
           "Your application has been submitted successfully. You will receive a confirmation email shortly.",
       };
     }),
-
 });
