@@ -48,9 +48,9 @@ export const workshopCreationFormSchema = z.object({
     .describe("Materials and tools required for the workshop"),
 
   targetAudience: z
-    .enum(["adults", "families", "children"], {
+    .enum(["adults", "families", "children", "couples", "all"], {
       error:
-        "Target audience must be either 'adults', 'families', or 'children'",
+        "Target audience must be either 'adults', 'families', 'children', 'couples', or 'all'",
     })
     .describe("Target audience for the workshop"),
 
@@ -61,14 +61,27 @@ export const workshopCreationFormSchema = z.object({
     .describe("Preferred participation duration"),
 
   contactDetails: z.object({
+    contactPerson: z
+      .string()
+      .min(1, "Contact person is required")
+      .describe(
+        "The full name of the primary contact person for your business.",
+      ),
+
     email: z
       .email("Invalid email address")
-      .describe("Email address for participant communication"),
+      .describe("The email address for preferred contact"),
 
-    phone: z
+    phoneNumber: z
       .string()
+      .min(1, "Phone number is required")
+      .describe("Phone number for preferred contact"),
+
+    instagramHandle: z
+      .string()
+      .transform((val) => (val && !val.startsWith("@") ? `@${val}` : val))
       .optional()
-      .describe("Phone number for participant communication"),
+      .describe("Your business's Instagram profile handle if applicable."),
   }),
 });
 

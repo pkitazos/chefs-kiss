@@ -5,7 +5,7 @@ export default function ApplicationsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Vendor Applications</h1>
-        <p className="text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           Review and manage vendor applications
         </p>
       </div>

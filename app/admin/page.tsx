@@ -50,7 +50,7 @@ export default function AdminPage() {
     <div className="space-y-6 py-8">
       <div>
         <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-        <p className="text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           Welcome to the Chef&apos;s Kiss event management system
         </p>
       </div>
@@ -140,7 +140,7 @@ export default function AdminPage() {
                   className="flex items-center justify-between rounded-lg border p-3"
                 >
                   <div>
-                    <p className="font-medium">{event.name}</p>
+                    <p className="text-sm font-medium">{event.name}</p>
                     <p className="text-sm text-muted-foreground">
                       {formatDateRange(event.startDate, event.endDate)} -{" "}
                       {event.location}

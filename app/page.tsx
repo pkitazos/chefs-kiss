@@ -9,6 +9,7 @@ const subtitle = (location: string, date: string) => `${date} | ${location}`;
 
 const NEXT_EVENT = {
   vendorApplicationDeadline: new Date("2026-02-28T23:59:59"),
+  workshopApplicationDeadline: new Date("2026-02-28T23:59:59"),
   locationName: "Ayia Napa Marina, Famagusta",
   dates: "16 · 17 May 2026",
 };
@@ -17,7 +18,8 @@ export const dynamic = "force-dynamic";
 
 export default function HomePage() {
   const now = new Date();
-  const isOpen = NEXT_EVENT.vendorApplicationDeadline > now;
+  const isVendorAppOpen = NEXT_EVENT.vendorApplicationDeadline > now;
+  const isWorkshopAppOpen = NEXT_EVENT.workshopApplicationDeadline > now;
 
   return (
     <main className="grid h-[92dvh] place-items-center pt-16 w-full relative px-2.5">
@@ -26,23 +28,37 @@ export default function HomePage() {
         <p className="text-center text-xl font-bold tracking-tight sm:text-2xl">
           {subtitle(NEXT_EVENT.locationName, NEXT_EVENT.dates)}
         </p>
-        {isOpen && (
-          <Link
-            href="/vendors/apply"
-            className={cn(
-              buttonVariants({ variant: "default", size: "lg" }),
-              "px-9 py-6 text-lg"
-            )}
-          >
-            Apply for a Stand
-          </Link>
-        )}
+        <div className="flex flex-row gap-10">
+          {isVendorAppOpen && (
+            <Link
+              href="/vendors/apply"
+              className={cn(
+                buttonVariants({ variant: "default", size: "lg" }),
+                "px-9 py-6 text-lg",
+              )}
+            >
+              Apply to be a Vendor
+            </Link>
+          )}
+          {isWorkshopAppOpen && (
+            <Link
+              href="/workshops/apply"
+              className={cn(
+                buttonVariants({ variant: "default", size: "lg" }),
+                "px-9 py-6 text-lg",
+              )}
+            >
+              Apply to host a Workshop
+            </Link>
+          )}
+        </div>
       </div>
-      {isOpen && (
+      {/* check if different deadlines for each application */}
+      {isWorkshopAppOpen && (
         <p className="absolute bottom-0 place-self-center text-center font-bold tracking-tight text-muted-foreground sm:text-lg px-2.5">
-          <span className="text-primary">*</span> All vendors are required to
-          complete and submit their application form by{" "}
-          {format(NEXT_EVENT.vendorApplicationDeadline, "MMMM d, yyyy")}.
+          <span className="text-primary">*</span> All applications are required
+          to be completed and submitted by{" "}
+          {format(NEXT_EVENT.workshopApplicationDeadline, "MMMM d, yyyy")}.
         </p>
       )}
     </main>

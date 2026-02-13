@@ -274,9 +274,7 @@
   }
 
   p {
-    @apply font-sans font-normal text-[12pt] leading-[16pt];
-    letter-spacing: 0.05em; /* tracking 50 */
-    /* Main Text: Manrope Regular, 12pt, leading +4pt, tracking 50 */
+    @apply font-sans font-normal;
   }
 
   /* Optional: h3-h6 defaults using responsive scaling */

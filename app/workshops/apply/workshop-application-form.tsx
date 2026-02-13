@@ -58,75 +58,82 @@ function WorkshopGuidelines({ onContinue }: { onContinue: () => void }) {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl">Workshop Guidelines</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-xl font-medium">
+            Workshop Guidelines
+          </CardTitle>
+          <CardDescription className="text-sm">
             Please read the following guidelines carefully before submitting
             your application
           </CardDescription>
         </CardHeader>
-        <CardContent className="prose prose-sm dark:prose-invert max-w-none">
-          <p>
+        <CardContent className="space-y-3 [&_ul]:list-disc [&_ul]:ml-12 [&_ul]:space-y-1.5">
+          <p className="text-sm">
             This document outlines the general terms, requirements, and
             responsibilities for all workshop partners participating in
             Chef&apos;s Kiss events.
           </p>
 
-          <Separator className="my-6" />
+          <Separator className="my-8" />
 
-          <h3>1. General Overview</h3>
-          <p>
+          <h3 className="font-semibold text-lg">1. General Overview</h3>
+          <p className="text-sm">
             Chef&apos;s Kiss hosts a curated programme of workshops that align
             with the festival&apos;s creative, cultural, lifestyle, and culinary
             ethos.
           </p>
-          <p>
+          <p className="text-sm">
             Workshop organisers are responsible for the design and delivery of
             their activity, while the event organisers provide infrastructure,
             visibility, and booking support to ensure a smooth participant
             experience.
           </p>
 
-          <Separator className="my-6" />
+          <Separator className="my-8" />
 
-          <h3>2. Workshop Space & Fees</h3>
-          <p>A standard participation fee applies per workshop station:</p>
+          <h3 className="font-semibold text-lg">2. Workshop Space & Fees</h3>
+          <p className="text-sm">
+            A standard participation fee applies per workshop station:
+          </p>
           <ul>
-            <li>
+            <li className="text-sm">
               <strong>&euro;200 for one event day</strong>
             </li>
-            <li>
+            <li className="text-sm">
               <strong>&euro;300 for both event days</strong>
             </li>
           </ul>
-          <p>
-            This fee covers the use of the workshop space and inclusion in the
-            event&apos;s official programme and booking system.
+          <p className="text-sm">
+            This fee covers the use of the workshop space, promotion through our
+            media platforms, and inclusion in the event&apos;s official
+            programme and booking system.
           </p>
-          <p>
+          <p className="text-sm">
             All payments made by workshop attendees belong entirely to the
             workshop organiser.
           </p>
 
-          <Separator className="my-6" />
+          <Separator className="my-8" />
 
-          <h3>3. Booking, Payments & Participants</h3>
+          <h3 className="font-semibold text-lg">
+            3. Booking, Payments & Participants
+          </h3>
           <ul>
-            <li>
+            <li className="text-sm">
               The event organisers will provide and manage the{" "}
               <strong>official booking system</strong> on the Chef&apos;s Kiss
               website.
             </li>
-            <li>
+            <li className="text-sm">
               Workshop organisers are{" "}
               <strong>fully responsible for collecting payments</strong> from
               attendees.
             </li>
-            <li>
+            <li className="text-sm">
               The event team will handle{" "}
               <strong>on-site hosting and reception</strong> of workshop
               participants.
             </li>
-            <li>
+            <li className="text-sm">
               If a workshop is fully booked, the organiser will receive the{" "}
               <strong>
                 final participant list 1&ndash;2 weeks prior to the event
@@ -134,136 +141,146 @@ function WorkshopGuidelines({ onContinue }: { onContinue: () => void }) {
               .
             </li>
           </ul>
-          <p>
+          <p className="text-sm">
             Workshop organisers are strongly encouraged to implement a{" "}
             <strong>prepayment or deposit system</strong> to confirm bookings
             and minimise last-minute cancellations.
           </p>
-          <p>
+          <p className="text-sm">
             If a workshop has{" "}
             <strong>no confirmed bookings one week prior to the event</strong>,
             the organiser must contact the event management team to discuss
             possible actions, including:
           </p>
           <ul>
-            <li>Adjusting the workshop format,</li>
-            <li>Revising the participation fee, or</li>
-            <li>Cancelling the workshop.</li>
+            <li className="text-sm">Adjusting the workshop format,</li>
+            <li className="text-sm">Revising the participation fee, or</li>
+            <li className="text-sm">Cancelling the workshop.</li>
           </ul>
 
-          <Separator className="my-6" />
+          <Separator className="my-8" />
 
-          <h3>4. Provided by the Organisers</h3>
-          <p>The event organisers will provide:</p>
+          <h3 className="font-semibold text-lg">
+            4. Provided by the Organisers
+          </h3>
+          <p className="text-sm">The event organisers will provide:</p>
           <ul>
-            <li>
+            <li className="text-sm">
               A dedicated workshop space (indoor or outdoor, depending on
               availability and suitability).
             </li>
-            <li>
+            <li className="text-sm">
               Inclusion in the official booking system and event programme.
             </li>
-            <li>
+            <li className="text-sm">
               Promotion through official event channels and onsite signage.
             </li>
-            <li>
+            <li className="text-sm">
               On-site participant reception and general event coordination.
             </li>
           </ul>
-          <p>
+          <p className="text-sm">
             Any additional requirements must be communicated in advance and
             approved by the organisers.
           </p>
 
-          <Separator className="my-6" />
+          <Separator className="my-8" />
 
-          <h3>5. Workshop Materials & Equipment</h3>
+          <h3 className="font-semibold text-lg">
+            5. Workshop Materials & Equipment
+          </h3>
           <ul>
-            <li>
+            <li className="text-sm">
               All materials, tools, consumables, and ingredients are the{" "}
               <strong>sole responsibility of the workshop organiser</strong>.
             </li>
-            <li>
+            <li className="text-sm">
               The organisers do not provide equipment or consumables unless
               explicitly agreed in advance.
             </li>
-            <li>
+            <li className="text-sm">
               Workshop organisers must prepare their area before each session
               and maintain cleanliness throughout the event.
             </li>
           </ul>
 
-          <Separator className="my-6" />
+          <Separator className="my-8" />
 
-          <h3>6. Operations & Logistics</h3>
+          <h3 className="font-semibold text-lg">6. Operations & Logistics</h3>
           <ul>
-            <li>
+            <li className="text-sm">
               Setup and breakdown times will be communicated prior to the event.
             </li>
-            <li>
+            <li className="text-sm">
               Organisers must arrive early enough to fully prepare before their
               first scheduled session.
             </li>
-            <li>
+            <li className="text-sm">
               Workshop areas must remain clean, organised, and safe at all
               times.
             </li>
-            <li>
+            <li className="text-sm">
               Any requirements for sound, electricity, or water must be
               requested and approved in advance.
             </li>
-            <li>
+            <li className="text-sm">
               All activities must comply with event safety and operational
               standards.
             </li>
           </ul>
 
-          <Separator className="my-6" />
+          <Separator className="my-8" />
 
-          <h3>7. Promotion & Communication</h3>
+          <h3 className="font-semibold text-lg">
+            7. Promotion & Communication
+          </h3>
           <ul>
-            <li>
+            <li className="text-sm">
               Workshops will be featured on the event website, booking platform,
               and onsite programme.
             </li>
-            <li>
+            <li className="text-sm">
               All public bookings will be managed through the official system.
             </li>
-            <li>
+            <li className="text-sm">
               Organisers are encouraged to promote their workshop independently,
               tagging official event channels.
             </li>
-            <li>
+            <li className="text-sm">
               Any custom marketing materials must align with the event&apos;s
               brand guidelines and may require approval.
             </li>
           </ul>
 
-          <Separator className="my-6" />
+          <Separator className="my-8" />
 
-          <h3>8. Cleaning & Responsibility</h3>
+          <h3 className="font-semibold text-lg">
+            8. Cleaning & Responsibility
+          </h3>
           <ul>
-            <li>
+            <li className="text-sm">
               Workshop organisers are fully responsible for cleaning their area
               after each session and at the end of the event.
             </li>
-            <li>
+            <li className="text-sm">
               Any damage or unclean conditions may result in a cleaning or
               repair fee charged by the organisers.
             </li>
           </ul>
 
-          <Separator className="my-6" />
+          <Separator className="my-8" />
 
-          <h3>Contact</h3>
-          <p>For all workshop-related inquiries, please contact:</p>
+          <h3 className="font-semibold text-lg">Contact</h3>
+          <p className="text-sm">
+            For all workshop-related inquiries, please contact:
+          </p>
           <ul>
-            <li>
+            <li className="text-sm">
               Email:{" "}
               <a href="mailto:info@chefskiss.com.cy">info@chefskiss.com.cy</a>
             </li>
-            <li>Phone: +357 99 145169</li>
-            <li>Contact Person: Panagiotis Zantis</li>
+            <li className="text-sm">Phone: +357 99 145169</li>
+            <li className="text-sm">Contact Person: Panagiotis Zantis</li>
           </ul>
         </CardContent>
       </Card>
@@ -291,10 +308,7 @@ export function WorkshopApplicationForm() {
   } = useForm<WorkshopCreationFormData>({
     resolver: zodResolver(workshopCreationFormSchema),
     defaultValues: {
-      generalInfo: {
-        title: "",
-        description: "",
-      },
+      generalInfo: { title: "", description: "" },
       contentOutline: "",
       sessionDetails: {
         duration: undefined,
@@ -305,8 +319,10 @@ export function WorkshopApplicationForm() {
       targetAudience: undefined,
       preferredParticipation: undefined,
       contactDetails: {
+        contactPerson: "",
         email: "",
-        phone: "",
+        phoneNumber: "",
+        instagramHandle: "",
       },
     },
   });
@@ -364,7 +380,7 @@ export function WorkshopApplicationForm() {
         <Card>
           <CardHeader>
             <CardTitle className="text-xl">General Information</CardTitle>
-            <CardDescription>
+            <CardDescription className="text-sm">
               Tell us about your workshop and what participants can expect
             </CardDescription>
           </CardHeader>
@@ -418,7 +434,7 @@ export function WorkshopApplicationForm() {
         <Card>
           <CardHeader>
             <CardTitle className="text-xl">Content & Activities</CardTitle>
-            <CardDescription>
+            <CardDescription className="text-sm">
               Outline the workshop content and what materials you&apos;ll need
             </CardDescription>
           </CardHeader>
@@ -470,7 +486,7 @@ export function WorkshopApplicationForm() {
         <Card>
           <CardHeader>
             <CardTitle className="text-xl">Session Details</CardTitle>
-            <CardDescription>
+            <CardDescription className="text-sm">
               Specify the logistics for each session
             </CardDescription>
           </CardHeader>
@@ -551,7 +567,7 @@ export function WorkshopApplicationForm() {
         <Card>
           <CardHeader>
             <CardTitle className="text-xl">Audience & Participation</CardTitle>
-            <CardDescription>
+            <CardDescription className="text-sm">
               Who is this workshop for and how many days would you like to
               participate?
             </CardDescription>
@@ -620,7 +636,7 @@ export function WorkshopApplicationForm() {
         <Card>
           <CardHeader>
             <CardTitle className="text-xl">Contact Details</CardTitle>
-            <CardDescription>
+            <CardDescription className="text-sm">
               How can we reach you about your workshop application?
             </CardDescription>
           </CardHeader>
@@ -656,16 +672,20 @@ export function WorkshopApplicationForm() {
                   id="phone"
                   type="tel"
                   placeholder="+357 99 999999"
-                  {...register("contactDetails.phone")}
-                  aria-invalid={!!errors.contactDetails?.phone}
+                  {...register("contactDetails.phoneNumber")}
+                  aria-invalid={!!errors.contactDetails?.phoneNumber}
                 />
               </Field>
-              {errors.contactDetails?.phone && (
-                <FieldError>{errors.contactDetails.phone.message}</FieldError>
+              {errors.contactDetails?.phoneNumber && (
+                <FieldError>
+                  {errors.contactDetails.phoneNumber.message}
+                </FieldError>
               )}
             </FieldGroup>
           </CardContent>
         </Card>
+
+        {/* todo: add confirmation "I agree blah bla bla" */}
 
         {/* Submit Button */}
         <div className="flex justify-end">
