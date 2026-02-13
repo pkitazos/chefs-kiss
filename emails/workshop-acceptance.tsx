@@ -12,14 +12,14 @@ import { Signature } from "./components/signature";
 
 interface WorkshopAcceptanceEmailProps {
   contactPerson: string;
-  workshopName: string;
+  workshopTitle: string;
   applicationId: string;
   festivalDate: string;
 }
 
 export default function WorkshopAcceptanceEmail({
   contactPerson,
-  workshopName,
+  workshopTitle,
   applicationId,
   festivalDate,
 }: WorkshopAcceptanceEmailProps) {
@@ -60,7 +60,7 @@ export default function WorkshopAcceptanceEmail({
                         Workshop Name:
                       </td>
                       <td className="py-2 text-sm font-semibold">
-                        {workshopName}
+                        {workshopTitle}
                       </td>
                     </tr>
                     <tr>
@@ -98,7 +98,7 @@ export default function WorkshopAcceptanceEmail({
 
 WorkshopAcceptanceEmail.PreviewProps = {
   contactPerson: "[Contact Person]",
-  workshopName: "[Workshop Name]",
+  workshopTitle: "[Workshop Name]",
   applicationId: "WS-2025-001234",
   festivalDate: "[Actual Festival Date]",
 } as WorkshopAcceptanceEmailProps;

@@ -29,7 +29,7 @@ export async function sendVendorConfirmation({
 
   const result = await sendEmail({
     to: email,
-    subject: "Application Received - Chef's Kiss Festival",
+    subject: "Vendor Application Received - Chef's Kiss Festival",
     html,
   });
 
@@ -65,7 +65,7 @@ export async function sendVendorAcceptance({
 
   const result = await sendEmail({
     to: email,
-    subject: "Application Approved - Chef's Kiss Festival",
+    subject: "Vendor Application Approved - Chef's Kiss Festival",
     html,
   });
 

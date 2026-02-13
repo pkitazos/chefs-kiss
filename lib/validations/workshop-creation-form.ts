@@ -1,15 +1,5 @@
 import { z } from "zod";
 
-// Workshop title and brief description
-// Workshop content and activity outline
-// Duration of each session
-// Number of participants per session
-// Number of sessions per day
-// Materials and tools required
-// Target audience (e.g. adults, families, children)
-// Preferred participation (one day or two days)
-// Contact details for participant communication
-
 export const workshopCreationFormSchema = z.object({
   generalInfo: z.object({
     title: z
@@ -22,7 +12,6 @@ export const workshopCreationFormSchema = z.object({
       .describe("Brief description of the workshop"),
   }),
 
-  // ? ti en touto?
   contentOutline: z
     .string()
     .min(1, "Content outline is required")

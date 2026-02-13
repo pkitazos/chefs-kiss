@@ -12,14 +12,14 @@ import { Signature } from "./components/signature";
 
 interface WorkshopConfirmationEmailProps {
   contactPerson: string;
-  workshopName: string;
+  workshopTitle: string;
   applicationId: string;
   submissionDate: string;
 }
 
 export default function WorkshopConfirmationEmail({
   contactPerson,
-  workshopName,
+  workshopTitle,
   applicationId,
   submissionDate,
 }: WorkshopConfirmationEmailProps) {
@@ -59,7 +59,7 @@ export default function WorkshopConfirmationEmail({
                         Workshop Name:
                       </td>
                       <td className="py-2 text-sm font-semibold">
-                        {workshopName}
+                        {workshopTitle}
                       </td>
                     </tr>
                     <tr>
@@ -111,7 +111,7 @@ export default function WorkshopConfirmationEmail({
 
 WorkshopConfirmationEmail.PreviewProps = {
   contactPerson: "[Contact Person]",
-  workshopName: "[Workshop Name]",
+  workshopTitle: "[Workshop Name]",
   applicationId: "WS-2025-001234",
   submissionDate: "[Actual Submission Date]",
 } as WorkshopConfirmationEmailProps;

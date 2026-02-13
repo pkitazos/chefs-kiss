@@ -10,12 +10,12 @@ import {
 import { Signature } from "./components/signature";
 
 interface WorkshopRejectionEmailProps {
-  businessName: string;
+  contactPerson: string;
   reason?: string;
 }
 
 export default function WorkshopRejectionEmail({
-  businessName,
+  contactPerson,
   reason,
 }: WorkshopRejectionEmailProps) {
   return (
@@ -28,7 +28,7 @@ export default function WorkshopRejectionEmail({
               <Heading className="mb-5 text-2xl text-[#2c3e50]">
                 Regarding Your Workshop Application
               </Heading>
-              <Text className="mb-3.75 text-base">Dear {businessName},</Text>
+              <Text className="mb-3.75 text-base">Dear {contactPerson},</Text>
               <Text className="mb-3.75 text-base">
                 Thank you for your interest in participating in the Chef&apos;s
                 Kiss Festival and for taking the time to submit your workshop
@@ -56,7 +56,7 @@ export default function WorkshopRejectionEmail({
 }
 
 WorkshopRejectionEmail.PreviewProps = {
-  businessName: "[Workshop Business Name]",
+  contactPerson: "[Workshop Business Name]",
   reason: `
 
   `,

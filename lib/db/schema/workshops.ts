@@ -1,11 +1,18 @@
-import { index, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import {
+  index,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+} from "drizzle-orm/pg-core";
 import { events } from "./events";
 import { applicationStatusEnum } from "./applications";
 
 export const workshopApplications = pgTable(
   "workshop_applications",
   {
-    id: uuid("id").primaryKey().defaultRandom(),
+    id: text("id").primaryKey(),
     status: applicationStatusEnum("status").notNull().default("pending"),
 
     contactPerson: text("contact_person").notNull(),
@@ -16,9 +23,9 @@ export const workshopApplications = pgTable(
     workshopTitle: text("workshop_title").notNull(),
     workshopDescription: text("workshop_description").notNull(),
 
-    sessionDuration: text("session_duration").notNull(),
-    participantsPerSession: text("participants_per_session").notNull(),
-    sessionsPerDay: text("sessions_per_day").notNull(),
+    sessionDuration: integer("session_duration").notNull(),
+    participantsPerSession: integer("participants_per_session").notNull(),
+    sessionsPerDay: integer("sessions_per_day").notNull(),
 
     materialsAndTools: text("materials_and_tools").notNull(),
     targetAudience: text("target_audience").notNull(),

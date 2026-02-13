@@ -1,5 +1,5 @@
 {
-  "id": "ff5ca8d5-ff38-495d-ae49-9dc457893c9b",
+  "id": "f991d009-dd7f-4bbc-b001-8a7a72578545",
   "prevId": "f1aa7b0a-4e91-4f96-9b47-975c9df21f12",
   "version": "7",
   "dialect": "postgresql",
@@ -95,12 +95,8 @@
           "name": "account_userId_user_id_fk",
           "tableFrom": "account",
           "tableTo": "user",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -172,12 +168,8 @@
           "name": "session_userId_user_id_fk",
           "tableFrom": "session",
           "tableTo": "user",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -187,9 +179,7 @@
         "session_token_unique": {
           "name": "session_token_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "token"
-          ]
+          "columns": ["token"]
         }
       },
       "policies": {},
@@ -253,9 +243,7 @@
         "user_email_unique": {
           "name": "user_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},
@@ -497,12 +485,8 @@
           "name": "vendor_applications_truck_info_id_vendor_truck_info_id_fk",
           "tableFrom": "vendor_applications",
           "tableTo": "vendor_truck_info",
-          "columnsFrom": [
-            "truck_info_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["truck_info_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -510,12 +494,8 @@
           "name": "vendor_applications_event_id_events_id_fk",
           "tableFrom": "vendor_applications",
           "tableTo": "events",
-          "columnsFrom": [
-            "event_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["event_id"],
+          "columnsTo": ["id"],
           "onDelete": "restrict",
           "onUpdate": "no action"
         }
@@ -569,12 +549,8 @@
           "name": "vendor_dishes_vendor_application_id_vendor_applications_id_fk",
           "tableFrom": "vendor_dishes",
           "tableTo": "vendor_applications",
-          "columnsFrom": [
-            "vendor_application_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["vendor_application_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -634,12 +610,8 @@
           "name": "vendor_employees_vendor_application_id_vendor_applications_id_fk",
           "tableFrom": "vendor_employees",
           "tableTo": "vendor_applications",
-          "columnsFrom": [
-            "vendor_application_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["vendor_application_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -693,12 +665,8 @@
           "name": "vendor_power_requirements_vendor_application_id_vendor_applications_id_fk",
           "tableFrom": "vendor_power_requirements",
           "tableTo": "vendor_applications",
-          "columnsFrom": [
-            "vendor_application_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["vendor_application_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -867,10 +835,9 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "text",
           "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
+          "notNull": true
         },
         "status": {
           "name": "status",
@@ -918,19 +885,19 @@
         },
         "session_duration": {
           "name": "session_duration",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
         "participants_per_session": {
           "name": "participants_per_session",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
         "sessions_per_day": {
           "name": "sessions_per_day",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
@@ -1040,12 +1007,8 @@
           "name": "workshop_applications_event_id_events_id_fk",
           "tableFrom": "workshop_applications",
           "tableTo": "events",
-          "columnsFrom": [
-            "event_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["event_id"],
+          "columnsTo": ["id"],
           "onDelete": "restrict",
           "onUpdate": "no action"
         }
@@ -1061,11 +1024,7 @@
     "public.application_status": {
       "name": "application_status",
       "schema": "public",
-      "values": [
-        "pending",
-        "approved",
-        "rejected"
-      ]
+      "values": ["pending", "approved", "rejected"]
     }
   },
   "schemas": {},

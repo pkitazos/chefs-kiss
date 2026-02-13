@@ -39,18 +39,19 @@ import {
   IconArrowRight,
   IconArrowLeft,
 } from "@tabler/icons-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { api } from "@/lib/trpc/client";
 
 const PLACEHOLDERS = {
   generalInfo: {
-    description: `Our Pottery & Wine workshop offers guests a relaxed, hands-on creative experience. Participants can enjoy
-     wine tasting while crafting pottery pieces, guided by experienced instructors.`,
+    description: `Our Pottery & Wine workshop offers guests a relaxed, hands-on creative experience. Participants can enjoy wine tasting while crafting pottery pieces, guided by experienced instructors.`,
   },
   contentOutline: `This workshop combines a guided wine tasting with a hands-on pottery session in a small-group setting. Guests are introduced to a selection of wines from a featured winery while learning the fundamentals of working with clay.
 
 With step-by-step guidance from the instructor, participants create their own ceramic piece, such as a bowl, cup, or decorative item, regardless of prior experience. The session is relaxed, practical, and interactive, offering a balanced mix of tasting, learning, and creating.
 
 By the end of the workshop, attendees leave with a handmade piece and a clearer understanding of both the winemaking story and the pottery process.`,
-  materialsAndTools: `Cutting boards, knives, mixing bowls, fresh herbs, olive oil, seasonal vegetables...`,
+  materialsAndTools: `Pottery wheels and/or hand-building stations, basic pottery tools (wooden ribs, carving tools, sponges, wire cutters), aprons and protective table covers, wine glasses for tasting`,
 };
 
 function WorkshopGuidelines({ onContinue }: { onContinue: () => void }) {
@@ -296,6 +297,8 @@ function WorkshopGuidelines({ onContinue }: { onContinue: () => void }) {
 }
 
 export function WorkshopApplicationForm() {
+  const [canSubmit, setCanSubmit] = useState(false);
+
   const [step, setStep] = useState<"guidelines" | "form">("guidelines");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -327,25 +330,28 @@ export function WorkshopApplicationForm() {
     },
   });
 
-  const onSubmit = async (data: WorkshopCreationFormData) => {
-    setIsSubmitting(true);
-    try {
-      // TODO: Replace with tRPC mutation when backend is ready
-      console.log("Workshop application data:", data);
+  const submitMutation = api.workshops.submitApplication.useMutation({
+    onSuccess: (data) => {
+      setIsSubmitting(false);
       toast.success("Application Submitted!", {
-        description:
-          "Your workshop application has been received. We'll be in touch soon.",
+        description: `Application ID: ${data.applicationId}`,
       });
       reset();
       window.scrollTo({ top: 0, behavior: "smooth" });
-    } catch {
+    },
+    onError: (error) => {
+      setIsSubmitting(false);
       toast.error("Submission Failed", {
         description:
           "Something went wrong while submitting your application. Please try again.",
       });
-    } finally {
-      setIsSubmitting(false);
-    }
+      console.error("Submission error:", error);
+    },
+  });
+
+  const onSubmit = async (data: WorkshopCreationFormData) => {
+    setIsSubmitting(true);
+    submitMutation.mutate(data);
   };
 
   if (step === "guidelines") {
@@ -470,7 +476,7 @@ export function WorkshopApplicationForm() {
               <Field>
                 <Textarea
                   id="materialsAndTools"
-                  placeholder="Cutting boards, knives, mixing bowls, fresh herbs, olive oil, seasonal vegetables..."
+                  placeholder={PLACEHOLDERS.materialsAndTools}
                   {...register("materialsAndTools")}
                   aria-invalid={!!errors.materialsAndTools}
                 />
@@ -547,7 +553,7 @@ export function WorkshopApplicationForm() {
                     id="sessionsPerDay"
                     type="number"
                     step="1"
-                    placeholder="3"
+                    placeholder="1"
                     {...register("sessionDetails.sessionsPerDay")}
                     aria-invalid={!!errors.sessionDetails?.sessionsPerDay}
                     onWheel={(e) => e.currentTarget.blur()}
@@ -593,6 +599,8 @@ export function WorkshopApplicationForm() {
                       <SelectItem value="adults">Adults</SelectItem>
                       <SelectItem value="families">Families</SelectItem>
                       <SelectItem value="children">Children</SelectItem>
+                      <SelectItem value="couples">Couples</SelectItem>
+                      <SelectItem value="all">All Ages</SelectItem>
                     </SelectContent>
                   </Select>
                 )}
@@ -643,6 +651,30 @@ export function WorkshopApplicationForm() {
           <CardContent className="space-y-4">
             <FieldGroup>
               <FieldLabel htmlFor="email" required>
+                Contact Person
+              </FieldLabel>
+              <FieldDescription>
+                The main point of contact for all communications about your
+                workshop
+              </FieldDescription>
+              <Field>
+                <Input
+                  id="contactPerson"
+                  type="text"
+                  placeholder="John Smith"
+                  {...register("contactDetails.contactPerson")}
+                  aria-invalid={!!errors.contactDetails?.contactPerson}
+                />
+              </Field>
+              {errors.contactDetails?.contactPerson && (
+                <FieldError>
+                  {errors.contactDetails.contactPerson.message}
+                </FieldError>
+              )}
+            </FieldGroup>
+
+            <FieldGroup>
+              <FieldLabel htmlFor="email" required>
                 Email
               </FieldLabel>
               <FieldDescription>
@@ -663,15 +695,15 @@ export function WorkshopApplicationForm() {
             </FieldGroup>
 
             <FieldGroup>
-              <FieldLabel htmlFor="phone">Phone Number</FieldLabel>
-              <FieldDescription>
-                Optional - include country code
-              </FieldDescription>
+              <FieldLabel htmlFor="phone" required>
+                Phone Number
+              </FieldLabel>
+              <FieldDescription>include country code</FieldDescription>
               <Field>
                 <Input
                   id="phone"
                   type="tel"
-                  placeholder="+357 99 999999"
+                  placeholder="+357 99 123456"
                   {...register("contactDetails.phoneNumber")}
                   aria-invalid={!!errors.contactDetails?.phoneNumber}
                 />
@@ -682,14 +714,58 @@ export function WorkshopApplicationForm() {
                 </FieldError>
               )}
             </FieldGroup>
+
+            <FieldGroup>
+              <FieldLabel htmlFor="instagramHandle">
+                Instagram Handle
+              </FieldLabel>
+              <FieldDescription>
+                Your business&apos;s Instagram profile handle if applicable.
+              </FieldDescription>
+              <Field>
+                <Input
+                  id="instagramHandle"
+                  type="text"
+                  placeholder="@yourhandle"
+                  {...register("contactDetails.instagramHandle")}
+                  aria-invalid={!!errors.contactDetails?.instagramHandle}
+                />
+              </Field>
+              {errors.contactDetails?.instagramHandle && (
+                <FieldError>
+                  {errors.contactDetails.instagramHandle.message}
+                </FieldError>
+              )}
+            </FieldGroup>
           </CardContent>
         </Card>
 
-        {/* todo: add confirmation "I agree blah bla bla" */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl">Confirmation</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-row items-center gap-4">
+              <Checkbox
+                checked={canSubmit}
+                onCheckedChange={() => setCanSubmit((prev) => !prev)}
+              />
+              <p className="text-sm">
+                By submitting this application, you confirm that all information
+                provided is accurate to your knowledge. Submitting this form
+                does not guarantee acceptance.
+              </p>
+            </div>
+            <p className="text-sm mt-6">
+              If your application is accepted, we will directly contact you with
+              the additional terms and conditions that will apply.
+            </p>
+          </CardContent>
+        </Card>
 
         {/* Submit Button */}
         <div className="flex justify-end">
-          <Button type="submit" size="lg" disabled={isSubmitting}>
+          <Button type="submit" size="lg" disabled={!canSubmit || isSubmitting}>
             {isSubmitting ? (
               <>
                 <IconLoader2 className="mr-2 h-4 w-4 animate-spin" />

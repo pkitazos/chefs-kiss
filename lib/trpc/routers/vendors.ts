@@ -273,7 +273,7 @@ export const vendorsRouter = createTRPCRouter({
         success: true,
         applicationId,
         message:
-          "Your application has been submitted successfully. You will receive a confirmation email shortly.",
+          "Your vendor application has been submitted successfully. You will receive a confirmation email shortly.",
       };
     }),
 });

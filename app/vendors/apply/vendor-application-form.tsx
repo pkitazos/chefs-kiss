@@ -34,6 +34,7 @@ import {
   IconSend,
   IconLoader2,
 } from "@tabler/icons-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const DISH_PLACEHOLDERS = [
   "Chef's Kiss Signature Smash Burger",
@@ -49,6 +50,8 @@ const DISH_PLACEHOLDERS = [
 ];
 
 export function VendorApplicationForm() {
+  const [canSubmit, setCanSubmit] = useState(false);
+
   // Track which file fields have a file selected but not uploaded
   const [pendingUploads, setPendingUploads] = useState<Record<string, boolean>>(
     {},
@@ -276,8 +279,8 @@ export function VendorApplicationForm() {
       {/* Section 1: Business Information */}
       <Card>
         <CardHeader>
-          <CardTitle>Business Information</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-xl">Business Information</CardTitle>
+          <CardDescription className="text-sm">
             Tell us about your business and how to contact you
           </CardDescription>
         </CardHeader>
@@ -407,8 +410,8 @@ export function VendorApplicationForm() {
       {/* Section 2: Festival Menu */}
       <Card>
         <CardHeader>
-          <CardTitle>Festival Menu</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-xl">Festival Menu</CardTitle>
+          <CardDescription className="text-sm">
             List the dishes you plan to offer (1-{MAX_DISHES} items). Please
             note, no drinks are allowed to be sold by vendors. The festival will
             be selling drinks separately.
@@ -505,8 +508,8 @@ export function VendorApplicationForm() {
       {/* Section 3: Special Requirements */}
       <Card>
         <CardHeader>
-          <CardTitle>Special Requirements</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-xl">Special Requirements</CardTitle>
+          <CardDescription className="text-sm">
             Let us know about any special needs for your setup
           </CardDescription>
         </CardHeader>
@@ -670,8 +673,8 @@ export function VendorApplicationForm() {
       {/* Section 4: Food Truck */}
       <Card>
         <CardHeader>
-          <CardTitle>Food Truck</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-xl">Food Truck</CardTitle>
+          <CardDescription className="text-sm">
             Information about your food truck (if applicable)
           </CardDescription>
         </CardHeader>
@@ -822,8 +825,8 @@ export function VendorApplicationForm() {
       {/* Section 5: Business Documents */}
       <Card>
         <CardHeader>
-          <CardTitle>Business Documents</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-xl">Business Documents</CardTitle>
+          <CardDescription className="text-sm">
             Upload your business license and hygiene certificate (liability
             insurance is optional)
           </CardDescription>
@@ -899,8 +902,8 @@ export function VendorApplicationForm() {
       {/* Section 6: Employee Documents */}
       <Card>
         <CardHeader>
-          <CardTitle>Employee Documents</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-xl">Employee Documents</CardTitle>
+          <CardDescription className="text-sm">
             Upload documents for all employees working at the festival
           </CardDescription>
         </CardHeader>
@@ -1018,11 +1021,37 @@ export function VendorApplicationForm() {
         </CardContent>
       </Card>
 
-      {/* todo: add confirmation "I agree blah bla bla" */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl">Confirmation</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-row items-center gap-4">
+            <Checkbox
+              checked={canSubmit}
+              onCheckedChange={() => setCanSubmit((prev) => !prev)}
+            />
+            <p className="text-sm">
+              By submitting this application, you confirm that all information
+              provided is accurate to your knowledge. Submitting this form does
+              not guarantee acceptance.
+            </p>
+          </div>
+          <p className="text-sm mt-6">
+            If your application is accepted, we will directly contact you with
+            the additional terms and conditions that will apply.
+          </p>
+        </CardContent>
+      </Card>
 
       {/* Submit Button */}
       <div className="flex justify-end">
-        <Button type="submit" size="lg" disabled={submitMutation.isPending}>
+        <Button
+          type="submit"
+          size="lg"
+          disabled={submitMutation.isPending || !canSubmit}
+          // todo: make sure the canSubmit is not just a ui layer protection but also prevents the mutation from running if false (currently it only disables the button)
+        >
           {submitMutation.isPending ? (
             <>
               <IconLoader2 className="mr-2 h-4 w-4 animate-spin" />
