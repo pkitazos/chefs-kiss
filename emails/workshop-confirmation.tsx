@@ -10,17 +10,19 @@ import {
 } from "@react-email/components";
 import { Signature } from "./components/signature";
 
-interface VendorConfirmationEmailProps {
-  businessName: string;
+interface WorkshopConfirmationEmailProps {
+  contactPerson: string;
+  workshopName: string;
   applicationId: string;
   submissionDate: string;
 }
 
-export default function VendorConfirmationEmail({
-  businessName,
+export default function WorkshopConfirmationEmail({
+  contactPerson,
+  workshopName,
   applicationId,
   submissionDate,
-}: VendorConfirmationEmailProps) {
+}: WorkshopConfirmationEmailProps) {
   return (
     <Html lang="en">
       <Head />
@@ -31,10 +33,10 @@ export default function VendorConfirmationEmail({
               <Heading className="mb-5 text-2xl text-[#2c3e50]">
                 Application Received!
               </Heading>
-              <Text className="mb-3.75 text-base">Dear {businessName},</Text>
+              <Text className="mb-3.75 text-base">Dear {contactPerson},</Text>
               <Text className="mb-3.75 text-base">
                 Thank you for your interest in participating in the Chef&apos;s
-                Kiss Festival! We have successfully received your vendor
+                Kiss Festival! We have successfully received your workshop
                 application.
               </Text>
 
@@ -54,10 +56,10 @@ export default function VendorConfirmationEmail({
                     </tr>
                     <tr>
                       <td className="py-2 text-sm text-gray-500">
-                        Business Name:
+                        Workshop Name:
                       </td>
                       <td className="py-2 text-sm font-semibold">
-                        {businessName}
+                        {workshopName}
                       </td>
                     </tr>
                     <tr>
@@ -82,7 +84,7 @@ export default function VendorConfirmationEmail({
                 </li>
                 <li>
                   If approved, you&apos;ll receive detailed information about
-                  the festival logistics, setup times, and vendor guidelines
+                  the festival logistics and setup times
                 </li>
                 <li>Please keep your application ID for reference</li>
               </ul>
@@ -107,8 +109,9 @@ export default function VendorConfirmationEmail({
   );
 }
 
-VendorConfirmationEmail.PreviewProps = {
-  businessName: "[Vendor Business Name]",
-  applicationId: "VEN-2025-001234",
+WorkshopConfirmationEmail.PreviewProps = {
+  contactPerson: "[Contact Person]",
+  workshopName: "[Workshop Name]",
+  applicationId: "WS-2025-001234",
   submissionDate: "[Actual Submission Date]",
-} as VendorConfirmationEmailProps;
+} as WorkshopConfirmationEmailProps;

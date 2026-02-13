@@ -10,17 +10,19 @@ import {
 } from "@react-email/components";
 import { Signature } from "./components/signature";
 
-interface VendorConfirmationEmailProps {
-  businessName: string;
+interface WorkshopAcceptanceEmailProps {
+  contactPerson: string;
+  workshopName: string;
   applicationId: string;
-  submissionDate: string;
+  festivalDate: string;
 }
 
-export default function VendorConfirmationEmail({
-  businessName,
+export default function WorkshopAcceptanceEmail({
+  contactPerson,
+  workshopName,
   applicationId,
-  submissionDate,
-}: VendorConfirmationEmailProps) {
+  festivalDate,
+}: WorkshopAcceptanceEmailProps) {
   return (
     <Html lang="en">
       <Head />
@@ -29,18 +31,19 @@ export default function VendorConfirmationEmail({
           <Container className="mx-auto max-w-150 p-5">
             <div className="mb-5 rounded-lg bg-gray-50 p-7.5">
               <Heading className="mb-5 text-2xl text-[#2c3e50]">
-                Application Received!
+                Congratulations! Your Application is Approved!
               </Heading>
-              <Text className="mb-3.75 text-base">Dear {businessName},</Text>
+              <Text className="mb-3.75 text-base">Dear {contactPerson},</Text>
               <Text className="mb-3.75 text-base">
-                Thank you for your interest in participating in the Chef&apos;s
-                Kiss Festival! We have successfully received your vendor
-                application.
+                We&apos;re thrilled to inform you that your workshop application
+                has been
+                <strong> approved</strong>! We can&apos;t wait to have you at
+                the Chef&apos;s Kiss Food Festival in {festivalDate}.
               </Text>
 
-              <Section className="my-5 rounded-md bg-white p-5">
+              <Section className="my-5 rounded-md border-2 border-green-500 bg-green-50 p-5">
                 <Heading as="h2" className="mt-0 text-lg text-[#2c3e50]">
-                  Application Details
+                  Festival Details
                 </Heading>
                 <table className="w-full border-collapse">
                   <tbody>
@@ -54,48 +57,34 @@ export default function VendorConfirmationEmail({
                     </tr>
                     <tr>
                       <td className="py-2 text-sm text-gray-500">
-                        Business Name:
+                        Workshop Name:
                       </td>
                       <td className="py-2 text-sm font-semibold">
-                        {businessName}
+                        {workshopName}
                       </td>
                     </tr>
                     <tr>
                       <td className="py-2 text-sm text-gray-500">
-                        Submission Date:
+                        Festival Date:
                       </td>
                       <td className="py-2 text-sm font-semibold">
-                        {submissionDate}
+                        {festivalDate}
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </Section>
 
-              <Heading as="h3" className="mb-2.5 mt-6 text-base text-[#2c3e50]">
-                What Happens Next?
-              </Heading>
-              <ul className="pl-5 text-[15px] leading-loose">
-                <li>
-                  Our team will review your application and contact you via
-                  email with updates on your application status
-                </li>
-                <li>
-                  If approved, you&apos;ll receive detailed information about
-                  the festival logistics, setup times, and vendor guidelines
-                </li>
-                <li>Please keep your application ID for reference</li>
-              </ul>
+              <Text className="mb-3.75 text-base">Payment</Text>
 
               <Text className="mb-3.75 text-base">
-                If you have any questions in the meantime, please don&apos;t
-                hesitate to reach out to us at{" "}
+                If you have any questions or need assistance, please don&apos;t
+                hesitate to contact us at{" "}
                 <span className="text-[#98244c]">info@chefskiss.com.cy</span>.
               </Text>
 
               <Text className="mb-3.75 text-base">
-                We&apos;re excited about the possibility of having you at the
-                festival!
+                We&apos;re looking forward to a fantastic festival with you!
               </Text>
 
               <Signature />
@@ -107,8 +96,9 @@ export default function VendorConfirmationEmail({
   );
 }
 
-VendorConfirmationEmail.PreviewProps = {
-  businessName: "[Vendor Business Name]",
-  applicationId: "VEN-2025-001234",
-  submissionDate: "[Actual Submission Date]",
-} as VendorConfirmationEmailProps;
+WorkshopAcceptanceEmail.PreviewProps = {
+  contactPerson: "[Contact Person]",
+  workshopName: "[Workshop Name]",
+  applicationId: "WS-2025-001234",
+  festivalDate: "[Actual Festival Date]",
+} as WorkshopAcceptanceEmailProps;

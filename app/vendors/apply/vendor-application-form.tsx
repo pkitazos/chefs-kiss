@@ -1018,6 +1018,8 @@ export function VendorApplicationForm() {
         </CardContent>
       </Card>
 
+      {/* todo: add confirmation "I agree blah bla bla" */}
+
       {/* Submit Button */}
       <div className="flex justify-end">
         <Button type="submit" size="lg" disabled={submitMutation.isPending}>

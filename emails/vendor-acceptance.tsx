@@ -69,24 +69,6 @@ export default function VendorAcceptanceEmail({
                         {festivalDate}
                       </td>
                     </tr>
-                    {/* <tr>
-                      <td className="py-2 text-sm text-gray-500">
-                        Setup Time:
-                      </td>
-                      <td className="py-2 text-sm font-semibold">
-                        {setupTime}
-                      </td>
-                    </tr> */}
-                    {/* {boothLocation && (
-                      <tr>
-                        <td className="py-2 text-sm text-gray-500">
-                          Booth Location:
-                        </td>
-                        <td className="py-2 text-sm font-semibold">
-                          {boothLocation}
-                        </td>
-                      </tr>
-                    )} */}
                   </tbody>
                 </table>
               </Section>
