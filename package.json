@@ -11,7 +11,7 @@
     "toggle-routes": "tsx scripts/toggle-routes.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:push": "drizzle-kit push",
+    "db:push": "echo 'This is not what you think it is. Do not run this command. What you want is migrate.'",
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {

@@ -23,8 +23,8 @@ VALUES (
   'Chef''s Kiss Ayia Napa 2026',
   'ANM',
   'Ayia Napa Marina',
-  '2026-04-15T00:00:00Z',
-  '2026-04-17T00:00:00Z',
+  '2026-05-16T00:00:00Z',
+  '2026-05-17T00:00:00Z',
   true
 );
 --> statement-breakpoint

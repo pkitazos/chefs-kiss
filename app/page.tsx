@@ -28,13 +28,13 @@ export default function HomePage() {
         <p className="text-center text-xl font-bold tracking-tight sm:text-2xl">
           {subtitle(NEXT_EVENT.locationName, NEXT_EVENT.dates)}
         </p>
-        <div className="flex flex-row gap-10">
+        <div className="flex flex-row gap-10 h-10 items-center">
           {isVendorAppOpen && (
             <Link
               href="/vendors/apply"
               className={cn(
                 buttonVariants({ variant: "default", size: "lg" }),
-                "px-9 py-6 text-lg",
+                "px-9 py-6 text-lg hover:scale-110 transition-all duration-200 hover:bg-primary",
               )}
             >
               Apply to be a Vendor
@@ -45,7 +45,7 @@ export default function HomePage() {
               href="/workshops/apply"
               className={cn(
                 buttonVariants({ variant: "default", size: "lg" }),
-                "px-9 py-6 text-lg",
+                "px-9 py-6 text-lg hover:scale-110 transition-all duration-200 hover:bg-primary",
               )}
             >
               Apply to host a Workshop
