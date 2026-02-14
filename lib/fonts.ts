@@ -18,7 +18,7 @@ export const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-manrope",
   display: "swap",
-  weight: ["400", "700", "800"], // Regular, Bold, Extrabold
+  weight: ["400", "500", "600", "700", "800"], // Regular, Medium, SemiBold, Bold, Extrabold
 });
 
 /**

@@ -1,15 +1,15 @@
 import Link from "next/link";
-import { format } from "date-fns";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { MainLogo } from "@/components/main-logo";
+import { format } from "date-fns";
 
 const subtitle = (location: string, date: string) => `${date} | ${location}`;
 
 const NEXT_EVENT = {
   vendorApplicationDeadline: new Date("2026-02-28T23:59:59"),
-  workshopApplicationDeadline: new Date("2026-02-28T23:59:59"),
+  workshopApplicationDeadline: new Date("2026-03-15T23:59:59"),
   locationName: "Ayia Napa Marina, Famagusta",
   dates: "16 · 17 May 2026",
 };
@@ -53,14 +53,67 @@ export default function HomePage() {
           )}
         </div>
       </div>
-      {/* check if different deadlines for each application */}
-      {isWorkshopAppOpen && (
-        <p className="absolute bottom-0 place-self-center text-center font-bold tracking-tight text-muted-foreground sm:text-lg px-2.5">
-          <span className="text-primary">*</span> All applications are required
-          to be completed and submitted by{" "}
-          {format(NEXT_EVENT.workshopApplicationDeadline, "MMMM d, yyyy")}.
-        </p>
-      )}
+      <ApplicationDeadlines
+        isVendorAppOpen={isVendorAppOpen}
+        isWorkshopAppOpen={isWorkshopAppOpen}
+      />
     </main>
   );
+}
+
+function ApplicationDeadlines({
+  isVendorAppOpen,
+  isWorkshopAppOpen,
+}: {
+  isVendorAppOpen: boolean;
+  isWorkshopAppOpen: boolean;
+}) {
+  if (isVendorAppOpen && isWorkshopAppOpen)
+    return (
+      <p className="absolute bottom-0 place-self-center text-center tracking-tight text-muted-foreground sm:text-lg px-2.5">
+        <span className="text-primary">*</span> Applications are required to be
+        completed and submitted by
+        <span className="font-semibold underline decoration-2 decoration-accent px-1">
+          {format(NEXT_EVENT.vendorApplicationDeadline, "MMMM d, yyyy")}
+        </span>
+        for
+        <span className="font-semibold underline decoration-2 decoration-accent px-1">
+          Vendors
+        </span>
+        and by
+        <span className="font-semibold underline decoration-2 decoration-accent px-1">
+          {format(NEXT_EVENT.workshopApplicationDeadline, "MMMM d, yyyy")}
+        </span>
+        for
+        <span className="font-semibold underline decoration-2 decoration-accent px-1">
+          {" "}
+          Workshops
+        </span>
+        .
+      </p>
+    );
+
+  if (isVendorAppOpen)
+    return (
+      <p className="absolute bottom-0 place-self-center text-center tracking-tight text-muted-foreground sm:text-lg px-2.5">
+        <span className="text-primary">*</span> Vendor applications are required
+        to be completed and submitted by
+        <span className="font-semibold underline decoration-2 decoration-accent px-1">
+          {format(NEXT_EVENT.vendorApplicationDeadline, "MMMM d, yyyy")}
+        </span>
+        .
+      </p>
+    );
+
+  if (isWorkshopAppOpen)
+    return (
+      <p className="absolute bottom-0 place-self-center text-center tracking-tight text-muted-foreground sm:text-lg px-2.5">
+        <span className="text-primary">*</span> Workshop applications are
+        required to be completed and submitted by
+        <span className="font-semibold underline decoration-2 decoration-accent px-1">
+          {format(NEXT_EVENT.workshopApplicationDeadline, "MMMM d, yyyy")}
+        </span>
+        .
+      </p>
+    );
 }
