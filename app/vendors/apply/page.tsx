@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { VendorApplicationForm } from "./vendor-application-form";
+import { CURRENT_EVENT } from "@/lib/config/event";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Vendor Application | Chef's Kiss Festival",
@@ -8,6 +11,8 @@ export const metadata: Metadata = {
 };
 
 export default function VendorApplicationPage() {
+  const isOpen = new Date() < CURRENT_EVENT.vendorApplicationDeadline;
+
   return (
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
@@ -20,17 +25,28 @@ export default function VendorApplicationPage() {
             application below with your business information, menu offerings,
             and all required documentation.
           </p>
-          <div className="border-l-4 border-primary bg-primary/5 p-4">
-            <p className="text-sm">
-              <strong>Important:</strong> All fields marked with an asterisk (
-              <span className="text-accent text-sm font-medium">*</span>) are
-              required. Please ensure all documents are in PDF format and all
-              images are clear and legible.
-            </p>
-          </div>
+          {isOpen ? (
+            <div className="border-l-4 border-primary bg-primary/5 p-4">
+              <p className="text-sm">
+                <strong>Important:</strong> All fields marked with an asterisk (
+                <span className="text-accent text-sm font-medium">*</span>) are
+                required. Please ensure all documents are in PDF format and all
+                images are clear and legible.
+              </p>
+            </div>
+          ) : (
+            <div className="border-l-4 border-destructive bg-destructive/5 p-4">
+              <h2 className="text-xl font-semibold">
+                Applications are now closed
+              </h2>
+              <p className="text-muted-foreground mt-2">
+                The vendor application period has ended.
+              </p>
+            </div>
+          )}
         </div>
 
-        <VendorApplicationForm />
+        {isOpen && <VendorApplicationForm />}
       </div>
     </div>
   );

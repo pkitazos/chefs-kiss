@@ -68,6 +68,17 @@ const serverEnvSchema = z.object({
     .describe(
       "Comma-separated list of admin emails allowed to access the system",
     ),
+
+  VENDOR_LATE_TOKEN: z
+    .string()
+    .min(16)
+    .optional()
+    .describe("Secret token for late vendor applications"),
+  WORKSHOP_LATE_TOKEN: z
+    .string()
+    .min(16)
+    .optional()
+    .describe("Secret token for late workshop applications"),
 });
 
 /**

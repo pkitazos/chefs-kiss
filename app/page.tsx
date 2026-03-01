@@ -4,29 +4,23 @@ import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { MainLogo } from "@/components/main-logo";
 import { format } from "date-fns";
+import { CURRENT_EVENT } from "@/lib/config/event";
 
 const subtitle = (location: string, date: string) => `${date} | ${location}`;
-
-const NEXT_EVENT = {
-  vendorApplicationDeadline: new Date("2026-02-28T23:59:59"),
-  workshopApplicationDeadline: new Date("2026-03-15T23:59:59"),
-  locationName: "Ayia Napa Marina, Famagusta",
-  dates: "16 · 17 May 2026",
-};
 
 export const dynamic = "force-dynamic";
 
 export default function HomePage() {
   const now = new Date();
-  const isVendorAppOpen = NEXT_EVENT.vendorApplicationDeadline > now;
-  const isWorkshopAppOpen = NEXT_EVENT.workshopApplicationDeadline > now;
+  const isVendorAppOpen = CURRENT_EVENT.vendorApplicationDeadline > now;
+  const isWorkshopAppOpen = CURRENT_EVENT.workshopApplicationDeadline > now;
 
   return (
     <main className="grid h-[92dvh] place-items-center pt-16 w-full relative px-2.5">
       <div className="flex flex-col items-center space-y-8 w-full justify-center h-full">
         <MainLogo className="mx-auto w-full max-w-80 sm:w-108 sm:max-w-full" />
         <p className="text-center text-xl font-bold tracking-tight sm:text-2xl">
-          {subtitle(NEXT_EVENT.locationName, NEXT_EVENT.dates)}
+          {subtitle(CURRENT_EVENT.locationName, CURRENT_EVENT.dates)}
         </p>
         <div className="flex flex-row gap-10 h-10 items-center">
           {isVendorAppOpen && (
@@ -74,7 +68,7 @@ function ApplicationDeadlines({
         <span className="text-primary">*</span> Applications are required to be
         completed and submitted by
         <span className="font-semibold underline decoration-2 decoration-accent px-1">
-          {format(NEXT_EVENT.vendorApplicationDeadline, "MMMM d, yyyy")}
+          {format(CURRENT_EVENT.vendorApplicationDeadline, "MMMM d, yyyy")}
         </span>
         for
         <span className="font-semibold underline decoration-2 decoration-accent px-1">
@@ -82,7 +76,7 @@ function ApplicationDeadlines({
         </span>
         and by
         <span className="font-semibold underline decoration-2 decoration-accent px-1">
-          {format(NEXT_EVENT.workshopApplicationDeadline, "MMMM d, yyyy")}
+          {format(CURRENT_EVENT.workshopApplicationDeadline, "MMMM d, yyyy")}
         </span>
         for
         <span className="font-semibold underline decoration-2 decoration-accent px-1">
@@ -99,7 +93,7 @@ function ApplicationDeadlines({
         <span className="text-primary">*</span> Vendor applications are required
         to be completed and submitted by
         <span className="font-semibold underline decoration-2 decoration-accent px-1">
-          {format(NEXT_EVENT.vendorApplicationDeadline, "MMMM d, yyyy")}
+          {format(CURRENT_EVENT.vendorApplicationDeadline, "MMMM d, yyyy")}
         </span>
         .
       </p>
@@ -111,7 +105,7 @@ function ApplicationDeadlines({
         <span className="text-primary">*</span> Workshop applications are
         required to be completed and submitted by
         <span className="font-semibold underline decoration-2 decoration-accent px-1">
-          {format(NEXT_EVENT.workshopApplicationDeadline, "MMMM d, yyyy")}
+          {format(CURRENT_EVENT.workshopApplicationDeadline, "MMMM d, yyyy")}
         </span>
         .
       </p>
