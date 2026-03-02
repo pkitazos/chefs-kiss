@@ -15,6 +15,7 @@ import { SectionLabel } from "@/components/ui/section-label";
 import { CURRENT_EVENT } from "@/lib/config/event";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import Image from "next/image";
 
 /* ═══════════════════════════════════════════════
    SVG UTENSIL
@@ -25,6 +26,44 @@ function ForkIcon({ className }: { className?: string }) {
     <svg viewBox="0 0 109.9 907.6" className={className} aria-hidden="true">
       <path
         d="M107.9,3.4h-17.7c0,0-2.8,160.7-2.8,160.7l-16.3-2.2-1.8-124.6-16.1-2.3-3.6,128.2-21.6-.2L24.9,4.8,3.6,0,.1,200.2s-3.3,51,25.1,72.8c0,0,13.3.8,14.4,19,1.1,17.3-12.9,556-15.9,590.4-.2,2,0,4,.4,6,1.3,5.6,5,16.4,14.8,18.9,9.3,2.4,17.8-6.8,22.2-12.7,2-2.6,3.1-5.8,3.2-9.1l-5.4-584s1.8-15.3,5-19.1c3.2-3.8,38.8-11.2,43.8-59.9,5-48.6.3-219,.3-219Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+function KnifeIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 137.8 909.8" className={className} aria-hidden="true">
+      <path
+        d="M137.8,908.7l-12.6-377.5-.7-20.5L107.5,0C39.3,13.9,22.7,53.1,22.7,53.1c-43.7,123.1-10.8,481.9-10.8,481.9l81.3-2.7,12.6,377.5,32.1-1.1Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+function SpatulaIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 251.6 917.8" className={className} aria-hidden="true">
+      <path
+        d="M145.4,50.1l-5.3,132c-.2,4.4,3.2,8,7.5,8.2,4.4.2,8-3.2,8.2-7.5l5.4-132c.2-4.4-3.2-8-7.6-8.2h-.3c-4.2,0-7.7,3.3-7.9,7.5Z"
+        fill="none"
+      />
+      <path
+        d="M200.7,50.1l-16.5,130.9c-.5,4.3,2.5,8.2,6.8,8.8,4.3.5,8.3-2.5,8.8-6.8l16.5-130.9c.5-4.3-2.5-8.3-6.8-8.8-.3,0-.7,0-1,0-3.9,0-7.3,2.9-7.8,6.9Z"
+        fill="none"
+      />
+      <path
+        d="M35,50l16.9,134c.6,4.3,4.5,7.4,8.8,6.8,4.3-.6,7.4-4.5,6.8-8.8L50.6,48c-.5-4-3.9-6.9-7.8-6.9-.3,0-.7,0-1,0-4.3.6-7.4,4.5-6.8,8.8Z"
+        fill="none"
+      />
+      <path
+        d="M90.1,50l5.8,133c.2,4.3,3.9,7.8,8.2,7.5,4.3-.2,7.7-3.9,7.5-8.2l-5.7-133c-.2-4.2-3.7-7.5-7.9-7.5-.1,0-.2,0-.3,0-4.4.2-7.7,3.9-7.5,8.2Z"
+        fill="none"
+      />
+      <path
+        d="M14.9,14.8C4.3,19-1.8,30.4.5,41.6l32.7,162c.9,4.3,2.9,8.3,5.9,11.5l69.2,74.6c1.4,1.5,3,2.8,4.7,3.9v99.6c-2.4,54.4-5.4,284.9-8.1,344.8-3.7,81.3-7,150.2-7.8,159-.9,9.9,6.8,15.5,15.9,18.7,0,0,0,0,.1,0,4.8,1.7,10,2.4,15,2.1,3.5-.2,7-.9,10.4-2.1,0,0,0,0,.1,0,9-3.2,16.8-8.8,15.9-18.7-.9-10.3-5.2-102.8-9.7-201.2-2.2-47.7-4.3-260.7-6.2-302.6v-99.6c1.7-1.1,3.2-2.3,4.6-3.8l69.3-74.6c3-3.2,5-7.2,5.9-11.5l32.7-161.9c2.3-11.3-3.8-22.6-14.5-26.9C219.1,7.9,186.1,0,125.8,0h0C65.5,0,32.4,7.9,14.9,14.8ZM209.4,43.3c4.3.6,7.4,4.5,6.8,8.8l-16.5,130.9c-.6,4.3-4.5,7.3-8.8,6.8-4.3-.6-7.3-4.5-6.8-8.8l16.5-130.9c.5-4,3.9-6.9,7.8-6.9.3,0,.7,0,1,0ZM153.6,42.5c4.4.2,7.7,3.8,7.6,8.2l-5.4,132c-.2,4.3-3.8,7.7-8.2,7.5-4.3-.2-7.7-3.8-7.5-8.2l5.3-132c.2-4.2,3.7-7.5,7.9-7.5h.3ZM105.9,49.3l5.7,133c.2,4.3-3.2,8-7.5,8.2-4.3.3-8-3.2-8.2-7.5l-5.8-133c-.2-4.3,3.2-8,7.5-8.2.1,0,.2,0,.3,0,4.2,0,7.7,3.3,7.9,7.5ZM50.6,48l16.9,134c.5,4.3-2.5,8.2-6.8,8.8-4.3.5-8.2-2.5-8.8-6.8L35,50c-.5-4.3,2.5-8.3,6.8-8.8.3,0,.7,0,1,0,3.9,0,7.3,2.9,7.8,6.9Z"
         fill="currentColor"
       />
     </svg>
@@ -102,25 +141,63 @@ const GALLERY_ITEMS = [
    HERO SECTION
    ═══════════════════════════════════════════════ */
 
-const HERO_FORKS = [
+type UtensilIcon = typeof ForkIcon;
+
+const HERO_UTENSILS: { Icon: UtensilIcon; className: string }[] = [
   // Top-left: large blue fork sweeping in
-  "h-[40vh] sm:h-[55vh] md:h-[70vh] -top-[8%] -left-[5%] -rotate-[40deg] text-slate-700",
+  {
+    Icon: ForkIcon,
+    className:
+      "h-[40vh] sm:h-[55vh] md:h-[70vh] -top-[8%] -left-[5%] -rotate-[40deg] text-slate-700",
+  },
   // Top-center-left: pink fork
-  "h-[30vh] sm:h-[40vh] md:h-[50vh] top-[5%] left-[15%] -rotate-[15deg] text-pink-500",
+  {
+    Icon: ForkIcon,
+    className:
+      "h-[30vh] sm:h-[40vh] md:h-[50vh] top-[5%] left-[15%] lg:left-[10%] -rotate-[15deg] text-pink-500",
+  },
   // Top-right: large amber fork
-  "h-[35vh] sm:h-[50vh] md:h-[65vh] -top-[5%] right-[0%] rotate-[30deg] text-amber-500",
-  // Right side: teal fork
-  "h-[25vh] sm:h-[35vh] md:h-[50vh] top-[15%] -right-[2%] rotate-[65deg] text-sky-500",
+  {
+    Icon: ForkIcon,
+    className:
+      "h-[35vh] sm:h-[50vh] md:h-[65vh] -top-[5%] right-[0%] rotate-[30deg] text-amber-500",
+  },
+  // Right side: knife
+  {
+    Icon: KnifeIcon,
+    className:
+      "h-[25vh] sm:h-[35vh] md:h-[50vh] top-[15%] -right-[2%] rotate-[65deg] text-sky-500",
+  },
   // Bottom-right: large blue fork
-  "h-[40vh] sm:h-[55vh] md:h-[70vh] -bottom-[8%] -right-[5%] rotate-[140deg] text-slate-700",
-  // Bottom-left: orange fork
-  "h-[30vh] sm:h-[45vh] md:h-[55vh] -bottom-[5%] -left-[3%] rotate-[25deg] text-orange-600",
+  {
+    Icon: ForkIcon,
+    className:
+      "h-[40vh] sm:h-[55vh] md:h-[70vh] -bottom-[8%] -right-[5%] rotate-[140deg] text-slate-700",
+  },
+  // Bottom-left: spatula
+  {
+    Icon: SpatulaIcon,
+    className:
+      "h-[30vh] sm:h-[45vh] md:h-[55vh] -bottom-[5%] -left-[3%] rotate-[25deg] text-orange-600",
+  },
   // Left side: sky fork (tablet+)
-  "h-[30vh] md:h-[45vh] top-[35%] -left-[4%] -rotate-[70deg] text-sky-600 hidden sm:block",
+  {
+    Icon: ForkIcon,
+    className:
+      "h-[30vh] md:h-[45vh] top-[35%] -left-[4%] -rotate-[70deg] text-sky-600 hidden sm:block",
+  },
   // Bottom-right accent: pink (desktop)
-  "h-[20vh] md:h-[35vh] bottom-[30%] right-[8%] -rotate-[20deg] text-pink-400 opacity-70 hidden md:block",
+  {
+    Icon: ForkIcon,
+    className:
+      "h-[20vh] md:h-[35vh] bottom-[30%] right-[8%] -rotate-[20deg] text-pink-400 opacity-70 hidden md:block",
+  },
   // Mid-left accent: amber (desktop)
-  "h-[20vh] md:h-[30vh] top-[50%] left-[5%] rotate-[10deg] text-amber-400 opacity-70 hidden md:block",
+  {
+    Icon: ForkIcon,
+    className:
+      "h-[20vh] md:h-[30vh] top-[50%] left-[5%] lg:left-[10%] rotate-[10deg] text-amber-400 opacity-70 hidden md:block",
+  },
 ];
 
 function HeroSection() {
@@ -137,13 +214,13 @@ function HeroSection() {
 
   return (
     <section ref={ref} className="relative h-dvh overflow-hidden bg-background">
-      {/* Decorative forks — blur on scroll */}
+      {/* Decorative utensils — blur on scroll */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{ filter }}
       >
-        {HERO_FORKS.map((cls, i) => (
-          <ForkIcon key={i} className={cn("absolute w-auto", cls)} />
+        {HERO_UTENSILS.map(({ Icon, className }, i) => (
+          <Icon key={i} className={cn("absolute w-auto", className)} />
         ))}
       </motion.div>
 
@@ -290,35 +367,78 @@ function PrivateDiningSection() {
 
 function WorkshopCTA() {
   return (
-    <motion.section
-      className="py-16 sm:py-24 px-4 sm:px-6 bg-secondary text-secondary-foreground"
+    <motion.div
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <div className="max-w-3xl mx-auto text-center">
-        <SectionLabel className="mb-3 block text-secondary-foreground/60">
-          Workshops
-        </SectionLabel>
-        <h2 className="text-3xl sm:text-4xl md:text-[40pt] font-display leading-tight mb-4 sm:mb-6">
-          Learn. Taste. Create.
-        </h2>
-        <p className="text-lg sm:text-xl text-secondary-foreground/80 max-w-xl mx-auto mb-8 sm:mb-10">
-          Join hands-on culinary workshops led by acclaimed chefs. From pasta
-          making to molecular gastronomy — find your next skill.
-        </p>
-        <Link
-          href="/workshops/book"
-          className={cn(
-            buttonVariants({ variant: "default", size: "lg" }),
-            "px-10 py-6 text-lg font-semibold hover:scale-105 transition-transform duration-200",
-          )}
-        >
-          Book Your Workshop
-        </Link>
-      </div>
-    </motion.section>
+      {/* Top curve: parabola dips down at center (y = x²) */}
+      <svg
+        viewBox="0 0 1440 120"
+        preserveAspectRatio="none"
+        className="block w-full h-10 sm:h-14 md:h-20"
+      >
+        <path
+          d="M0,0 Q720,120 1440,0 L1440,120 L0,120 Z"
+          fill="#edede9"
+        />
+      </svg>
+
+      <section className="bg-[#edede9] text-foreground py-16 sm:py-24 px-4 sm:px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="flex items-end justify-center gap-6 sm:gap-10 md:gap-14 mb-8 sm:mb-10">
+            {[
+              { src: "/assets/learn.svg", alt: "Learn", word: "Learn." },
+              { src: "/assets/taste.svg", alt: "Taste", word: "Taste." },
+              { src: "/assets/create.svg", alt: "Create", word: "Create." },
+            ].map((item) => (
+              <div
+                key={item.alt}
+                className="flex flex-col items-center gap-2 sm:gap-3"
+              >
+                <Image
+                  height={100}
+                  width={100}
+                  src={item.src}
+                  alt={item.alt}
+                  className="w-16 sm:w-24 md:w-32 lg:w-36 h-auto"
+                />
+                <span className="text-2xl sm:text-3xl md:text-[40pt] font-display leading-tight">
+                  {item.word}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-lg sm:text-xl text-foreground/80 max-w-xl mx-auto mb-8 sm:mb-10">
+            Join hands-on culinary workshops led by acclaimed chefs. From pasta
+            making to molecular gastronomy — find your next skill.
+          </p>
+          <Link
+            href="/workshops/book"
+            className={cn(
+              buttonVariants({ variant: "default", size: "lg" }),
+              "px-10 py-6 text-lg font-semibold hover:scale-105 transition-transform duration-200",
+            )}
+          >
+            Book Your Workshop
+          </Link>
+        </div>
+      </section>
+
+      {/* Bottom curve: inverted parabola rises at center (y = -x²) */}
+      <svg
+        viewBox="0 0 1440 120"
+        preserveAspectRatio="none"
+        className="block w-full h-10 sm:h-14 md:h-20"
+      >
+        <path
+          d="M0,120 Q720,0 1440,120 L1440,0 L0,0 Z"
+          fill="#edede9"
+        />
+      </svg>
+    </motion.div>
   );
 }
 
@@ -366,7 +486,7 @@ function PhotoGallery() {
 function LocationSection() {
   return (
     <motion.section
-      className="py-16 sm:py-24 px-4 sm:px-6 border-t border-border"
+      className="py-16 sm:py-24 px-4 sm:px-6 border-t border-gray-200"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
@@ -384,6 +504,14 @@ function LocationSection() {
           {CURRENT_EVENT.dates}
         </p>
       </div>
+
+      <iframe
+        className="rounded-xl mx-auto mt-10"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3269.096896587421!2d33.940426576165756!3d34.97923756821617!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14dfd027db276487%3A0x9858cbbd7660f787!2sAyia%20Napa%20Marina!5e0!3m2!1sen!2s!4v1772445894628!5m2!1sen!2s"
+        width="600"
+        height="450"
+        loading="lazy"
+      />
     </motion.section>
   );
 }
