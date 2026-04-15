@@ -129,7 +129,7 @@ export function WorkshopBookingForm({
     <div className="space-y-6">
       <div className="space-y-2">
         <SectionLabel>Workshop</SectionLabel>
-        <h1 className="text-3xl font-bold tracking-tight">Book Your Spot</h1>
+        <h1 className="font-display text-3xl tracking-tight">Book Your Spot</h1>
       </div>
 
       <Card>
@@ -273,7 +273,7 @@ export function WorkshopBookingForm({
             </p>
             <Button
               type="submit"
-              size="lg"
+              size="cta"
               disabled={isSubmitting || remaining === 0}
             >
               {isSubmitting ? (

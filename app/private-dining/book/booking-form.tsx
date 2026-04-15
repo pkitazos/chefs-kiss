@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { IconLoader2, IconToolsKitchen2 } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { IconLoader2, IconSend } from "@tabler/icons-react";
 
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Field,
@@ -15,7 +16,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { SectionLabel } from "@/components/ui/section-label";
 import {
   Select,
   SelectContent,
@@ -23,13 +24,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { SectionLabel } from "@/components/ui/section-label";
+import { eventDateFormat } from "@/lib/config/event";
+import { api } from "@/lib/trpc/client";
 import {
   createBookingFormSchema,
   type BookingFormData,
 } from "@/lib/validations/booking";
-import { eventDateFormat } from "@/lib/config/event";
-import { api } from "@/lib/trpc/client";
 
 function getBrowserSessionId() {
   const key = "ck-browser-session-id";
@@ -117,7 +117,7 @@ export function PrivateDiningBookingForm({
     <div className="space-y-6">
       <div className="space-y-2">
         <SectionLabel>Private Dining</SectionLabel>
-        <h1 className="text-3xl font-bold tracking-tight">
+        <h1 className="font-display text-3xl tracking-tight">
           Reserve Your Seats
         </h1>
       </div>
@@ -244,7 +244,7 @@ export function PrivateDiningBookingForm({
             </p>
             <Button
               type="submit"
-              size="lg"
+              size="cta-md"
               disabled={isSubmitting || remaining === 0}
             >
               {isSubmitting ? (
@@ -254,7 +254,7 @@ export function PrivateDiningBookingForm({
                 </>
               ) : (
                 <>
-                  <IconSend />
+                  <IconToolsKitchen2 />
                   Reserve
                 </>
               )}
