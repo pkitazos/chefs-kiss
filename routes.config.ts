@@ -38,6 +38,12 @@ export const ROUTES = {
   dishes: false, // Browse all dishes with filters (enable when finalized)
 
   // ============================================================================
+  // PRIVATE DINING
+  // ============================================================================
+
+  "private-dining": true, // Private dining landing + booking (enable when bookings open)
+
+  // ============================================================================
   // WORKSHOPS
   // ============================================================================
 
@@ -72,6 +78,7 @@ export const ROUTES = {
   admin: true, // Admin dashboard overview
   "admin/login": true, // Admin login page
   "admin/applications": true, // Vendor applications management
+  "admin/bookings": true, // Booking management
   "admin/registrations": true, // Workshop registrations management
   "admin/analytics": true, // Event analytics
 } as const;
@@ -88,6 +95,7 @@ export const POST_EVENT_CONFIG = {
   map: true,
   schedule: true,
   venue: true,
+  "private-dining": false,
   vendors: true,
   "vendors/apply": false,
   "vendors/apply/success": false,
@@ -101,6 +109,7 @@ export const POST_EVENT_CONFIG = {
   admin: true,
   "admin/login": true,
   "admin/applications": true,
+  "admin/bookings": true,
   "admin/registrations": true,
   "admin/analytics": true,
 };
@@ -113,6 +122,7 @@ export const HIBERNATION_CONFIG = {
   map: false,
   schedule: false,
   venue: false,
+  "private-dining": false,
   vendors: false,
   "vendors/apply": false,
   "vendors/apply/success": false,
@@ -126,6 +136,7 @@ export const HIBERNATION_CONFIG = {
   admin: true,
   "admin/login": true,
   "admin/applications": true,
+  "admin/bookings": true,
   "admin/registrations": true,
   "admin/analytics": true,
 };
@@ -138,6 +149,7 @@ export const VENDOR_APPLICATIONS_CONFIG = {
   map: false,
   schedule: false,
   venue: false,
+  "private-dining": false,
   vendors: false,
   "vendors/apply": true, // Open for applications
   "vendors/apply/success": true,
@@ -151,6 +163,7 @@ export const VENDOR_APPLICATIONS_CONFIG = {
   admin: true,
   "admin/login": true,
   "admin/applications": true,
+  "admin/bookings": true,
   "admin/registrations": true,
   "admin/analytics": true,
 };
@@ -163,6 +176,7 @@ export const VENDORS_LIVE_CONFIG = {
   map: false,
   schedule: false,
   venue: false,
+  "private-dining": false,
   vendors: true, // List of vendors now visible
   "vendors/apply": false, // Applications closed
   "vendors/apply/success": false,
@@ -176,6 +190,7 @@ export const VENDORS_LIVE_CONFIG = {
   admin: true,
   "admin/login": true,
   "admin/applications": true,
+  "admin/bookings": true,
   "admin/registrations": true,
   "admin/analytics": true,
 };
@@ -188,6 +203,7 @@ export const WORKSHOPS_LIVE_CONFIG = {
   map: false,
   schedule: false,
   venue: false,
+  "private-dining": true, // Bookings open
   vendors: true,
   "vendors/apply": false,
   "vendors/apply/success": false,
@@ -201,6 +217,7 @@ export const WORKSHOPS_LIVE_CONFIG = {
   admin: true,
   "admin/login": true,
   "admin/applications": true,
+  "admin/bookings": true,
   "admin/registrations": true,
   "admin/analytics": true,
 };
@@ -213,6 +230,7 @@ export const FULL_EVENT_CONFIG = {
   map: true,
   schedule: true,
   venue: true,
+  "private-dining": true, // Bookings open
   vendors: true,
   "vendors/apply": false, // Applications closed
   "vendors/apply/success": false,
@@ -226,6 +244,7 @@ export const FULL_EVENT_CONFIG = {
   admin: true,
   "admin/login": true,
   "admin/applications": true,
+  "admin/bookings": true,
   "admin/registrations": true,
   "admin/analytics": true,
 };
