@@ -18,23 +18,34 @@ export const eventDateFormat = {
     `${format(CURRENT_EVENT.startDate, "d")} · ${format(CURRENT_EVENT.endDate, "d MMMM yyyy")}`,
 };
 
-export const DINING_DAYS = [
+export type DiningSession = {
+  id: string;
+  title: string;
+  time: string;
+  location: string;
+  description: string;
+  price: number;
+  capacity: number;
+};
+
+export type DiningDay = {
+  date: Date;
+  sessions: DiningSession[];
+};
+
+export const DINING_DAYS: DiningDay[] = [
   {
     date: CURRENT_EVENT.startDate,
     sessions: [
       {
-        title: "Daytime Session",
-        time: "11:00 AM – 3:00 PM",
+        id: "PD-2026-05-16",
+        title: "Private Dining Experience",
+        time: "19:00",
+        location: "Atelier",
         description:
           "A curated four-course tasting menu with wine pairings, set against the marina backdrop.",
         price: 120,
-      },
-      {
-        title: "Evening Session",
-        time: "7:00 PM – 11:00 PM",
-        description:
-          "An exclusive chef's table dinner with live cooking stations and premium cocktail service.",
-        price: 180,
+        capacity: 50,
       },
     ],
   },
@@ -42,19 +53,26 @@ export const DINING_DAYS = [
     date: CURRENT_EVENT.endDate,
     sessions: [
       {
-        title: "Daytime Session",
-        time: "11:00 AM – 3:00 PM",
+        id: "PD-2026-05-17",
+        title: "Private Dining Experience",
+        time: "19:00",
+        location: "Atelier",
         description:
           "Seafood-focused tasting experience featuring locally sourced Mediterranean ingredients.",
         price: 120,
-      },
-      {
-        title: "Evening Session",
-        time: "7:00 PM – 11:00 PM",
-        description:
-          "Grand finale dinner with a multi-course journey through Cyprus and beyond.",
-        price: 200,
+        capacity: 50,
       },
     ],
   },
-] as const;
+];
+
+export function getDiningSessionById(id: string) {
+  for (const day of DINING_DAYS) {
+    for (const session of day.sessions) {
+      if (session.id === id) {
+        return { day, session };
+      }
+    }
+  }
+  return null;
+}

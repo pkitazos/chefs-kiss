@@ -9,10 +9,10 @@
     "lint": "eslint",
     "email": "email dev --port 3001",
     "toggle-routes": "tsx scripts/toggle-routes.ts",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
+    "db:generate": "dotenv -e .env.local -- drizzle-kit generate",
+    "db:migrate": "dotenv -e .env.local -- drizzle-kit migrate",
     "db:push": "echo 'This is not what you think it is. Do not run this command. What you want is migrate.'",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "dotenv -e .env.local -- drizzle-kit studio"
   },
   "dependencies": {
     "@base-ui/react": "1.0.0",
@@ -54,6 +54,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv-cli": "11.0.0",
     "drizzle-kit": "0.31.8",
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
