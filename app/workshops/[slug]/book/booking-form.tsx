@@ -84,6 +84,7 @@ export function WorkshopBookingForm({
     },
   });
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const seats = watch("seats");
 
   const availability = api.bookings.getSlotAvailability.useQuery({

@@ -947,6 +947,7 @@ export function VendorApplicationForm() {
                 label="Food Handler Health Certificate (Πιστοποιητικό Υγείας για Χειριστές Τροφίμων)"
                 description="Valid employee health certificate for food handling."
                 endpoint="vendorEmployeeHealthCert"
+                // eslint-disable-next-line react-hooks/incompatible-library
                 value={watch(`files.employees.${index}.healthCertificate`)}
                 onUploadComplete={(url) =>
                   handleUploadComplete(
