@@ -8,7 +8,7 @@ import {
   useTransform,
   useMotionTemplate,
 } from "motion/react";
-import { IconChevronDown } from "@tabler/icons-react";
+import { IconCalendar, IconChevronDown } from "@tabler/icons-react";
 
 import { MainLogo } from "@/components/main-logo";
 import { SectionLabel } from "@/components/ui/section-label";
@@ -201,8 +201,8 @@ function HeroSection() {
         <Link
           href="#tickets"
           className={cn(
-            buttonVariants({ variant: "default", size: "lg" }),
-            "px-10 py-6 text-lg font-semibold hover:scale-105 transition-transform duration-200",
+            buttonVariants({ variant: "default", size: "cta" }),
+            "hover:scale-105 transition-transform duration-200",
           )}
         >
           Get Tickets
@@ -376,12 +376,13 @@ function WorkshopCTA() {
             making to molecular gastronomy — find your next skill.
           </p>
           <Link
-            href="/workshops/book"
+            href="/workshops"
             className={cn(
-              buttonVariants({ variant: "default", size: "lg" }),
-              "px-10 py-6 text-lg font-semibold hover:scale-105 transition-transform duration-200",
+              buttonVariants({ variant: "default", size: "cta" }),
+              "hover:scale-105 transition-transform duration-200",
             )}
           >
+            <IconCalendar />
             Book Your Workshop
           </Link>
         </div>

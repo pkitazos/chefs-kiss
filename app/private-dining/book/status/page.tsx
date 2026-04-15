@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -18,6 +19,20 @@ import { SectionLabel } from "@/components/ui/section-label";
 import { api } from "@/lib/trpc/client";
 
 export default function PrivateDiningStatusPage() {
+  return (
+    <Suspense
+      fallback={
+        <PageLayout className="flex max-w-2xl items-center justify-center py-24">
+          <IconLoader2 className="text-muted-foreground size-6 animate-spin" />
+        </PageLayout>
+      }
+    >
+      <PrivateDiningStatusContent />
+    </Suspense>
+  );
+}
+
+function PrivateDiningStatusContent() {
   const searchParams = useSearchParams();
   const bookingId = searchParams.get("ref");
   const utils = api.useUtils();
@@ -177,8 +192,8 @@ function StatusMessage({ status }: { status: string }) {
   switch (status) {
     case "confirmed":
       return (
-        <div className="flex items-start gap-3 rounded-md bg-emerald-50 p-3 dark:bg-emerald-950/30">
-          <IconCircleCheck className="text-emerald-600 mt-0.5 size-5 shrink-0" />
+        <div className="flex items-start gap-3 rounded-md bg-primary/5 p-3">
+          <IconCircleCheck className="text-primary mt-0.5 size-5 shrink-0" />
           <p className="text-sm">
             Your booking is confirmed! A confirmation email has been sent.
           </p>
@@ -186,8 +201,8 @@ function StatusMessage({ status }: { status: string }) {
       );
     case "pending":
       return (
-        <div className="flex items-start gap-3 rounded-md bg-amber-50 p-3 dark:bg-amber-950/30">
-          <IconClock className="text-amber-600 mt-0.5 size-5 shrink-0" />
+        <div className="flex items-start gap-3 rounded-md bg-amber-500/10 p-3">
+          <IconClock className="text-amber-500 mt-0.5 size-5 shrink-0" />
           <p className="text-sm">
             Your booking is awaiting payment. Please complete payment within 15
             minutes.
@@ -196,7 +211,7 @@ function StatusMessage({ status }: { status: string }) {
       );
     case "expired":
       return (
-        <div className="flex items-start gap-3 rounded-md bg-gray-50 p-3 dark:bg-gray-900/30">
+        <div className="flex items-start gap-3 rounded-md bg-muted p-3">
           <IconAlertCircle className="text-muted-foreground mt-0.5 size-5 shrink-0" />
           <p className="text-sm">
             This booking has expired. Please create a new reservation.
@@ -205,7 +220,7 @@ function StatusMessage({ status }: { status: string }) {
       );
     case "failed":
       return (
-        <div className="flex items-start gap-3 rounded-md bg-rose-50 p-3 dark:bg-rose-950/30">
+        <div className="flex items-start gap-3 rounded-md bg-destructive/10 p-3">
           <IconAlertCircle className="text-destructive mt-0.5 size-5 shrink-0" />
           <p className="text-sm">
             Payment failed. Please try again or contact support.

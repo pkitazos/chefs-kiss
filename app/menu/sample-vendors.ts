@@ -9,10 +9,15 @@ export interface MenuSection {
   items: MenuItem[];
 }
 
+export type VendorAccent = "amber" | "pink" | "sky" | "orange" | "teal";
+export type VendorIcon = "grill" | "meat" | "coffee" | "salad" | "pepper";
+
 export interface Vendor {
   id: string;
   name: string;
   cuisine: string;
+  accent: VendorAccent;
+  icon: VendorIcon;
   menu: MenuSection[];
 }
 
@@ -21,6 +26,8 @@ export const vendors: Vendor[] = [
     id: "hard-rock",
     name: "Hard Rock",
     cuisine: "American",
+    accent: "amber",
+    icon: "grill",
     menu: [
       {
         section: "Burgers",
@@ -64,6 +71,8 @@ export const vendors: Vendor[] = [
     id: "soukris",
     name: "Soukris",
     cuisine: "Greek",
+    accent: "orange",
+    icon: "meat",
     menu: [
       {
         section: "Mains",
@@ -118,6 +127,8 @@ export const vendors: Vendor[] = [
     id: "loukou",
     name: "Loukou",
     cuisine: "Café & Pastries",
+    accent: "pink",
+    icon: "coffee",
     menu: [
       {
         section: "Pastries",
@@ -160,6 +171,8 @@ export const vendors: Vendor[] = [
     id: "meze-corner",
     name: "Meze Corner",
     cuisine: "Middle Eastern",
+    accent: "sky",
+    icon: "salad",
     menu: [
       {
         section: "Starters",
@@ -199,6 +212,8 @@ export const vendors: Vendor[] = [
     id: "spice-trail",
     name: "Spice Trail",
     cuisine: "Indian",
+    accent: "orange",
+    icon: "pepper",
     menu: [
       {
         section: "Curries",

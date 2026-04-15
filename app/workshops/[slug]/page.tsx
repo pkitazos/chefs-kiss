@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { IconArrowLeft } from "@tabler/icons-react";
 import { getWorkshopBySlug, WORKSHOPS } from "@/lib/config/workshops";
 import { PageLayout } from "@/components/page-layout";
 import { SectionLabel } from "@/components/ui/section-label";
+import { AnimateIn } from "@/components/animate-in";
 import { WorkshopSlots } from "./workshop-slots";
 
 export function generateStaticParams() {
@@ -40,9 +42,17 @@ export default async function WorkshopPage({
   return (
     <PageLayout>
       <div className="space-y-8">
-        <div className="space-y-4">
+        <Link
+          href="/workshops"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <IconArrowLeft size={15} />
+          <span>Workshops</span>
+        </Link>
+
+        <AnimateIn className="space-y-4">
           <SectionLabel>Workshop</SectionLabel>
-          <h1 className="text-4xl font-bold tracking-tight">
+          <h1 className="font-display text-4xl tracking-tight">
             {workshop.title}
           </h1>
           <p className="text-muted-foreground text-lg">
@@ -50,30 +60,32 @@ export default async function WorkshopPage({
           </p>
           <p className="text-muted-foreground text-lg">{workshop.tagline}</p>
           <div className="text-sm">
-            <span className="font-semibold">&euro;{workshop.price}</span>
+            <span className="font-semibold text-primary">
+              &euro;{workshop.price}
+            </span>
             <span className="text-muted-foreground">
               {" "}
               &middot; {workshop.duration}
             </span>
           </div>
-        </div>
+        </AnimateIn>
 
-        <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-2">
-          <div className="aspect-4/3 rounded-2xl bg-muted" />
-          <div className="space-y-2">
-            <h2 className="text-lg font-semibold">About this workshop</h2>
-            <p className="text-muted-foreground">{workshop.longDescription}</p>
+        <AnimateIn>
+          <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-2">
+            <div className="aspect-4/3 rounded-2xl bg-muted" />
+            <div className="space-y-2">
+              <h2 className="text-lg font-semibold">About this workshop</h2>
+              <p className="text-muted-foreground">
+                {workshop.longDescription}
+              </p>
+            </div>
           </div>
-        </div>
+        </AnimateIn>
 
-        <WorkshopSlots workshop={workshop} />
+        <AnimateIn>
+          <WorkshopSlots workshop={workshop} />
+        </AnimateIn>
 
-        <Link
-          href="/workshops"
-          className="text-primary block text-sm underline"
-        >
-          Back to Workshops
-        </Link>
       </div>
     </PageLayout>
   );

@@ -92,7 +92,7 @@ function SlotRow({
       ) : (
         <Link
           href={`/workshops/${workshopSlug}/book?slot=${slotId}`}
-          className={cn(buttonVariants({ size: "lg" }))}
+          className={cn(buttonVariants({ size: "cta" }))}
         >
           Book Now
         </Link>
