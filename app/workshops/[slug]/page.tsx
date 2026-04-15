@@ -45,6 +45,9 @@ export default async function WorkshopPage({
           <h1 className="text-4xl font-bold tracking-tight">
             {workshop.title}
           </h1>
+          <p className="text-muted-foreground text-lg">
+            by {workshop.hostedBy}
+          </p>
           <p className="text-muted-foreground text-lg">{workshop.tagline}</p>
           <div className="text-sm">
             <span className="font-semibold">&euro;{workshop.price}</span>

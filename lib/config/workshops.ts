@@ -15,6 +15,7 @@ export type WorkshopDay = {
 export type WorkshopConfig = {
   slug: string;
   title: string;
+  hostedBy: string;
   tagline: string;
   shortDescription: string;
   longDescription: string;
@@ -25,34 +26,64 @@ export type WorkshopConfig = {
   days: WorkshopDay[];
 };
 
+const DEFAULT_WORKSHOP_LOCATION = "Workshop Area";
+const DEFAULT_SLOT_CAPACITY = 15;
+const DEFAULT_MAX_SEATS_PER_BOOKING = 4;
+const DEFAULT_WORKSHOP_PRICE = 10;
+
 export const WORKSHOPS: WorkshopConfig[] = [
   {
-    slug: "mediterranean-pastry",
-    title: "Mediterranean Pastry Masterclass",
-    tagline: "From dough to delight",
+    slug: "boards-and-bordeaux",
+    title: "BOARDS & BORDEAUX",
+    hostedBy: "C(h)rystal art",
+    tagline: "Wine, cheese, and creative plaster board painting",
     shortDescription:
-      "Learn the art of Mediterranean pastry-making with hands-on techniques from award-winning pastry chefs.",
+      "A relaxed workshop where participants enjoy wine and cheese while designing and painting their own plaster board.",
     longDescription:
-      "Dive into the world of Mediterranean pastries in this immersive workshop. You'll learn traditional techniques for crafting flaky phyllo, delicate baklava, and rustic galettes using locally sourced ingredients. Each participant gets a hands-on workstation with all tools and ingredients provided. Take home your creations and a recipe booklet to continue your pastry journey.",
-    duration: "2 hours",
-    price: 65,
+      "Boards & Bordeaux is a relaxed, creative workshop where participants enjoy wine, cheese, and delicious accompaniments while designing and painting their own plaster board. With simple techniques and guidance from the team, each guest leaves with a unique handmade piece of décor to take home.",
+    duration: "1 hour",
+    price: 25,
     images: [],
-    maxSeatsPerBooking: 4,
+    maxSeatsPerBooking: DEFAULT_MAX_SEATS_PER_BOOKING,
     days: [
       {
         date: CURRENT_EVENT.startDate,
         slots: [
           {
-            id: "ws-pastry-2026-05-16-am",
-            time: "10:00 AM – 12:00 PM",
-            location: "Workshop Tent A",
-            capacity: 20,
+            id: "ws-boards-day1-1200",
+            time: "12:00 PM – 1:00 PM",
+            location: DEFAULT_WORKSHOP_LOCATION,
+            capacity: DEFAULT_SLOT_CAPACITY,
           },
           {
-            id: "ws-pastry-2026-05-16-pm",
-            time: "2:00 PM – 4:00 PM",
-            location: "Workshop Tent A",
-            capacity: 20,
+            id: "ws-boards-day1-1315",
+            time: "1:15 PM – 2:15 PM",
+            location: DEFAULT_WORKSHOP_LOCATION,
+            capacity: DEFAULT_SLOT_CAPACITY,
+          },
+          {
+            id: "ws-boards-day1-1445",
+            time: "2:45 PM – 3:45 PM",
+            location: DEFAULT_WORKSHOP_LOCATION,
+            capacity: DEFAULT_SLOT_CAPACITY,
+          },
+          {
+            id: "ws-boards-day1-1600",
+            time: "4:00 PM – 5:00 PM",
+            location: DEFAULT_WORKSHOP_LOCATION,
+            capacity: DEFAULT_SLOT_CAPACITY,
+          },
+          {
+            id: "ws-boards-day1-1730",
+            time: "5:30 PM – 6:30 PM",
+            location: DEFAULT_WORKSHOP_LOCATION,
+            capacity: DEFAULT_SLOT_CAPACITY,
+          },
+          {
+            id: "ws-boards-day1-1900",
+            time: "7:00 PM – 8:00 PM",
+            location: DEFAULT_WORKSHOP_LOCATION,
+            capacity: DEFAULT_SLOT_CAPACITY,
           },
         ],
       },
@@ -60,36 +91,73 @@ export const WORKSHOPS: WorkshopConfig[] = [
         date: CURRENT_EVENT.endDate,
         slots: [
           {
-            id: "ws-pastry-2026-05-17-am",
-            time: "10:00 AM – 12:00 PM",
-            location: "Workshop Tent A",
-            capacity: 20,
+            id: "ws-boards-day2-1200",
+            time: "12:00 PM – 1:00 PM",
+            location: DEFAULT_WORKSHOP_LOCATION,
+            capacity: DEFAULT_SLOT_CAPACITY,
+          },
+          {
+            id: "ws-boards-day2-1315",
+            time: "1:15 PM – 2:15 PM",
+            location: DEFAULT_WORKSHOP_LOCATION,
+            capacity: DEFAULT_SLOT_CAPACITY,
+          },
+          {
+            id: "ws-boards-day2-1445",
+            time: "2:45 PM – 3:45 PM",
+            location: DEFAULT_WORKSHOP_LOCATION,
+            capacity: DEFAULT_SLOT_CAPACITY,
+          },
+          {
+            id: "ws-boards-day2-1600",
+            time: "4:00 PM – 5:00 PM",
+            location: DEFAULT_WORKSHOP_LOCATION,
+            capacity: DEFAULT_SLOT_CAPACITY,
+          },
+          {
+            id: "ws-boards-day2-1730",
+            time: "5:30 PM – 6:30 PM",
+            location: DEFAULT_WORKSHOP_LOCATION,
+            capacity: DEFAULT_SLOT_CAPACITY,
+          },
+          {
+            id: "ws-boards-day2-1900",
+            time: "7:00 PM – 8:00 PM",
+            location: DEFAULT_WORKSHOP_LOCATION,
+            capacity: DEFAULT_SLOT_CAPACITY,
           },
         ],
       },
     ],
   },
   {
-    slug: "cocktail-crafting",
-    title: "Cocktail Crafting Workshop",
-    tagline: "Shake, stir, sip",
+    slug: "tote-dalin",
+    title: "TOTE DALIN",
+    hostedBy: "Alina",
+    tagline: "Design and paint your own custom tote bag",
     shortDescription:
-      "Master the art of cocktail making with premium spirits and fresh Mediterranean botanicals.",
+      "Learn basic textile painting techniques and create your own custom, hand-painted tote bag.",
     longDescription:
-      "Join our expert mixologists for a hands-on cocktail crafting experience. You'll learn the fundamentals of balancing flavours, proper shaking and stirring techniques, and how to use fresh herbs and citrus from the Mediterranean to elevate your drinks. Each participant will craft three signature cocktails and leave with the recipes and confidence to impress at home.",
-    duration: "1.5 hours",
-    price: 50,
+      "The workshop introduces participants to basic textile painting techniques before guiding them through creating their own custom tote bag design. Beyond learning practical skills, they’ll enjoy a relaxed, creative experience, build confidence in their artistic expression, and leave with a unique, hand-painted tote bag they can proudly use.",
+    duration: "2 hours",
+    price: DEFAULT_WORKSHOP_PRICE,
     images: [],
-    maxSeatsPerBooking: 6,
+    maxSeatsPerBooking: DEFAULT_MAX_SEATS_PER_BOOKING,
     days: [
       {
         date: CURRENT_EVENT.startDate,
         slots: [
           {
-            id: "ws-cocktail-2026-05-16-pm",
-            time: "3:00 PM – 4:30 PM",
-            location: "Marina Bar",
-            capacity: 16,
+            id: "ws-tote-day1-1400",
+            time: "2:00 PM – 4:00 PM",
+            location: DEFAULT_WORKSHOP_LOCATION,
+            capacity: DEFAULT_SLOT_CAPACITY,
+          },
+          {
+            id: "ws-tote-day1-1700",
+            time: "5:00 PM – 7:00 PM",
+            location: DEFAULT_WORKSHOP_LOCATION,
+            capacity: DEFAULT_SLOT_CAPACITY,
           },
         ],
       },
@@ -97,16 +165,16 @@ export const WORKSHOPS: WorkshopConfig[] = [
         date: CURRENT_EVENT.endDate,
         slots: [
           {
-            id: "ws-cocktail-2026-05-17-am",
-            time: "11:00 AM – 12:30 PM",
-            location: "Marina Bar",
-            capacity: 16,
+            id: "ws-tote-day2-1400",
+            time: "2:00 PM – 4:00 PM",
+            location: DEFAULT_WORKSHOP_LOCATION,
+            capacity: DEFAULT_SLOT_CAPACITY,
           },
           {
-            id: "ws-cocktail-2026-05-17-pm",
-            time: "3:00 PM – 4:30 PM",
-            location: "Marina Bar",
-            capacity: 16,
+            id: "ws-tote-day2-1700",
+            time: "5:00 PM – 7:00 PM",
+            location: DEFAULT_WORKSHOP_LOCATION,
+            capacity: DEFAULT_SLOT_CAPACITY,
           },
         ],
       },
