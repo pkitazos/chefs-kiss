@@ -3,6 +3,7 @@ import { sendEmail } from "./index";
 import VendorConfirmationEmail from "@/emails/vendor-confirmation";
 import VendorAcceptanceEmail from "@/emails/vendor-acceptance";
 import VendorRejectionEmail from "@/emails/vendor-rejection";
+import { CURRENT_EVENT, eventDateFormat } from "@/lib/config/event";
 
 type SendVendorConfirmationParams = {
   email: string;
@@ -29,7 +30,7 @@ export async function sendVendorConfirmation({
 
   const result = await sendEmail({
     to: email,
-    subject: "Vendor Application Received - Chef's Kiss Festival",
+    subject: `Vendor Application Received - ${CURRENT_EVENT.name}`,
     html,
   });
 
@@ -59,13 +60,13 @@ export async function sendVendorAcceptance({
     VendorAcceptanceEmail({
       businessName,
       applicationId,
-      festivalDate: "May 16-17, 2026",
+      festivalDate: eventDateFormat.range(),
     }),
   );
 
   const result = await sendEmail({
     to: email,
-    subject: "Vendor Application Approved - Chef's Kiss Festival",
+    subject: `Vendor Application Approved - ${CURRENT_EVENT.name}`,
     html,
   });
 
@@ -100,7 +101,7 @@ export async function sendVendorRejection({
 
   const result = await sendEmail({
     to: email,
-    subject: "Regarding Your Vendor Application - Chef's Kiss Festival",
+    subject: `Regarding Your Vendor Application - ${CURRENT_EVENT.name}`,
     html,
   });
 

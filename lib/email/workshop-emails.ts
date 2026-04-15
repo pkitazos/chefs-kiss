@@ -4,6 +4,7 @@ import WorkshopConfirmationEmail from "@/emails/workshop-confirmation";
 import WorkshopAcceptanceEmail from "@/emails/workshop-acceptance";
 import WorkshopRejectionEmail from "@/emails/workshop-rejection";
 import { formatDateRange } from "@/lib/utils/format-date-range";
+import { CURRENT_EVENT } from "@/lib/config/event";
 
 type SendWorkshopConfirmationParams = {
   email: string;
@@ -33,7 +34,7 @@ export async function sendWorkshopConfirmation({
 
   const result = await sendEmail({
     to: email,
-    subject: "Workshop Application Received - Chef's Kiss Festival",
+    subject: `Workshop Application Received - ${CURRENT_EVENT.name}`,
     html,
   });
 
@@ -80,7 +81,7 @@ export async function sendWorkshopAcceptance({
 
   const result = await sendEmail({
     to: email,
-    subject: "Workshop Application Approved - Chef's Kiss Festival",
+    subject: `Workshop Application Approved - ${CURRENT_EVENT.name}`,
     html,
   });
 
@@ -115,7 +116,7 @@ export async function sendWorkshopRejection({
 
   const result = await sendEmail({
     to: email,
-    subject: "Regarding Your Workshop Application - Chef's Kiss Festival",
+    subject: `Regarding Your Workshop Application - ${CURRENT_EVENT.name}`,
     html,
   });
 

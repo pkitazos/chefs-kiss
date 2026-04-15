@@ -12,7 +12,11 @@ import { IconChevronDown } from "@tabler/icons-react";
 
 import { MainLogo } from "@/components/main-logo";
 import { SectionLabel } from "@/components/ui/section-label";
-import { CURRENT_EVENT } from "@/lib/config/event";
+import {
+  CURRENT_EVENT,
+  DINING_DAYS,
+  eventDateFormat,
+} from "@/lib/config/event";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import Image from "next/image";
@@ -83,47 +87,6 @@ const VENDOR_NAMES = [
   "Olive & Thyme",
   "Nikkei House",
   "The Smokepit",
-];
-
-const DINING_DAYS = [
-  {
-    date: "Friday, May 16",
-    sessions: [
-      {
-        title: "Daytime Session",
-        time: "11:00 AM – 3:00 PM",
-        description:
-          "A curated four-course tasting menu with wine pairings, set against the marina backdrop.",
-        price: 120,
-      },
-      {
-        title: "Evening Session",
-        time: "7:00 PM – 11:00 PM",
-        description:
-          "An exclusive chef's table dinner with live cooking stations and premium cocktail service.",
-        price: 180,
-      },
-    ],
-  },
-  {
-    date: "Saturday, May 17",
-    sessions: [
-      {
-        title: "Daytime Session",
-        time: "11:00 AM – 3:00 PM",
-        description:
-          "Seafood-focused tasting experience featuring locally sourced Mediterranean ingredients.",
-        price: 120,
-      },
-      {
-        title: "Evening Session",
-        time: "7:00 PM – 11:00 PM",
-        description:
-          "Grand finale dinner with a multi-course journey through Cyprus and beyond.",
-        price: 200,
-      },
-    ],
-  },
 ];
 
 const GALLERY_ITEMS = [
@@ -232,7 +195,7 @@ function HeroSection() {
         <MainLogo className="w-full max-w-64 sm:max-w-80 md:max-w-md lg:max-w-lg" />
 
         <p className="text-center text-lg sm:text-xl md:text-2xl font-bold tracking-tight text-foreground">
-          {CURRENT_EVENT.dates} · {CURRENT_EVENT.locationName}
+          {eventDateFormat.range()} · {CURRENT_EVENT.locationName}
         </p>
 
         <Link
@@ -312,10 +275,10 @@ function PrivateDiningSection() {
 
         <div className="space-y-10 sm:space-y-14">
           {DINING_DAYS.map((day) => (
-            <div key={day.date}>
+            <div key={day.date.toISOString()}>
               <div className="flex items-center gap-4 mb-6">
                 <h3 className="text-lg sm:text-xl font-bold tracking-tight text-foreground shrink-0">
-                  {day.date}
+                  {eventDateFormat.dayName(day.date)}
                 </h3>
                 <div className="flex-1 h-px bg-border" />
               </div>
@@ -379,10 +342,7 @@ function WorkshopCTA() {
         preserveAspectRatio="none"
         className="block w-full h-10 sm:h-14 md:h-20"
       >
-        <path
-          d="M0,0 Q720,120 1440,0 L1440,120 L0,120 Z"
-          fill="#edede9"
-        />
+        <path d="M0,0 Q720,120 1440,0 L1440,120 L0,120 Z" fill="#edede9" />
       </svg>
 
       <section className="bg-[#edede9] text-foreground py-16 sm:py-24 px-4 sm:px-6">
@@ -433,10 +393,7 @@ function WorkshopCTA() {
         preserveAspectRatio="none"
         className="block w-full h-10 sm:h-14 md:h-20"
       >
-        <path
-          d="M0,120 Q720,0 1440,120 L1440,0 L0,0 Z"
-          fill="#edede9"
-        />
+        <path d="M0,120 Q720,0 1440,120 L1440,0 L0,0 Z" fill="#edede9" />
       </svg>
     </motion.div>
   );
@@ -501,7 +458,7 @@ function LocationSection() {
           {CURRENT_EVENT.locationName}
         </p>
         <p className="text-base text-muted-foreground mt-2">
-          {CURRENT_EVENT.dates}
+          {eventDateFormat.range()}
         </p>
       </div>
 
