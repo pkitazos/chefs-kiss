@@ -38,6 +38,9 @@ export default function WorkshopsPage() {
             <div className="flex flex-1 flex-col gap-3 p-5">
               <div>
                 <h2 className="text-lg font-semibold">{workshop.title}</h2>
+                <p className="-mt-1 mb-2.5 text-muted-foreground text-sm">
+                  by {workshop.hostedBy}
+                </p>
                 <p className="text-muted-foreground text-sm">
                   {workshop.tagline}
                 </p>
