@@ -71,7 +71,7 @@ export const uploadRouter = {
       // No auth check, anyone can upload
       return { uploadedAt: new Date().toISOString() };
     })
-    .onUploadComplete(async ({ metadata, file }) => {
+    .onUploadComplete(async ({ file }) => {
       console.log("Public upload complete:", file.ufsUrl);
       return { url: file.ufsUrl };
     }),
