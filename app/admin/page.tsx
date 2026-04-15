@@ -16,6 +16,7 @@ import {
   IconCalendar,
   IconMapPin,
   IconUsers,
+  IconTicket,
 } from "@tabler/icons-react";
 
 function formatDate(date: Date) {
@@ -33,8 +34,10 @@ export default function AdminPage() {
     api.events.getActiveEventStats.useQuery();
   const { data: allEvents, isLoading: eventsLoading } =
     api.events.getAllEvents.useQuery();
+  const { data: allBookings, isLoading: bookingsLoading } =
+    api.bookings.adminList.useQuery({});
 
-  const isLoading = eventLoading || eventsLoading;
+  const isLoading = eventLoading || eventsLoading || bookingsLoading;
 
   if (isLoading) {
     return (
@@ -167,6 +170,45 @@ export default function AdminPage() {
                       {workshopStats.rejected}
                     </p>
                     <p className="text-xs text-muted-foreground">Rejected</p>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="flex flex-col">
+              <div className="flex justify-start items-center gap-2">
+                <h3 className="font-medium my-4">Bookings</h3>
+                <Link href="/admin/bookings">
+                  <Button variant="link">
+                    <IconTicket className="mr-2 size-4" />
+                    View all Bookings
+                  </Button>
+                </Link>
+              </div>
+              {allBookings && (
+                <div className="mb-4 grid grid-cols-4 gap-4">
+                  <div className="rounded-lg bg-background p-3 text-center">
+                    <p className="text-2xl font-bold">{allBookings.length}</p>
+                    <p className="text-xs text-muted-foreground">
+                      Total Bookings
+                    </p>
+                  </div>
+                  <div className="rounded-lg bg-background p-3 text-center">
+                    <p className="text-2xl font-bold text-yellow-600">
+                      {allBookings.filter((b) => b.status === "pending").length}
+                    </p>
+                    <p className="text-xs text-muted-foreground">Pending</p>
+                  </div>
+                  <div className="rounded-lg bg-background p-3 text-center">
+                    <p className="text-2xl font-bold text-green-600">
+                      {allBookings.filter((b) => b.status === "confirmed").length}
+                    </p>
+                    <p className="text-xs text-muted-foreground">Confirmed</p>
+                  </div>
+                  <div className="rounded-lg bg-background p-3 text-center">
+                    <p className="text-2xl font-bold text-red-600">
+                      {allBookings.filter((b) => b.status === "expired").length}
+                    </p>
+                    <p className="text-xs text-muted-foreground">Expired</p>
                   </div>
                 </div>
               )}
