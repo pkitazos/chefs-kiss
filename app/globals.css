@@ -341,7 +341,7 @@
 }
 
 .marquee-track {
-    animation: marquee 30s linear infinite;
+    animation: marquee 45s linear infinite;
 }
 
 .marquee-container:hover .marquee-track {
