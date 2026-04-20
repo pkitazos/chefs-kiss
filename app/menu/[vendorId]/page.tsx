@@ -60,12 +60,9 @@ function VendorMenu({ vendorId }: { vendorId: string }) {
       </div>
 
       <PageLayout className="max-w-2xl">
-        {vendor.menu.map((section, i) => (
-          <AnimateIn
-            key={section.section}
-            transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.08 }}
-          >
-            <section className="mb-10 last:mb-0">
+        <AnimateIn>
+          {vendor.menu.map((section) => (
+            <section key={section.section} className="mb-10 last:mb-0">
               {/* Section heading */}
               <h2 className="text-xs uppercase tracking-widest font-semibold text-muted-foreground mb-4 pb-2 border-b border-border">
                 {section.section}
@@ -95,8 +92,8 @@ function VendorMenu({ vendorId }: { vendorId: string }) {
                 ))}
               </ul>
             </section>
-          </AnimateIn>
-        ))}
+          ))}
+        </AnimateIn>
       </PageLayout>
     </>
   );
