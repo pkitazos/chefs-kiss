@@ -83,6 +83,10 @@
     --color-orange-600: var(--orange-600);
     --color-orange-700: var(--orange-700);
 
+    --color-green-400: var(--green-400);
+    --color-green-500: var(--green-500);
+    --color-green-600: var(--green-600);
+
     /* Fonts */
     --font-display: var(--font-pp-neue-machina);
     --font-sans: var(--font-manrope);
@@ -200,6 +204,11 @@
     --orange-500: oklch(0.56 0.17 32.3431);
     --orange-600: oklch(0.6189 0.1846 35.5445);
     --orange-700: oklch(0.7035 0.1404 42.152);
+
+    /* Green - Use sparingly */
+    --green-400: oklch(0.4729 0.137 153.1651);
+    --green-500: oklch(0.5729 0.147 153.1651);
+    --green-600: oklch(0.6229 0.137 153.1651);
 
     --radius: 0.625rem;
 }

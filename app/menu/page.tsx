@@ -9,7 +9,7 @@ import {
   IconPepper,
   IconSalad,
 } from "@tabler/icons-react";
-import { vendors, type VendorAccent, type VendorIcon } from "./sample-vendors";
+import { vendors, type VendorAccent, type VendorIcon } from "@/lib/config/menu";
 import { AnimateIn } from "@/components/animate-in";
 import { DotsPattern } from "@/components/brand-pattern";
 import { SectionLabel } from "@/components/ui/section-label";
@@ -22,10 +22,13 @@ const ACCENT_CLASSES: Record<VendorAccent, { bg: string; text: string }> = {
   pink: { bg: "bg-pink-500/15", text: "text-pink-600" },
   sky: { bg: "bg-sky-500/15", text: "text-sky-600" },
   orange: { bg: "bg-orange-500/15", text: "text-orange-600" },
-  teal: { bg: "bg-teal-500/15", text: "text-teal-600" },
+  green: { bg: "bg-green-500/15", text: "text-green-600" },
 };
 
-const ICON_MAP: Record<VendorIcon, ComponentType<{ size?: number; className?: string }>> = {
+const ICON_MAP: Record<
+  VendorIcon,
+  ComponentType<{ size?: number; className?: string }>
+> = {
   grill: IconGrill,
   meat: IconMeat,
   coffee: IconCoffee,
