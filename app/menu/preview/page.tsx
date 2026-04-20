@@ -104,59 +104,51 @@ export default function VendorListPreview() {
           <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground border-b pb-2">
             Option B
           </h2>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {vendors.slice(0, 6).map((vendor, i) => {
+          <AnimateIn className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {vendors.slice(0, 6).map((vendor) => {
               const a = ACCENT_CLASSES[vendor.accent];
               const Icon = ICON_MAP[vendor.icon];
               return (
-                <AnimateIn
+                <Link
                   key={vendor.id}
-                  transition={{
-                    duration: 0.5,
-                    ease: "easeOut",
-                    delay: i * 0.1,
-                  }}
+                  href={`/menu/${vendor.id}`}
+                  className="group flex h-full flex-col overflow-hidden rounded-lg border transition-colors hover:border-primary/30 hover:bg-muted/50"
                 >
-                  <Link
-                    href={`/menu/${vendor.id}`}
-                    className="group flex h-full flex-col overflow-hidden rounded-lg border transition-colors hover:border-primary/30 hover:bg-muted/50"
+                  <div
+                    className={cn(
+                      "flex aspect-video items-center justify-center",
+                      a.card,
+                    )}
                   >
-                    <div
+                    <Icon size={48} className="text-white/40" />
+                  </div>
+                  <div className="flex flex-1 flex-col gap-2 p-5">
+                    <p
                       className={cn(
-                        "flex aspect-video items-center justify-center",
-                        a.card,
+                        "text-xs font-semibold uppercase tracking-wider",
+                        a.text,
                       )}
                     >
-                      <Icon size={48} className="text-white/40" />
-                    </div>
-                    <div className="flex flex-1 flex-col gap-2 p-5">
-                      <p
+                      {vendor.cuisine}
+                    </p>
+                    <p className="font-display text-xl tracking-tight">
+                      {vendor.name}
+                    </p>
+                    <div className="mt-auto pt-3">
+                      <span
                         className={cn(
-                          "text-xs font-semibold uppercase tracking-wider",
-                          a.text,
+                          buttonVariants({ size: "cta-md" }),
+                          "pointer-events-none w-full",
                         )}
                       >
-                        {vendor.cuisine}
-                      </p>
-                      <p className="font-display text-xl tracking-tight">
-                        {vendor.name}
-                      </p>
-                      <div className="mt-auto pt-3">
-                        <span
-                          className={cn(
-                            buttonVariants({ size: "cta-md" }),
-                            "pointer-events-none w-full",
-                          )}
-                        >
-                          View Menu
-                        </span>
-                      </div>
+                        View Menu
+                      </span>
                     </div>
-                  </Link>
-                </AnimateIn>
+                  </div>
+                </Link>
               );
             })}
-          </div>
+          </AnimateIn>
         </section>
 
         {/* ── OPTION C: Large rows with cuisine pill ── */}
@@ -164,54 +156,46 @@ export default function VendorListPreview() {
           <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground border-b pb-2">
             Option C
           </h2>
-          <div className="mx-auto max-w-3xl space-y-3">
-            {vendors.slice(0, 6).map((vendor, i) => {
+          <AnimateIn className="mx-auto max-w-3xl space-y-3">
+            {vendors.slice(0, 6).map((vendor) => {
               const a = ACCENT_CLASSES[vendor.accent];
               const Icon = ICON_MAP[vendor.icon];
               return (
-                <AnimateIn
+                <Link
                   key={vendor.id}
-                  transition={{
-                    duration: 0.5,
-                    ease: "easeOut",
-                    delay: i * 0.08,
-                  }}
+                  href={`/menu/${vendor.id}`}
+                  className="group flex items-center gap-5 rounded-xl border p-4 transition-colors hover:border-primary/30 hover:bg-muted/50 md:p-5"
                 >
-                  <Link
-                    href={`/menu/${vendor.id}`}
-                    className="group flex items-center gap-5 rounded-xl border p-4 transition-colors hover:border-primary/30 hover:bg-muted/50 md:p-5"
+                  <div
+                    className={cn(
+                      "flex size-20 shrink-0 items-center justify-center rounded-2xl md:size-24",
+                      a.bg,
+                    )}
                   >
-                    <div
+                    <Icon size={36} className={a.text} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span
                       className={cn(
-                        "flex size-20 shrink-0 items-center justify-center rounded-2xl md:size-24",
+                        "mb-1 inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold",
                         a.bg,
+                        a.text,
                       )}
                     >
-                      <Icon size={36} className={a.text} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <span
-                        className={cn(
-                          "mb-1 inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold",
-                          a.bg,
-                          a.text,
-                        )}
-                      >
-                        {vendor.cuisine}
-                      </span>
-                      <p className="font-display text-xl tracking-tight md:text-2xl">
-                        {vendor.name}
-                      </p>
-                    </div>
-                    <IconArrowRight
-                      size={20}
-                      className="shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary"
-                    />
-                  </Link>
-                </AnimateIn>
+                      {vendor.cuisine}
+                    </span>
+                    <p className="font-display text-xl tracking-tight md:text-2xl">
+                      {vendor.name}
+                    </p>
+                  </div>
+                  <IconArrowRight
+                    size={20}
+                    className="shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary"
+                  />
+                </Link>
               );
             })}
-          </div>
+          </AnimateIn>
         </section>
       </div>
     </div>

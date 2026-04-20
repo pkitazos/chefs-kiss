@@ -63,50 +63,46 @@ export default function MenuPage() {
         <h2 className="text-xs uppercase tracking-widest text-muted-foreground font-semibold mb-4 px-1">
           All vendors
         </h2>
-        <div className="space-y-3">
-          {vendors.map((vendor, i) => {
+        <AnimateIn className="space-y-3">
+          {vendors.map((vendor) => {
             const a = ACCENT_CLASSES[vendor.accent];
             const Icon = ICON_MAP[vendor.icon];
             return (
-              <AnimateIn
+              <Link
                 key={vendor.id}
-                transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.08 }}
+                href={`/menu/${vendor.id}`}
+                className="group flex items-center gap-5 rounded-xl border p-4 transition-colors hover:border-primary/30 hover:bg-muted/50 md:p-5"
               >
-                <Link
-                  href={`/menu/${vendor.id}`}
-                  className="group flex items-center gap-5 rounded-xl border p-4 transition-colors hover:border-primary/30 hover:bg-muted/50 md:p-5"
+                <div
+                  className={cn(
+                    "flex size-20 shrink-0 items-center justify-center rounded-2xl md:size-24",
+                    a.bg,
+                  )}
                 >
-                  <div
+                  <Icon size={36} className={a.text} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span
                     className={cn(
-                      "flex size-20 shrink-0 items-center justify-center rounded-2xl md:size-24",
+                      "mb-1 inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold",
                       a.bg,
+                      a.text,
                     )}
                   >
-                    <Icon size={36} className={a.text} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <span
-                      className={cn(
-                        "mb-1 inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold",
-                        a.bg,
-                        a.text,
-                      )}
-                    >
-                      {vendor.cuisine}
-                    </span>
-                    <p className="font-display text-xl tracking-tight md:text-2xl">
-                      {vendor.name}
-                    </p>
-                  </div>
-                  <IconArrowRight
-                    size={20}
-                    className="shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary"
-                  />
-                </Link>
-              </AnimateIn>
+                    {vendor.cuisine}
+                  </span>
+                  <p className="font-display text-xl tracking-tight md:text-2xl">
+                    {vendor.name}
+                  </p>
+                </div>
+                <IconArrowRight
+                  size={20}
+                  className="shrink-0 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary"
+                />
+              </Link>
             );
           })}
-        </div>
+        </AnimateIn>
       </PageLayout>
     </>
   );
