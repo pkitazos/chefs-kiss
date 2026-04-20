@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { IconArrowLeft } from "@tabler/icons-react";
-import { vendors } from "../sample-vendors";
+import { vendors } from "@/lib/config/menu";
 import { AnimateIn } from "@/components/animate-in";
 import { WavyPattern } from "@/components/brand-pattern";
 import { SectionLabel } from "@/components/ui/section-label";

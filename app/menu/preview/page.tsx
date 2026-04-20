@@ -14,7 +14,7 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 import type { ComponentType } from "react";
-import { vendors, type VendorAccent, type VendorIcon } from "../sample-vendors";
+import { vendors, type VendorAccent, type VendorIcon } from "@/lib/config/menu";
 
 const ACCENT_CLASSES: Record<
   VendorAccent,
@@ -32,7 +32,11 @@ const ACCENT_CLASSES: Record<
     text: "text-orange-600",
     card: "bg-orange-500",
   },
-  teal: { bg: "bg-teal-500/15", text: "text-teal-600", card: "bg-teal-500" },
+  green: {
+    bg: "bg-green-500/15",
+    text: "text-green-600",
+    card: "bg-green-500",
+  },
 };
 
 const ICON_MAP: Record<
@@ -57,11 +61,11 @@ export default function VendorListPreview() {
         {/* ── OPTION A: Divide-y list ── */}
         <section className="space-y-4">
           <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground border-b pb-2">
-            Option A — Divide-y rows (matches private dining)
+            Option A
           </h2>
           <div className="mx-auto max-w-2xl">
             <div className="divide-y">
-              {vendors.map((vendor) => {
+              {vendors.slice(0, 6).map((vendor) => {
                 const a = ACCENT_CLASSES[vendor.accent];
                 const Icon = ICON_MAP[vendor.icon];
                 return (
@@ -98,10 +102,10 @@ export default function VendorListPreview() {
         {/* ── OPTION B: Grid cards (matches workshops) ── */}
         <section className="space-y-4">
           <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground border-b pb-2">
-            Option B — Grid cards (matches workshops)
+            Option B
           </h2>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {vendors.map((vendor, i) => {
+            {vendors.slice(0, 6).map((vendor, i) => {
               const a = ACCENT_CLASSES[vendor.accent];
               const Icon = ICON_MAP[vendor.icon];
               return (
@@ -158,10 +162,10 @@ export default function VendorListPreview() {
         {/* ── OPTION C: Large rows with cuisine pill ── */}
         <section className="space-y-4">
           <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground border-b pb-2">
-            Option C — Large rows with cuisine pill
+            Option C
           </h2>
           <div className="mx-auto max-w-3xl space-y-3">
-            {vendors.map((vendor, i) => {
+            {vendors.slice(0, 6).map((vendor, i) => {
               const a = ACCENT_CLASSES[vendor.accent];
               const Icon = ICON_MAP[vendor.icon];
               return (
