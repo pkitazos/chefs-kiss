@@ -50,7 +50,7 @@ export default function MenuPage() {
           <AnimateIn>
             <SectionLabel>Festival Vendors</SectionLabel>
             <h1 className="mt-3 font-display text-3xl tracking-tight md:text-5xl">
-              {"Chef's Kiss"}
+              Menu
             </h1>
             <p className="mt-2 text-black text-pretty">
               Discover menus from our festival vendors

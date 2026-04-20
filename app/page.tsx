@@ -8,15 +8,17 @@ import {
   useTransform,
   useMotionTemplate,
 } from "motion/react";
-import { IconCalendar, IconChevronDown } from "@tabler/icons-react";
+import {
+  IconArrowRight,
+  IconChevronDown,
+  IconClock,
+} from "@tabler/icons-react";
 
 import { MainLogo } from "@/components/main-logo";
 import { SectionLabel } from "@/components/ui/section-label";
-import {
-  CURRENT_EVENT,
-  DINING_DAYS,
-  eventDateFormat,
-} from "@/lib/config/event";
+import { CURRENT_EVENT, eventDateFormat } from "@/lib/config/event";
+import { vendors } from "@/lib/config/menu";
+import { WORKSHOPS } from "@/lib/config/workshops";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import Image from "next/image";
@@ -78,16 +80,9 @@ function SpatulaIcon({ className }: { className?: string }) {
    DATA
    ═══════════════════════════════════════════════ */
 
-const VENDOR_NAMES = [
-  "Hard Rock",
-  "Soukris",
-  "Loukou",
-  "Meze Corner",
-  "Spice Trail",
-  "Olive & Thyme",
-  "Nikkei House",
-  "The Smokepit",
-];
+const VENDOR_NAMES = vendors.map((v) => v.name);
+
+const FEATURED_WORKSHOPS = WORKSHOPS.slice(0, 3);
 
 const GALLERY_ITEMS = [
   { color: "bg-slate-700", tall: true },
@@ -198,15 +193,26 @@ function HeroSection() {
           {eventDateFormat.range()} · {CURRENT_EVENT.locationName}
         </p>
 
-        <Link
-          href="#tickets"
-          className={cn(
-            buttonVariants({ variant: "default", size: "cta" }),
-            "hover:scale-105 transition-transform duration-200",
-          )}
-        >
-          Get Tickets
-        </Link>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+          <Link
+            href="/workshops"
+            className={cn(
+              buttonVariants({ variant: "soft", size: "cta" }),
+              "hover:scale-105 transition-transform duration-200",
+            )}
+          >
+            Book a Workshop
+          </Link>
+          <Link
+            href="/private-dining"
+            className={cn(
+              buttonVariants({ variant: "default", size: "cta" }),
+              "hover:scale-105 transition-transform duration-200",
+            )}
+          >
+            Reserve Private Dining
+          </Link>
+        </div>
       </motion.div>
 
       {/* Scroll indicator */}
@@ -258,66 +264,163 @@ function VendorMarquee() {
 function PrivateDiningSection() {
   return (
     <motion.section
-      id="tickets"
       className="py-16 sm:py-24 px-4 sm:px-6"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <div className="max-w-3xl mx-auto">
-        <SectionLabel className="mb-3 block">Private Dining</SectionLabel>
-        <h2 className="text-3xl sm:text-4xl md:text-[40pt] font-display leading-tight mb-12 sm:mb-16">
-          An Exclusive
-          <br />
-          Culinary Experience
+      <div className="max-w-5xl mx-auto">
+        <h2 className="font-display text-4xl sm:text-5xl md:text-[56pt] leading-none tracking-tight">
+          Private Dining
         </h2>
+        <SectionLabel className="mt-3 block">
+          An Exclusive Culinary Experience
+        </SectionLabel>
 
-        <div className="space-y-10 sm:space-y-14">
-          {DINING_DAYS.map((day) => (
-            <div key={day.date.toISOString()}>
-              <div className="flex items-center gap-4 mb-6">
-                <h3 className="text-lg sm:text-xl font-bold tracking-tight text-foreground shrink-0">
-                  {eventDateFormat.dayName(day.date)}
-                </h3>
-                <div className="flex-1 h-px bg-border" />
-              </div>
-
-              <div className="divide-y divide-border border-y border-border">
-                {day.sessions.map((session) => (
-                  <div
-                    key={session.title}
-                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-5 sm:py-6 px-2 hover:bg-muted/50 transition-colors"
-                  >
-                    <div className="flex-1 min-w-0">
-                      <p className="font-bold text-foreground text-base sm:text-lg">
-                        {session.title}
-                      </p>
-                      <p className="text-sm text-muted-foreground mt-0.5">
-                        {session.time}
-                      </p>
-                      <p className="text-sm text-muted-foreground mt-1 max-w-md">
-                        {session.description}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-4 sm:gap-6 shrink-0">
-                      <span className="text-xl sm:text-2xl font-bold text-foreground">
-                        €{session.price}
-                      </span>
-                      <button
-                        className={cn(
-                          buttonVariants({ variant: "default" }),
-                          "px-6",
-                        )}
-                      >
-                        Select
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+        <div className="mt-10 sm:mt-14 grid grid-cols-1 items-center gap-8 md:grid-cols-[1.3fr_1fr] md:gap-12">
+          <div className="relative aspect-4/3 overflow-hidden rounded-2xl bg-sky-500">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="font-display text-4xl sm:text-5xl md:text-6xl tracking-tight text-white drop-shadow-sm">
+                Sea &amp; Fire
+              </span>
             </div>
+          </div>
+
+          <div className="space-y-6">
+            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
+              Join us for an intimate dining experience crafted by renowned
+              chefs. Each session features a curated multi-course menu with
+              premium pairings, set in a stunning marina-side venue.
+            </p>
+            <Link
+              href="/private-dining"
+              className={cn(
+                buttonVariants({ variant: "default", size: "cta" }),
+                "hover:scale-105 transition-transform duration-200",
+              )}
+            >
+              Reserve Your Seat
+              <IconArrowRight />
+            </Link>
+          </div>
+        </div>
+      </div>
+    </motion.section>
+  );
+}
+
+/* ═══════════════════════════════════════════════
+   WORKSHOPS PREVIEW
+   ═══════════════════════════════════════════════ */
+
+const WORKSHOP_CARD_ACCENTS = [
+  "bg-amber-500",
+  "bg-pink-500",
+  "bg-sky-500",
+] as const;
+
+function WorkshopsSection() {
+  return (
+    <motion.section
+      className="py-16 sm:py-24 px-4 sm:px-6"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
+      <div className="max-w-6xl mx-auto">
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 className="font-display text-4xl sm:text-5xl md:text-[56pt] leading-none tracking-tight">
+              Workshops
+            </h2>
+            <SectionLabel className="mt-3 block max-w-md">
+              An exclusive chance to interact with one of your favourite brands
+            </SectionLabel>
+          </div>
+          <Link
+            href="/workshops"
+            className="group inline-flex items-center gap-1.5 self-start text-sm font-semibold tracking-tight text-foreground/70 hover:text-foreground transition-colors sm:self-auto sm:text-base"
+          >
+            See all workshops
+            <IconArrowRight
+              size={18}
+              className="transition-transform group-hover:translate-x-0.5"
+            />
+          </Link>
+        </div>
+
+        <div className="mt-10 sm:mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+          {FEATURED_WORKSHOPS.map((workshop, i) => (
+            <Link
+              key={workshop.slug}
+              href={`/workshops/${workshop.slug}`}
+              className="group flex flex-col gap-3"
+            >
+              <div
+                className={cn(
+                  "aspect-3/4 w-full overflow-hidden rounded-2xl transition-transform duration-300 group-hover:scale-[1.02]",
+                  WORKSHOP_CARD_ACCENTS[i % WORKSHOP_CARD_ACCENTS.length],
+                )}
+              />
+              <div className="flex flex-col gap-1.5 px-1">
+                <div className="flex items-start justify-between gap-3">
+                  <p className="font-display text-xl tracking-tight sm:text-2xl">
+                    {workshop.title}
+                  </p>
+                  <span className="inline-flex items-center gap-1.5 shrink-0 pt-1 text-sm font-medium text-primary">
+                    <IconClock size={16} />
+                    {workshop.duration}
+                  </span>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {workshop.tagline}
+                </p>
+              </div>
+            </Link>
           ))}
+        </div>
+      </div>
+    </motion.section>
+  );
+}
+
+/* ═══════════════════════════════════════════════
+   MENU CTA
+   ═══════════════════════════════════════════════ */
+
+function MenuSection() {
+  return (
+    <motion.section
+      className="py-16 sm:py-24 px-4 sm:px-6"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
+      <div className="mx-auto max-w-4xl text-center">
+        <h2 className="font-display text-4xl sm:text-5xl md:text-[56pt] leading-none tracking-tight">
+          Taste the Festival
+        </h2>
+        <SectionLabel className="mt-3 block">
+          {vendors.length} vendors &middot; Hundreds of dishes
+        </SectionLabel>
+        <p className="mx-auto mt-6 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed">
+          From smash burgers to handmade loukoumades — browse every vendor menu
+          and plan your festival bites before you arrive.
+        </p>
+        <div className="mt-8 sm:mt-10">
+          <Link
+            href="/menu"
+            className={cn(
+              buttonVariants({ variant: "default", size: "cta" }),
+              "hover:scale-105 transition-transform duration-200",
+            )}
+          >
+            Browse the Menu
+            <IconArrowRight />
+          </Link>
         </div>
       </div>
     </motion.section>
@@ -371,20 +474,10 @@ function WorkshopCTA() {
             ))}
           </div>
 
-          <p className="text-lg sm:text-xl text-foreground/80 max-w-xl mx-auto mb-8 sm:mb-10">
-            Join hands-on culinary workshops led by acclaimed chefs. From pasta
-            making to molecular gastronomy — find your next skill.
+          <p className="text-lg sm:text-xl text-foreground/80 max-w-xl mx-auto">
+            Join hands-on culinary workshops led by acclaimed chefs.
+            {/* todo: need better/longer description */}
           </p>
-          <Link
-            href="/workshops"
-            className={cn(
-              buttonVariants({ variant: "default", size: "cta" }),
-              "hover:scale-105 transition-transform duration-200",
-            )}
-          >
-            <IconCalendar />
-            Book Your Workshop
-          </Link>
         </div>
       </section>
 
@@ -484,6 +577,8 @@ export default function LandingPage() {
       <HeroSection />
       <VendorMarquee />
       <PrivateDiningSection />
+      <WorkshopsSection />
+      <MenuSection />
       <WorkshopCTA />
       <PhotoGallery />
       <LocationSection />

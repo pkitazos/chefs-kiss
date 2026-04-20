@@ -279,7 +279,7 @@ export const WORKSHOPS: WorkshopConfig[] = [
     longDescription:
       "Whiskey & Cigar is a relaxed tasting experience taking place at the Sundeck of Ayia Napa Marina, where participants can enjoy premium whiskey and cigars while exploring rich flavours, aromas, and pairing notes in a refined waterfront setting.",
     duration: "TBC",
-    price: 0,
+    price: DEFAULT_WORKSHOP_PRICE,
     images: [],
     maxSeatsPerBooking: 4,
     days: [
@@ -303,7 +303,7 @@ export const WORKSHOPS: WorkshopConfig[] = [
     longDescription:
       "Cocktail Making Workshop is an interactive experience at the Sundeck of Ayia Napa Marina, where participants learn how to craft refreshing cocktails, discover mixing techniques, and enjoy a fun, lively atmosphere by the water.",
     duration: "TBC",
-    price: 0,
+    price: DEFAULT_WORKSHOP_PRICE,
     images: [],
     maxSeatsPerBooking: 4,
     days: [
