@@ -1,28 +1,29 @@
 "use client";
 
-import { useRef } from "react";
-import Link from "next/link";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  useMotionTemplate,
-} from "motion/react";
 import {
   IconArrowRight,
   IconChevronDown,
   IconClock,
 } from "@tabler/icons-react";
+import {
+  motion,
+  useMotionTemplate,
+  useScroll,
+  useTransform,
+} from "motion/react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRef } from "react";
 
 import { MainLogo } from "@/components/main-logo";
+import { SiteNav } from "@/components/site-nav";
+import { buttonVariants } from "@/components/ui/button";
 import { SectionLabel } from "@/components/ui/section-label";
 import { CURRENT_EVENT, eventDateFormat } from "@/lib/config/event";
 import { vendors } from "@/lib/config/menu";
 import { COMING_SOON } from "@/lib/config/mode";
 import { WORKSHOPS } from "@/lib/config/workshops";
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-import Image from "next/image";
 
 /* ═══════════════════════════════════════════════
    SVG UTENSIL
@@ -420,6 +421,7 @@ function MenuSection() {
             )}
           >
             Browse the Menu
+            {/* todo: add little animation to the arrow */}
             <IconArrowRight />
           </Link>
         </div>
@@ -575,6 +577,7 @@ function LocationSection() {
 export default function LandingPage() {
   return (
     <main className="bg-background">
+      <SiteNav revealOnScroll />
       <HeroSection />
       <VendorMarquee />
       <PrivateDiningSection />
