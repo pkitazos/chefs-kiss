@@ -1,318 +1,161 @@
-# Chefs Kiss
+# Chef's Kiss
 
-A production-ready Next.js stack with modern tooling, type-safe APIs, and authentication.
+Website for **Chef's Kiss Festival 2026** — a food festival at Ayia Napa Marina, Cyprus (16–17 May 2026).
+
+The site covers the public-facing festival experience (vendors, workshops, private dining, menu, contact, legal pages) plus an admin dashboard for managing bookings and applications.
 
 ## Tech Stack
 
-- **Framework**: [Next.js 16](https://nextjs.org) with App Router
+- **Framework**: [Next.js 16](https://nextjs.org) (App Router) + React 19
 - **Language**: TypeScript (strict mode)
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com) with OKLCH color system
-- **UI Components**: [ShadCN UI](https://ui.shadcn.com) (radix-mira style)
-- **Database**: PostgreSQL with [Drizzle ORM](https://orm.drizzle.team)
-- **Authentication**: [BetterAuth](https://better-auth.com) with Google OAuth
-- **API Layer**: [tRPC](https://trpc.io) with [TanStack Query](https://tanstack.com/query)
-- **Validation**: [Zod](https://zod.dev)
-- **Forms**: [React Hook Form](https://react-hook-form.com)
-- **Email**: [Resend](https://resend.com)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com) with OKLCH colors
+- **UI**: [ShadCN UI](https://ui.shadcn.com), [Base UI](https://base-ui.com), [Radix UI](https://radix-ui.com), [Motion](https://motion.dev)
+- **Database**: PostgreSQL + [Drizzle ORM](https://orm.drizzle.team)
+- **Auth**: [BetterAuth](https://better-auth.com) with Google OAuth (admin-only, email allowlist)
+- **API**: [tRPC](https://trpc.io) + [TanStack Query](https://tanstack.com/query)
+- **Forms & Validation**: [React Hook Form](https://react-hook-form.com) + [Zod](https://zod.dev)
+- **Email**: [Resend](https://resend.com) + [React Email](https://react.email)
 - **File Upload**: [Uploadthing](https://uploadthing.com)
 - **Package Manager**: pnpm
 
-## Documentation
+## Public Pages
 
-**[Full Documentation](docs/README.md)**
+- `/` — Landing page (hero, vendor marquee, private dining, workshops, menu CTA, gallery, location)
+- `/vendors/apply` — Vendor application form
+- `/workshops` + `/workshops/[slug]` + `/workshops/apply` — Browse, view, and apply to run workshops
+- `/private-dining` + `/private-dining/book` — Private dining landing and booking flow
+- `/menu` + `/menu/[vendorId]` — Vendor menus
+- `/contact-us` — Contact info
+- `/(legal)/privacy`, `/(legal)/cookies`, `/(legal)/toc` — Legal pages
 
-Detailed guides for all features:
-- [Setup Guide](docs/setup.md) - Get started quickly
-- [Authentication](docs/authentication.md) - BetterAuth with Google OAuth
-- [Database](docs/database.md) - Drizzle ORM and PostgreSQL
-- [tRPC API Layer](docs/trpc.md) - Type-safe API development
-- [File Uploads](docs/uploadthing.md) - Uploadthing configuration
-- [Email](docs/email.md) - Resend email service
-- [Forms & Validation](docs/forms-validation.md) - React Hook Form + Zod
-- [Environment Variables](docs/environment-variables.md) - Env validation guide
+## Admin
+
+`/admin` (gated by `ADMIN_EMAILS` allowlist via Google OAuth):
+- Bookings — manage private dining bookings
+- Vendor applications — review, accept/reject (triggers templated email)
+- Workshop applications — review, accept/reject (triggers templated email)
 
 ## Project Structure
 
 ```
-/app                    - Next.js App Router pages
+/app
+  /(legal)              Privacy, cookies, T&Cs
+  /admin                Admin dashboard (protected)
   /api
-    /auth/[...all]      - BetterAuth API routes
-    /trpc/[trpc]        - tRPC API handler
-    /uploadthing        - Uploadthing file upload handler
-/components             - React components
-  /ui                   - ShadCN UI components
-/docs                   - Documentation for all features
+    /auth/[...all]      BetterAuth routes
+    /trpc/[trpc]        tRPC handler
+    /uploadthing        Upload handler
+  /contact-us
+  /menu                 Vendor menus
+  /private-dining       Landing + booking flow
+  /vendors/apply        Vendor application
+  /workshops            Browse, detail, apply
+/components             Shared components (ui/, site-nav, site-footer, etc.)
+/emails                 React Email templates (booking & application emails)
 /lib
-  /auth                 - Authentication config & client
-  /db                   - Database schema & client
-    /schema             - Drizzle schema definitions
-    /migrations         - Database migrations
-  /email                - Email utilities & templates
-  /env                  - Environment variable validation
-    /server.ts          - Server-only env vars
-    /client.ts          - Client-safe env vars
-  /trpc                 - tRPC configuration
-    /routers            - tRPC API routers
-  /uploadthing          - File upload configuration
-  /validations          - Shared Zod schemas
+  /auth                 BetterAuth server + client
+  /config               Festival-wide config (event, menu, workshops, socials, mode)
+  /db
+    /schema             Drizzle tables (users, vendors, events, workshops, applications, bookings)
+    /migrations
+  /email                Email-sending utilities
+  /env                  Zod-validated server.ts / client.ts env
+  /trpc
+    /routers            bookings, vendors, events, workshops
+  /uploadthing
+  /validations          Shared Zod schemas
+/scripts
+  seed-event.ts         Seed the current event
+  toggle-routes.ts      Enable/disable routes via routes.config.ts
+/routes.config.ts       Phase-based route toggling (see below)
 ```
 
 ## Getting Started
 
-### 1. Clone and Install
+### 1. Install
 
 ```bash
 pnpm install
 ```
 
-### 2. Set Up Database
-
-Start the local PostgreSQL database with Docker:
+### 2. Start Postgres
 
 ```bash
 docker compose up -d
 ```
 
-Copy the environment variables template:
+### 3. Configure environment
 
 ```bash
 cp .env.example .env.local
 ```
 
-### 3. Configure Environment Variables
+Fill in `.env.local`:
 
-Edit `.env.local` and fill in the required values:
+- `DATABASE_URL` — pre-configured for the local Docker instance
+- `BETTER_AUTH_SECRET` — generate with `openssl rand -base64 32`
+- `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` — Google Cloud Console (redirect URI: `http://localhost:3000/api/auth/callback/google`)
+- `ADMIN_EMAILS` — comma-separated emails allowed into `/admin`
+- `RESEND_API_KEY` / `RESEND_FROM_EMAIL` — Resend dashboard + verified sending domain
+- `UPLOADTHING_TOKEN` — Uploadthing dashboard
+- `NEXT_PUBLIC_COMING_SOON` — toggles CTAs between "Book" and "Explore" copy
+- `VENDOR_LATE_TOKEN` / `WORKSHOP_LATE_TOKEN` — optional secrets to allow late applications past the deadline
 
-#### Database
-The default DATABASE_URL is already configured for the local Docker database.
+All env vars are validated at startup via `lib/env/server.ts` and `lib/env/client.ts` — missing or invalid values fail fast with a clear error.
 
-#### BetterAuth Secret
-Generate a secret key:
-
-```bash
-openssl rand -base64 32
-```
-
-Add it to `BETTER_AUTH_SECRET` in `.env.local`.
-
-#### Google OAuth
-1. Go to [Google Cloud Console](https://console.cloud.google.com)
-2. Create a new project or select an existing one
-3. Enable the Google+ API
-4. Go to "Credentials" → "Create Credentials" → "OAuth 2.0 Client ID"
-5. Set application type to "Web application"
-6. Add authorized redirect URI: `http://localhost:3000/api/auth/callback/google`
-7. Copy the Client ID and Client Secret to `.env.local`
-
-#### Resend
-1. Sign up at [Resend](https://resend.com)
-2. Get your API key from the dashboard
-3. Add it to `RESEND_API_KEY` in `.env.local`
-4. Update `RESEND_FROM_EMAIL` with your verified domain
-
-#### Uploadthing
-1. Sign up at [Uploadthing](https://uploadthing.com)
-2. Create a new app in the dashboard
-3. Copy your app token
-4. Add it to `UPLOADTHING_TOKEN` in `.env.local`
-
-### 4. Set Up Database Schema
-
-Push the database schema to your PostgreSQL database:
+### 4. Run migrations
 
 ```bash
-pnpm db:push
+pnpm db:generate    # generate a new migration from schema changes
+pnpm db:migrate     # apply migrations
 ```
 
-Or generate and run migrations:
+> Note: `pnpm db:push` is intentionally disabled. Use `db:migrate`.
 
-```bash
-pnpm db:generate
-pnpm db:migrate
-```
-
-### 5. Start Development Server
+### 5. Dev server
 
 ```bash
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to see your app.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Environment Variable Validation
+## Scripts
 
-This project uses Zod to validate all environment variables at startup. Benefits:
+- `pnpm dev` — Next.js dev server
+- `pnpm build` / `pnpm start` — production build / serve
+- `pnpm lint` — ESLint
+- `pnpm email` — React Email preview server (port 3001)
+- `pnpm toggle-routes` — apply `routes.config.ts` by renaming disabled route folders (prefixed with `_` so Next.js ignores them)
+- `pnpm db:generate` / `pnpm db:migrate` / `pnpm db:studio` — Drizzle tooling
 
-- **Fail fast** with clear error messages if env vars are missing/invalid
-- **Type-safe** access to env vars with autocomplete
-- **No more `!` assertions** or `??` operators everywhere
-- Single source of truth for all environment configuration
+## Route Phases
 
-### Usage
+`routes.config.ts` drives which routes are live at each stage of the festival lifecycle (hibernation, vendor applications open, vendors finalized, workshops live, full event live, post-event). Edit the `ROUTES` object (or copy one of the preset configs like `WORKSHOPS_LIVE_CONFIG`), then run `pnpm toggle-routes` followed by `pnpm build`.
 
-Instead of `process.env`, import the validated `env` object:
+Separately, `NEXT_PUBLIC_COMING_SOON` controls CTA copy on the landing page without toggling routes.
 
-```typescript
-// Old way (not type-safe, might be undefined)
-const dbUrl = process.env.DATABASE_URL!;
+## Documentation
 
-// New way (type-safe, guaranteed to exist)
-// Server-side code
-import { env } from "@/lib/env/server";
-const dbUrl = env.DATABASE_URL;
+See [`docs/`](docs/) for deeper guides:
 
-// Client-side code
-import { env } from "@/lib/env/client";
-const appUrl = env.NEXT_PUBLIC_APP_URL;
-```
-
-The app will fail to start if required env vars are missing, showing you exactly what needs to be configured.
-
-See [lib/env/server.ts](lib/env/server.ts) and [lib/env/client.ts](lib/env/client.ts) for the full validation schemas.
-
-## Available Scripts
-
-- `pnpm dev` - Start development server
-- `pnpm build` - Build for production
-- `pnpm start` - Start production server
-- `pnpm lint` - Run ESLint
-- `pnpm db:generate` - Generate database migrations
-- `pnpm db:migrate` - Run database migrations
-- `pnpm db:push` - Push schema changes to database (dev)
-- `pnpm db:studio` - Open Drizzle Studio (database GUI)
-
-## Key Features
-
-> **Tip**: See the [docs](docs/) directory for detailed guides on each feature.
-
-### Authentication (BetterAuth)
-
-Google OAuth authentication with session management. [Full guide →](docs/authentication.md)
-
-```tsx
-import { signIn, signOut, useSession } from "@/lib/auth/client";
-
-const { data: session } = useSession();
-```
-
-### Type-Safe APIs (tRPC)
-
-End-to-end type safety with automatic TypeScript inference. [Full guide →](docs/trpc.md)
-
-```tsx
-// Server: lib/trpc/routers/example.ts
-export const exampleRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ name: z.string() }))
-    .query(({ input }) => {
-      return { greeting: `Hello ${input.name}!` };
-    }),
-});
-
-// Client
-import { trpc } from "@/lib/trpc/client";
-
-function MyComponent() {
-  const { data } = trpc.example.hello.useQuery({ name: "World" });
-  return <div>{data?.greeting}</div>;
-}
-```
-
-### Database (Drizzle ORM)
-
-Type-safe database queries with PostgreSQL. [Full guide →](docs/database.md)
-
-```tsx
-import { db } from "@/lib/db";
-import { users } from "@/lib/db/schema";
-
-const allUsers = await db.select().from(users);
-```
-
-### Forms & Validation
-
-React Hook Form with Zod schema validation. [Full guide →](docs/forms-validation.md)
-
-```tsx
-const form = useForm({ resolver: zodResolver(schema) });
-```
-
-### File Uploads
-
-Uploadthing for type-safe file uploads. [Full guide →](docs/uploadthing.md)
-
-```tsx
-const { startUpload } = useUploadThing("imageUploader");
-```
-
-### Email
-
-Resend for transactional emails. [Full guide →](docs/email.md)
-
-```tsx
-await sendEmail({ to, subject, html });
-```
-
-## Database Management
-
-### View Database with Drizzle Studio
-
-```bash
-pnpm db:studio
-```
-
-This opens a web UI at https://local.drizzle.studio to browse and edit your database.
-
-### Stop Database
-
-```bash
-docker compose down
-```
-
-To remove the data volume as well:
-
-```bash
-docker compose down -v
-```
+- [Setup](docs/setup.md)
+- [Authentication](docs/authentication.md)
+- [Database](docs/database.md)
+- [tRPC](docs/trpc.md)
+- [Uploadthing](docs/uploadthing.md)
+- [Email](docs/email.md)
+- [Forms & Validation](docs/forms-validation.md)
+- [Environment Variables](docs/environment-variables.md)
+- [Colors](docs/colors-usage.md) · [Typography](docs/typography.md)
 
 ## Deployment
 
-### Environment Variables
+Production env vars to set (beyond the local ones):
 
-Make sure to set all required environment variables in your production environment:
+- `BETTER_AUTH_URL` / `NEXT_PUBLIC_APP_URL` — production URL
+- Add the production redirect URI in Google Cloud Console: `https://yourdomain.com/api/auth/callback/google`
+- `DATABASE_URL` — managed Postgres (Neon, Supabase, Vercel Postgres, Railway, etc.)
+- Generate a fresh `BETTER_AUTH_SECRET` for production
 
-- `DATABASE_URL` - Your production PostgreSQL connection string
-- `BETTER_AUTH_SECRET` - Generate a new secret for production
-- `BETTER_AUTH_URL` - Your production URL (e.g., `https://yourdomain.com`)
-- `NEXT_PUBLIC_APP_URL` - Your production URL
-- `GOOGLE_CLIENT_ID` & `GOOGLE_CLIENT_SECRET` - From Google Cloud Console
-- Add redirect URI in Google Console: `https://yourdomain.com/api/auth/callback/google`
-- `RESEND_API_KEY` & `RESEND_FROM_EMAIL` - For production emails
-- `UPLOADTHING_TOKEN` - From Uploadthing dashboard (for file uploads)
-
-### Deploy to Vercel
-
-The easiest deployment option:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
-
-1. Push your code to GitHub
-2. Import project in Vercel
-3. Add environment variables
-4. Deploy
-
-For database hosting, consider:
-- [Vercel Postgres](https://vercel.com/storage/postgres)
-- [Supabase](https://supabase.com)
-- [Neon](https://neon.tech)
-- [Railway](https://railway.app)
-
-## Learn More
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [tRPC Documentation](https://trpc.io/docs)
-- [Drizzle ORM Documentation](https://orm.drizzle.team/docs/overview)
-- [BetterAuth Documentation](https://better-auth.com/docs)
-- [ShadCN UI Documentation](https://ui.shadcn.com)
-- [TanStack Query Documentation](https://tanstack.com/query/latest)
-- [Uploadthing Documentation](https://docs.uploadthing.com)
+Deploys cleanly to Vercel.
