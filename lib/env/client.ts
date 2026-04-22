@@ -14,6 +14,15 @@ const clientEnvSchema = z.object({
     .url()
     .default("http://localhost:3000")
     .describe("Public URL of the application"),
+
+  // Site mode
+  NEXT_PUBLIC_COMING_SOON: z
+    .string()
+    .optional()
+    .transform((v) => v === "true")
+    .describe(
+      "When 'true', hides booking CTAs/forms and blocks booking endpoints",
+    ),
 });
 
 /**
@@ -22,6 +31,7 @@ const clientEnvSchema = z.object({
 function validateClientEnv() {
   const parsed = clientEnvSchema.safeParse({
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    NEXT_PUBLIC_COMING_SOON: process.env.NEXT_PUBLIC_COMING_SOON,
   });
 
   if (!parsed.success) {

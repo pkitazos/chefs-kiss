@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import { CURRENT_EVENT } from "@/lib/config/event";
 
 const FOOTER_LINKS = [

@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { WORKSHOPS } from "@/lib/config/workshops";
-import { PageLayout } from "@/components/page-layout";
-import { SectionLabel } from "@/components/ui/section-label";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+
 import { AnimateIn } from "@/components/animate-in";
 import { WavyPattern } from "@/components/brand-pattern";
+import { PageLayout } from "@/components/page-layout";
+import { buttonVariants } from "@/components/ui/button";
+import { SectionLabel } from "@/components/ui/section-label";
+import { WORKSHOPS } from "@/lib/config/workshops";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Workshops | Chef's Kiss Festival",

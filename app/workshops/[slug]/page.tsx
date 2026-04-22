@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { IconArrowLeft } from "@tabler/icons-react";
-import { getWorkshopBySlug, WORKSHOPS } from "@/lib/config/workshops";
+
+import { AnimateIn } from "@/components/animate-in";
 import { PageLayout } from "@/components/page-layout";
 import { SectionLabel } from "@/components/ui/section-label";
-import { AnimateIn } from "@/components/animate-in";
+import { COMING_SOON } from "@/lib/config/mode";
+import { getWorkshopBySlug, WORKSHOPS } from "@/lib/config/workshops";
+import { IconArrowLeft } from "@tabler/icons-react";
 import { WorkshopSlots } from "./workshop-slots";
 
 export function generateStaticParams() {
@@ -83,9 +85,21 @@ export default async function WorkshopPage({
         </AnimateIn>
 
         <AnimateIn>
-          <WorkshopSlots workshop={workshop} />
+          {COMING_SOON ? (
+            <div className="rounded-2xl border border-dashed bg-muted/30 p-8 text-center">
+              <SectionLabel>Coming Soon</SectionLabel>
+              <h2 className="mt-3 font-display text-3xl tracking-tight">
+                Sessions coming soon
+              </h2>
+              <p className="mx-auto mt-3 max-w-md text-muted-foreground">
+                We&apos;re finalising the workshop schedule. Check back soon to
+                book your spot.
+              </p>
+            </div>
+          ) : (
+            <WorkshopSlots workshop={workshop} />
+          )}
         </AnimateIn>
-
       </div>
     </PageLayout>
   );

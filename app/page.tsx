@@ -18,6 +18,7 @@ import { MainLogo } from "@/components/main-logo";
 import { SectionLabel } from "@/components/ui/section-label";
 import { CURRENT_EVENT, eventDateFormat } from "@/lib/config/event";
 import { vendors } from "@/lib/config/menu";
+import { COMING_SOON } from "@/lib/config/mode";
 import { WORKSHOPS } from "@/lib/config/workshops";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
@@ -201,7 +202,7 @@ function HeroSection() {
               "hover:scale-105 transition-transform duration-200",
             )}
           >
-            Book a Workshop
+            {COMING_SOON ? "Explore Workshops" : "Book a Workshop"}
           </Link>
           <Link
             href="/private-dining"
@@ -210,7 +211,7 @@ function HeroSection() {
               "hover:scale-105 transition-transform duration-200",
             )}
           >
-            Reserve Private Dining
+            {COMING_SOON ? "Explore Private Dining" : "Reserve Private Dining"}
           </Link>
         </div>
       </motion.div>
@@ -300,7 +301,7 @@ function PrivateDiningSection() {
                 "hover:scale-105 transition-transform duration-200",
               )}
             >
-              Reserve Your Seat
+              {COMING_SOON ? "Learn More" : "Reserve Your Seat"}
               <IconArrowRight />
             </Link>
           </div>

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { getWorkshopBySlug, getWorkshopSlotById } from "@/lib/config/workshops";
+
 import { PageLayout } from "@/components/page-layout";
+import { COMING_SOON } from "@/lib/config/mode";
+import { getWorkshopBySlug, getWorkshopSlotById } from "@/lib/config/workshops";
 import { WorkshopBookingForm } from "./booking-form";
 
 export const metadata: Metadata = {
@@ -18,6 +20,10 @@ export default async function WorkshopBookPage({
 }) {
   const { slug } = await params;
   const { slot: slotId } = await searchParams;
+
+  if (COMING_SOON) {
+    redirect(`/workshops/${slug}`);
+  }
 
   const workshop = getWorkshopBySlug(slug);
   if (!workshop) {
