@@ -73,8 +73,8 @@ export default function PrivacyPolicyPage() {
       <ul>
         <li>
           Technical information required for the site to function (e.g., session
-          cookies for signed-in administrators). See our Cookie Policy for
-          details.
+          cookies for signed-in administrators). See our{" "}
+          <Link href="/cookies">Cookie Policy</Link>. for details.
         </li>
       </ul>
 
