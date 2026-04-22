@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  IconArrowLeft,
   IconArrowRight,
   IconChevronDown,
   IconClock,
@@ -13,7 +14,7 @@ import {
 } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { MainLogo } from "@/components/main-logo";
 import { SiteNav } from "@/components/site-nav";
@@ -83,8 +84,6 @@ function SpatulaIcon({ className }: { className?: string }) {
    ═══════════════════════════════════════════════ */
 
 const VENDOR_NAMES = vendors.map((v) => v.name);
-
-const FEATURED_WORKSHOPS = WORKSHOPS.slice(0, 3);
 
 const GALLERY_ITEMS = [
   { color: "bg-slate-700", tall: true },
@@ -320,18 +319,124 @@ const WORKSHOP_CARD_ACCENTS = [
   "bg-amber-500",
   "bg-pink-500",
   "bg-sky-500",
+  "bg-orange-500",
+  "bg-green-500",
 ] as const;
 
+const WORKSHOPS_AUTO_ADVANCE_MS = 4500;
+const TRANSITION_MS = 600;
+
 function WorkshopsSection() {
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const count = WORKSHOPS.length;
+
+  // Triple the list so we always have a buffer copy on both sides of the
+  // "real" middle copy. The user always sees the middle copy in their
+  // resting position; side copies are just there to animate in/out of.
+  const slides = [...WORKSHOPS, ...WORKSHOPS, ...WORKSHOPS];
+
+  // Start anchored in the middle copy (index = count) so backward nav
+  // has somewhere to animate to.
+  const [index, setIndex] = useState(count);
+  const [isAnimating, setIsAnimating] = useState(true);
+  const [autoPlay, setAutoPlay] = useState(true);
+
+  // Layout measurements, updated on resize. Storing the actual pixel
+  // values rather than computing from percentages is what eliminates
+  // the drift: each translation step is exactly one slide's worth of
+  // distance, never an approximation.
+
+  const [slideWidth, setSlideWidth] = useState(0);
+  const [gap, setGap] = useState(20);
+
+  // Measure the viewport and derive the per-slide width from it. We do
+  // this rather than reading getComputedStyle on the slides themselves
+  // because the slides' own width is what we're about to SET.
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+
+    const update = () => {
+      const w = window.innerWidth;
+      // cardsPerView is a local variable now — we only need it to divide
+      // the viewport width into slots. Once we have the per-slide pixel
+      // value, nothing downstream cares how many cards are on screen.
+      const cardsPerView = w >= 1024 ? 3 : w >= 640 ? 2 : 1;
+      const g = w >= 640 ? 24 : 20; // matches gap-5 sm:gap-6
+
+      setGap(g);
+
+      const viewportWidth = viewport.clientWidth;
+      const totalGap = (cardsPerView - 1) * g;
+      const perSlide = (viewportWidth - totalGap) / cardsPerView;
+      setSlideWidth(perSlide);
+    };
+
+    update();
+
+    const ro = new ResizeObserver(update);
+    ro.observe(viewport);
+    window.addEventListener("resize", update);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  }, []);
+
+  const advance = (direction: 1 | -1) => {
+    setIsAnimating(true);
+    setIndex((i) => i + direction);
+  };
+
+  // When a transition ends outside the middle copy, silently snap back
+  // into the middle copy. Because adjacent copies are identical, the
+  // user sees no change — but the next animation will start from a
+  // position that has room to move in either direction.
+  const handleTransitionEnd = () => {
+    if (index >= count * 2) {
+      setIsAnimating(false);
+      setIndex(index - count);
+    } else if (index < count) {
+      setIsAnimating(false);
+      setIndex(index + count);
+    }
+  };
+
+  // After a silent reset we need to re-enable animation before the
+  // next user interaction. requestAnimationFrame ensures the browser
+  // has committed the new (transition-less) position before we flip
+  // the flag back on.
+  useEffect(() => {
+    if (!isAnimating) {
+      const id = requestAnimationFrame(() => setIsAnimating(true));
+      return () => cancelAnimationFrame(id);
+    }
+  }, [isAnimating]);
+
+  useEffect(() => {
+    if (!autoPlay) return;
+    const id = window.setInterval(() => advance(1), WORKSHOPS_AUTO_ADVANCE_MS);
+    return () => window.clearInterval(id);
+  }, [autoPlay]);
+
+  const handleManualNav = (direction: 1 | -1) => {
+    setAutoPlay(false);
+    advance(direction);
+  };
+
+  // Pixel-based translation: each step is exactly one slide width plus
+  // one gap. No rounding, no accumulation, no drift.
+  const translatePx = index * (slideWidth + gap);
+
   return (
     <motion.section
-      className="py-16 sm:py-24 px-4 sm:px-6"
+      className="py-16 sm:py-24"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2 className="font-display text-4xl sm:text-5xl md:text-[56pt] leading-none tracking-tight">
@@ -341,47 +446,108 @@ function WorkshopsSection() {
               An exclusive chance to interact with one of your favourite brands
             </SectionLabel>
           </div>
-          <Link
-            href="/workshops"
-            className="group inline-flex items-center gap-1.5 self-start text-sm font-semibold tracking-tight text-foreground/70 hover:text-foreground transition-colors sm:self-auto sm:text-base"
-          >
-            See all workshops
-            <IconArrowRight
-              size={18}
-              className="transition-transform group-hover:translate-x-0.5"
-            />
-          </Link>
-        </div>
-
-        <div className="mt-10 sm:mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-          {FEATURED_WORKSHOPS.map((workshop, i) => (
-            <Link
-              key={workshop.slug}
-              href={`/workshops/${workshop.slug}`}
-              className="group flex flex-col gap-3"
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <button
+              type="button"
+              aria-label="Previous workshops"
+              onClick={() => handleManualNav(-1)}
+              className="inline-flex size-10 items-center justify-center rounded-full border border-border/70 bg-background text-foreground/70 transition-colors hover:text-foreground hover:border-foreground/50"
             >
-              <div
-                className={cn(
-                  "aspect-3/4 w-full overflow-hidden rounded-2xl transition-transform duration-300 group-hover:scale-[1.02]",
-                  WORKSHOP_CARD_ACCENTS[i % WORKSHOP_CARD_ACCENTS.length],
-                )}
+              <IconArrowLeft size={18} />
+            </button>
+            <button
+              type="button"
+              aria-label="Next workshops"
+              onClick={() => handleManualNav(1)}
+              className="inline-flex size-10 items-center justify-center rounded-full border border-border/70 bg-background text-foreground/70 transition-colors hover:text-foreground hover:border-foreground/50"
+            >
+              <IconArrowRight size={18} />
+            </button>
+            <Link
+              href="/workshops"
+              className="group ml-2 inline-flex items-center gap-1.5 text-sm font-semibold tracking-tight text-foreground/70 hover:text-foreground transition-colors sm:text-base"
+            >
+              See all
+              <IconArrowRight
+                size={18}
+                className="transition-transform group-hover:translate-x-0.5"
               />
-              <div className="flex flex-col gap-1.5 px-1">
-                <div className="flex items-start justify-between gap-3">
-                  <p className="font-display text-xl tracking-tight sm:text-2xl">
-                    {workshop.title}
-                  </p>
-                  <span className="inline-flex items-center gap-1.5 shrink-0 pt-1 text-sm font-medium text-primary">
-                    <IconClock size={16} />
-                    {workshop.duration}
-                  </span>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  {workshop.tagline}
-                </p>
-              </div>
             </Link>
-          ))}
+          </div>
+        </div>
+      </div>
+
+      {/*
+           Outer wrapper: overflow-x-hidden (not overflow-hidden) so the
+           scale-on-hover transform can grow vertically without being clipped.
+           py-2 gives breathing room above and below for the same reason.
+         */}
+      <div
+        ref={viewportRef}
+        className="mt-10 sm:mt-14 overflow-x-hidden px-4 py-2 sm:px-6"
+      >
+        <div
+          onTransitionEnd={handleTransitionEnd}
+          className="flex"
+          style={{
+            gap: `${gap}px`,
+            transform: `translate3d(-${translatePx}px, 0, 0)`,
+            transition: isAnimating
+              ? `transform ${TRANSITION_MS}ms ease-in-out`
+              : "none",
+            // will-change hints the browser to promote this to its own
+            // compositor layer, which keeps animations smooth.
+            willChange: "transform",
+          }}
+        >
+          {slides.map((workshop, i) => {
+            // Colour is keyed off the ORIGINAL workshop index, not the
+            // flattened position, so each workshop keeps the same accent
+            // no matter which copy of the list it's currently living in.
+            const originalIndex = i % count;
+            const isMiddleCopy = i >= count && i < count * 2;
+
+            return (
+              <Link
+                key={`${workshop.slug}-${i}`}
+                href={`/workshops/${workshop.slug}`}
+                // Only expose the middle copy to screen readers; the
+                // side copies are visual-only buffer.
+                aria-hidden={!isMiddleCopy ? true : undefined}
+                tabIndex={!isMiddleCopy ? -1 : undefined}
+                className="group flex shrink-0 flex-col gap-3"
+                style={{
+                  width: `${slideWidth}px`,
+                }}
+              >
+                <div
+                  className={cn(
+                    "aspect-3/4 w-full overflow-hidden rounded-2xl transition-transform duration-300 group-hover:scale-[1.02]",
+                    "text-center text-9xl",
+                    WORKSHOP_CARD_ACCENTS[
+                      originalIndex % WORKSHOP_CARD_ACCENTS.length
+                    ],
+                  )}
+                >
+                  {i % WORKSHOPS.length}
+                </div>
+                <div className="flex flex-col gap-1.5 px-1">
+                  <div className="flex items-start justify-between gap-3">
+                    <p className="font-display text-xl tracking-tight sm:text-2xl">
+                      {workshop.title}
+                    </p>
+                    <span className="inline-flex items-center gap-1.5 shrink-0 pt-1 text-sm font-medium text-primary">
+                      <IconClock size={16} />
+                      {workshop.duration}
+                    </span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    {workshop.tagline}
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </motion.section>

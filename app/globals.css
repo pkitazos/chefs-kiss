@@ -328,6 +328,13 @@
         @apply font-sans font-normal text-[12pt] leading-[16pt];
         letter-spacing: 0.05em;
     }
+
+    .no-scrollbar {
+        scrollbar-width: none;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 /* Marquee */
