@@ -1,12 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  IconAlertTriangle,
+  IconLoader2,
+  IconShoppingCart,
+} from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { IconLoader2, IconSend, IconAlertTriangle } from "@tabler/icons-react";
 
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Field,
@@ -15,7 +20,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { SectionLabel } from "@/components/ui/section-label";
 import {
   Select,
   SelectContent,
@@ -23,13 +28,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { SectionLabel } from "@/components/ui/section-label";
+import { eventDateFormat } from "@/lib/config/event";
+import { api } from "@/lib/trpc/client";
 import {
   createBookingFormSchema,
   type BookingFormData,
 } from "@/lib/validations/booking";
-import { eventDateFormat } from "@/lib/config/event";
-import { api } from "@/lib/trpc/client";
 
 function getBrowserSessionId() {
   const key = "ck-browser-session-id";
@@ -284,8 +288,9 @@ export function WorkshopBookingForm({
                 </>
               ) : (
                 <>
-                  <IconSend />
-                  Book Now
+                  <IconShoppingCart />
+                  {/*<IconCreditCard />*/}
+                  Pay
                 </>
               )}
             </Button>
