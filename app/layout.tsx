@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "@/components/providers";
+import { SiteFooter } from "@/components/site-footer";
 import { ppNeueMachina, manrope } from "@/lib/fonts";
 import { CURRENT_EVENT, eventDateFormat } from "@/lib/config/event";
 
@@ -18,7 +19,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${ppNeueMachina.variable} ${manrope.variable}`}>
       <body className="antialiased">
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <SiteFooter />
+        </Providers>
       </body>
     </html>
   );
