@@ -34,7 +34,7 @@ export const WORKSHOPS: WorkshopConfig[] = [
   {
     slug: "boards-and-bordeaux",
     title: "BOARDS & BORDEAUX",
-    hostedBy: "Christia Zorpa",
+    hostedBy: "C(h)rystal art",
     tagline: "Wine, cheese, and handmade decor",
     shortDescription:
       "A relaxed paint-and-sip workshop with wine, cheese, and handmade decor.",
