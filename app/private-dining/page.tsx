@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { DINING_DAYS, DiningDay, eventDateFormat } from "@/lib/config/event";
+import { COMING_SOON } from "@/lib/config/mode";
 import { PageLayout } from "@/components/page-layout";
 import { SectionLabel } from "@/components/ui/section-label";
 import { buttonVariants } from "@/components/ui/button";
@@ -82,21 +83,23 @@ function DiningDaySlot({ day }: { day: DiningDay }) {
                 {session.description}
               </p>
             </div>
-            <div className="flex shrink-0 items-center gap-4">
-              <span className="text-sm font-semibold text-primary">
-                &euro;{session.price}
-                <span className="text-muted-foreground font-normal">
-                  /person
+            {!COMING_SOON && (
+              <div className="flex shrink-0 items-center gap-4">
+                <span className="text-sm font-semibold text-primary">
+                  &euro;{session.price}
+                  <span className="text-muted-foreground font-normal">
+                    /person
+                  </span>
                 </span>
-              </span>
-              <Link
-                href={`/private-dining/book?session=${session.id}`}
-                className={cn(buttonVariants({ size: "cta" }))}
-              >
-                <IconToolsKitchen2 />
-                Reserve
-              </Link>
-            </div>
+                <Link
+                  href={`/private-dining/book?session=${session.id}`}
+                  className={cn(buttonVariants({ size: "cta" }))}
+                >
+                  <IconToolsKitchen2 />
+                  Reserve
+                </Link>
+              </div>
+            )}
           </div>
         ))}
       </div>

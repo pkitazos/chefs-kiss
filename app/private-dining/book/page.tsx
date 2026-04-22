@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getDiningSessionById } from "@/lib/config/event";
+import { COMING_SOON } from "@/lib/config/mode";
 import { PageLayout } from "@/components/page-layout";
 import { PrivateDiningBookingForm } from "./booking-form";
 
@@ -15,6 +16,10 @@ export default async function PrivateDiningBookPage({
   searchParams: Promise<{ session?: string }>;
 }) {
   const { session: sessionId } = await searchParams;
+
+  if (COMING_SOON) {
+    redirect("/private-dining");
+  }
 
   if (!sessionId) {
     redirect("/private-dining");

@@ -3,6 +3,7 @@ import { and, count, desc, eq, inArray, lt, sql } from "drizzle-orm";
 import { z } from "zod";
 
 import { getDiningSessionById } from "@/lib/config/event";
+import { COMING_SOON } from "@/lib/config/mode";
 import { getWorkshopSlotById } from "@/lib/config/workshops";
 import { bookings, events } from "@/lib/db/schema";
 import { sendBookingConfirmation } from "@/lib/email/booking-emails";
@@ -15,6 +16,13 @@ export const bookingsRouter = createTRPCRouter({
   create: publicProcedure
     .input(createBookingSchema)
     .mutation(async ({ ctx, input }) => {
+      if (COMING_SOON) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Bookings are not open yet.",
+        });
+      }
+
       const slotConfig = getSlotConfig(input.slotId, input.type);
       if (!slotConfig) {
         throw new TRPCError({
@@ -202,6 +210,13 @@ export const bookingsRouter = createTRPCRouter({
   simulatePayment: publicProcedure
     .input(z.object({ bookingId: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      if (COMING_SOON) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Bookings are not open yet.",
+        });
+      }
+
       await expireStalePendingBookings(ctx.db);
 
       const [booking] = await ctx.db

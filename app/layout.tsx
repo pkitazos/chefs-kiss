@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import "./globals.css";
+
 import { Providers } from "@/components/providers";
 import { SiteFooter } from "@/components/site-footer";
-import { ppNeueMachina, manrope } from "@/lib/fonts";
 import { CURRENT_EVENT, eventDateFormat } from "@/lib/config/event";
+import { manrope, ppNeueMachina } from "@/lib/fonts";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: CURRENT_EVENT.name,
