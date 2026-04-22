@@ -1,35 +1,12 @@
 "use client";
 
-import {
-  IconBrandFacebook,
-  IconBrandInstagram,
-  IconBrandTiktok,
-  IconMail,
-} from "@tabler/icons-react";
+import { IconMail } from "@tabler/icons-react";
 import { motion } from "motion/react";
 
 import { SectionLabel } from "@/components/ui/section-label";
+import { SOCIAL_LINKS } from "@/lib/config/socials";
 
 const CONTACT_EMAIL = "info@chefskiss.com.cy";
-
-// TODO: confirm real social media URLs with the product owner before launch.
-const SOCIAL_LINKS = [
-  {
-    name: "Instagram",
-    href: "https://instagram.com/chefskiss.cy/",
-    Icon: IconBrandInstagram,
-  },
-  {
-    name: "TikTok",
-    href: "https://tiktok.com/@chefskiss.cy",
-    Icon: IconBrandTiktok,
-  },
-  {
-    name: "Facebook",
-    href: "https://facebook.com/profile.php?id=61575561244802",
-    Icon: IconBrandFacebook,
-  },
-] as const;
 
 export default function ContactPage() {
   return (

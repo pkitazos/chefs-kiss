@@ -3,6 +3,7 @@
 import {
   IconArrowLeft,
   IconArrowRight,
+  IconBrandInstagram,
   IconChevronDown,
   IconClock,
 } from "@tabler/icons-react";
@@ -23,6 +24,7 @@ import { SectionLabel } from "@/components/ui/section-label";
 import { CURRENT_EVENT, eventDateFormat } from "@/lib/config/event";
 import { vendors } from "@/lib/config/menu";
 import { COMING_SOON } from "@/lib/config/mode";
+import { INSTAGRAM_HANDLE, INSTAGRAM_URL } from "@/lib/config/socials";
 import { WORKSHOPS } from "@/lib/config/workshops";
 import { cn } from "@/lib/utils";
 
@@ -730,6 +732,24 @@ function LocationSection() {
         height="450"
         loading="lazy"
       />
+
+      <div className="mt-10 flex justify-center">
+        <a
+          href={INSTAGRAM_URL}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="group inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary sm:text-base"
+        >
+          <IconBrandInstagram size={18} aria-hidden="true" />
+          <span>
+            Follow{" "}
+            <span className="font-semibold text-foreground/80 group-hover:text-primary">
+              {INSTAGRAM_HANDLE}
+            </span>{" "}
+            for updates
+          </span>
+        </a>
+      </div>
     </motion.section>
   );
 }
