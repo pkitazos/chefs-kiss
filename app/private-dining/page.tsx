@@ -83,14 +83,27 @@ function DiningDaySlot({ day }: { day: DiningDay }) {
                 {session.description}
               </p>
             </div>
-            {!COMING_SOON && (
-              <div className="flex shrink-0 items-center gap-4">
+            <div className="flex shrink-0 items-center gap-4">
+              {!COMING_SOON && (
                 <span className="text-sm font-semibold text-primary">
                   &euro;{session.price}
                   <span className="text-muted-foreground font-normal">
                     /person
                   </span>
                 </span>
+              )}
+              {COMING_SOON ? (
+                <button
+                  type="button"
+                  disabled
+                  className={cn(
+                    buttonVariants({ size: "cta" }),
+                    "cursor-not-allowed opacity-60",
+                  )}
+                >
+                  Reservations opening soon…
+                </button>
+              ) : (
                 <Link
                   href={`/private-dining/book?session=${session.id}`}
                   className={cn(buttonVariants({ size: "cta" }))}
@@ -98,8 +111,8 @@ function DiningDaySlot({ day }: { day: DiningDay }) {
                   <IconToolsKitchen2 />
                   Reserve
                 </Link>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         ))}
       </div>
