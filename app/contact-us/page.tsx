@@ -1,29 +1,16 @@
-import type { Metadata } from "next";
+"use client";
+
 import {
   IconBrandFacebook,
   IconBrandInstagram,
   IconBrandTiktok,
   IconMail,
 } from "@tabler/icons-react";
+import { motion } from "motion/react";
 
-import { PageLayout } from "@/components/page-layout";
 import { SectionLabel } from "@/components/ui/section-label";
-import { AnimateIn } from "@/components/animate-in";
-import { DashPattern } from "@/components/brand-pattern";
-
-export const metadata: Metadata = {
-  title: "Contact | Chef's Kiss Festival",
-  description: "Get in touch with the Chef's Kiss team.",
-};
 
 const CONTACT_EMAIL = "info@chefskiss.com.cy";
-
-const CONTACT_REASONS = [
-  "Questions about workshop bookings (e.g., confirmation emails not received, changes to a booking)",
-  "Questions about applying as a vendor or workshop host",
-  "Press and media inquiries",
-  "Any other general questions about the festival",
-];
 
 // TODO: confirm real social media URLs with the product owner before launch.
 const SOCIAL_LINKS = [
@@ -46,76 +33,53 @@ const SOCIAL_LINKS = [
 
 export default function ContactPage() {
   return (
-    <>
-      {/* Hero */}
-      <div className="relative overflow-hidden bg-[#edede9]">
-        <DashPattern className="absolute inset-0 text-amber-400/30" />
-        <div
-          aria-hidden
-          className="absolute -right-16 -top-16 size-64 rounded-full bg-[#457b9d]/10"
-        />
-        <div className="relative mx-auto max-w-4xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-          <AnimateIn>
-            <SectionLabel>We&apos;d love to hear from you</SectionLabel>
-            <h1 className="mt-3 font-display text-5xl tracking-tight">
-              Get in touch
-            </h1>
-          </AnimateIn>
-        </div>
-      </div>
+    <main className="min-h-screen bg-background">
+      <motion.section
+        className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-2xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-32"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
+        <SectionLabel>Contact</SectionLabel>
 
-      <PageLayout className="max-w-3xl">
-        <AnimateIn className="space-y-10">
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            Whether you&apos;re booking a workshop, thinking about joining us as
-            a vendor, or just curious about the festival, drop us a line. We
-            read every email.
-          </p>
+        <h1 className="mt-3 font-display text-4xl leading-none tracking-tight sm:text-5xl md:text-[56pt]">
+          Say hello.
+        </h1>
 
-          <section className="space-y-4">
-            <h2 className="text-xl font-bold tracking-tight">
-              Reasons to reach out
-            </h2>
-            <ul className="list-disc space-y-2 pl-6 text-muted-foreground">
-              {CONTACT_REASONS.map((reason) => (
-                <li key={reason}>{reason}</li>
-              ))}
-            </ul>
-          </section>
+        <p className="mt-8 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg">
+          Workshop questions, vendor applications, press, whatever it is, drop
+          us a line. We read every email.
+        </p>
 
-          <section className="space-y-4">
-            <h2 className="text-xl font-bold tracking-tight">Email us</h2>
-            <a
-              href={`mailto:${CONTACT_EMAIL}`}
-              className="group inline-flex items-center gap-3 rounded-2xl border border-border bg-background px-5 py-4 transition-colors hover:border-primary hover:bg-primary/5"
-            >
-              <IconMail size={24} className="text-primary" aria-hidden="true" />
-              <span className="font-display text-xl tracking-tight text-foreground sm:text-2xl">
-                {CONTACT_EMAIL}
-              </span>
-            </a>
-          </section>
+        <a
+          href={`mailto:${CONTACT_EMAIL}`}
+          className="group mt-12 inline-flex items-center gap-3 font-display text-2xl tracking-tight text-foreground transition-colors hover:text-primary sm:text-3xl md:text-4xl"
+        >
+          <IconMail
+            className="size-7 text-primary sm:size-8 md:size-9"
+            aria-hidden="true"
+          />
+          <span className="underline decoration-transparent decoration-2 underline-offset-[0.2em] transition-colors group-hover:decoration-primary">
+            {CONTACT_EMAIL}
+          </span>
+        </a>
 
-          <section className="space-y-4">
-            <h2 className="text-xl font-bold tracking-tight">Follow along</h2>
-            <ul className="flex flex-wrap gap-3">
-              {SOCIAL_LINKS.map(({ name, href, Icon }) => (
-                <li key={name}>
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-sm font-semibold tracking-tight text-foreground/80 transition-colors hover:border-primary hover:text-primary hover:bg-primary/5"
-                  >
-                    <Icon size={18} aria-hidden="true" />
-                    {name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
-        </AnimateIn>
-      </PageLayout>
-    </>
+        <ul className="mt-16 flex items-center gap-3">
+          {SOCIAL_LINKS.map(({ name, href, Icon }) => (
+            <li key={name}>
+              <a
+                href={href}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label={name}
+                className="inline-flex size-10 items-center justify-center rounded-full border border-border/70 text-foreground/60 transition-colors hover:border-primary/60 hover:text-primary"
+              >
+                <Icon size={18} aria-hidden="true" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </motion.section>
+    </main>
   );
 }
