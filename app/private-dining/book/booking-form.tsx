@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { IconLoader2, IconToolsKitchen2 } from "@tabler/icons-react";
+import { IconLoader2, IconShoppingCart } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -255,8 +255,9 @@ export function PrivateDiningBookingForm({
                 </>
               ) : (
                 <>
-                  <IconToolsKitchen2 />
-                  Reserve
+                  <IconShoppingCart />
+                  {/*<IconCreditCard />*/}
+                  Pay
                 </>
               )}
             </Button>

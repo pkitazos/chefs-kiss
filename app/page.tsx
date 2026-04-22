@@ -528,9 +528,7 @@ function WorkshopsSection() {
                       originalIndex % WORKSHOP_CARD_ACCENTS.length
                     ],
                   )}
-                >
-                  {i % WORKSHOPS.length}
-                </div>
+                />
                 <div className="flex flex-col gap-1.5 px-1">
                   <div className="flex items-start justify-between gap-3">
                     <p className="font-display text-xl tracking-tight sm:text-2xl">
