@@ -136,7 +136,7 @@ export default function TermsAndConditionsPage() {
         your party may appear in such images.
       </p>
       <p>
-        If you do not wish to appear in promotional material, please email us at
+        If you do not wish to appear in promotional material, please email us at{" "}
         <span className="text-primary">info@chefskiss.com.cy</span> before the
         event so we can take reasonable steps to accommodate your request. You
         may also notify a member of our staff at the event.
