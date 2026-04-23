@@ -24,12 +24,12 @@ export interface Vendor {
 
 const PLACEHOLDER_PRICE = 10;
 
-export const vendors: Vendor[] = [
+export const MENU_VENDORS: Vendor[] = [
   {
     id: "yozen",
     name: "Yozen",
     cuisine: "Frozen Yoghurt & Desserts",
-    image: "/vendors/yozen.png",
+    image: "/vendors/yozen.jpg",
     accent: "pink",
     icon: "coffee",
     menu: [
@@ -60,7 +60,7 @@ export const vendors: Vendor[] = [
     id: "to-glykatzidiko",
     name: "To Glykatzidiko",
     cuisine: "Desserts & Ice Cream",
-    image: "/vendors/to-glykatzidiko.png",
+    image: "/vendors/to-glykatzidiko.jpg",
     accent: "green",
     icon: "coffee",
     menu: [
@@ -84,7 +84,7 @@ export const vendors: Vendor[] = [
     id: "crepaland",
     name: "Crepaland",
     cuisine: "Crepes",
-    image: "/vendors/crepaland-2.png",
+    image: "/vendors/crepaland.jpg",
     accent: "amber",
     icon: "coffee",
     menu: [
@@ -101,7 +101,7 @@ export const vendors: Vendor[] = [
     id: "por-favor",
     name: "Por Favor",
     cuisine: "Mexican",
-    image: "/vendors/por-favor.png",
+    image: "/vendors/por-favor.jpg",
     accent: "orange",
     icon: "pepper",
     menu: [
@@ -125,7 +125,7 @@ export const vendors: Vendor[] = [
     id: "gems-food-truck",
     name: "Gems Food Truck",
     cuisine: "Street Food",
-    image: "/vendors/gems-food-truck.png",
+    image: "/vendors/gems-food-truck.jpg",
     accent: "sky",
     icon: "grill",
     menu: [
@@ -149,7 +149,7 @@ export const vendors: Vendor[] = [
     id: "mays-diner",
     name: "May's Diner",
     cuisine: "Burgers & BBQ",
-    image: "/vendors/mays-diner.png",
+    image: "/vendors/mays-diner.jpg",
     accent: "amber",
     icon: "grill",
     menu: [
@@ -188,7 +188,7 @@ export const vendors: Vendor[] = [
     id: "pizzella",
     name: "Pizzella",
     cuisine: "Pizza",
-    image: "/vendors/pizzella.png",
+    image: "/vendors/pizzella.jpg",
     accent: "green",
     icon: "pepper",
     menu: [
@@ -223,7 +223,7 @@ export const vendors: Vendor[] = [
     id: "to-souvlaki-tou-soukri",
     name: "To Souvlaki tou Soukri",
     cuisine: "Greek Grill",
-    image: "/vendors/to-souvlaki-tou-soukri.png",
+    image: "/vendors/to-souvlaki-tou-soukri.jpg",
     accent: "amber",
     icon: "meat",
     menu: [
@@ -242,7 +242,7 @@ export const vendors: Vendor[] = [
     id: "cacio-e-pepe",
     name: "Cacio e Pepe",
     cuisine: "Italian",
-    image: "/vendors/cacio-e-pepe.png",
+    image: "/vendors/cacio-e-pepe.jpg",
     accent: "sky",
     icon: "pepper",
     menu: [
@@ -268,7 +268,7 @@ export const vendors: Vendor[] = [
     id: "hard-rock-cafe",
     name: "Hard Rock Cafe",
     cuisine: "American",
-    image: "/vendors/hard-rock-cafe.png",
+    image: "/vendors/hard-rock-cafe.jpg",
     accent: "amber",
     icon: "grill",
     menu: [
@@ -348,7 +348,7 @@ export const vendors: Vendor[] = [
     id: "mr-wurst",
     name: "Mr. Wurst",
     cuisine: "Hot Dogs",
-    image: "/vendors/mr-wurst.png",
+    image: "/vendors/mr-wurst.jpg",
     accent: "amber",
     icon: "meat",
     menu: [
@@ -367,7 +367,7 @@ export const vendors: Vendor[] = [
     id: "garden-gourmet",
     name: "Garden Gourmet",
     cuisine: "Plant-Based",
-    image: "/vendors/garden-gourmet.png",
+    image: "/vendors/garden-gourmet.jpg",
     accent: "green",
     icon: "salad",
     menu: [
@@ -411,7 +411,7 @@ export const vendors: Vendor[] = [
     id: "omni-eats",
     name: "Omni Eats",
     cuisine: "Middle Eastern",
-    image: "/vendors/omni-eats.png",
+    image: "/vendors/omni-eats.jpg",
     accent: "green",
     icon: "salad",
     menu: [
@@ -439,7 +439,7 @@ export const vendors: Vendor[] = [
     id: "nikkei",
     name: "Nikkei",
     cuisine: "Asian Fusion & Burgers",
-    image: "/vendors/nikkei-peruvian-senses.png",
+    image: "/vendors/nikkei-peruvian-senses.jpg",
     accent: "pink",
     icon: "grill",
     menu: [

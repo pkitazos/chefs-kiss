@@ -5,7 +5,11 @@ import { DotsPattern } from "@/components/brand-pattern";
 import { PageLayout } from "@/components/page-layout";
 import { buttonVariants } from "@/components/ui/button";
 import { SectionLabel } from "@/components/ui/section-label";
-import { vendors, type VendorAccent, type VendorIcon } from "@/lib/config/menu";
+import {
+  MENU_VENDORS,
+  type VendorAccent,
+  type VendorIcon,
+} from "@/lib/config/menu";
 import { cn } from "@/lib/utils";
 import {
   IconChevronRight,
@@ -84,7 +88,7 @@ export default function MenuPage() {
         {/* Mobile: divide-y list */}
         <AnimateIn className="sm:hidden">
           <div className="divide-y">
-            {vendors.map((vendor) => {
+            {MENU_VENDORS.map((vendor) => {
               const a = ACCENT_CLASSES[vendor.accent];
               const Icon = ICON_MAP[vendor.icon];
               return (
@@ -119,7 +123,7 @@ export default function MenuPage() {
 
         {/* Desktop: grid cards */}
         <AnimateIn className="hidden sm:grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {vendors.map((vendor) => {
+          {MENU_VENDORS.map((vendor) => {
             const a = ACCENT_CLASSES[vendor.accent];
             const Icon = ICON_MAP[vendor.icon];
             return (

@@ -22,7 +22,7 @@ import { SiteNav } from "@/components/site-nav";
 import { buttonVariants } from "@/components/ui/button";
 import { SectionLabel } from "@/components/ui/section-label";
 import { CURRENT_EVENT, eventDateFormat } from "@/lib/config/event";
-import { vendors } from "@/lib/config/menu";
+import { MENU_VENDORS } from "@/lib/config/menu";
 import { COMING_SOON } from "@/lib/config/mode";
 import { INSTAGRAM_HANDLE, INSTAGRAM_URL } from "@/lib/config/socials";
 import { WORKSHOPS } from "@/lib/config/workshops";
@@ -85,7 +85,7 @@ function SpatulaIcon({ className }: { className?: string }) {
    DATA
    ═══════════════════════════════════════════════ */
 
-const VENDOR_NAMES = vendors.map((v) => v.name);
+const VENDOR_NAMES = MENU_VENDORS.map((v) => v.name);
 
 const GALLERY_ITEMS = [
   { color: "bg-slate-700", tall: true },
@@ -571,7 +571,8 @@ function MenuSection() {
           Taste the Festival
         </h2>
         <SectionLabel className="mt-3 block">
-          {truncateWithPlus(vendors.length)} vendors &middot; Hundreds of dishes
+          {truncateWithPlus(MENU_VENDORS.length)} vendors &middot; Hundreds of
+          dishes
         </SectionLabel>
         <p className="mx-auto mt-6 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed">
           From smash burgers to handmade loukoumades — browse every vendor menu
