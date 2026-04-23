@@ -13,7 +13,9 @@
     "db:generate": "dotenv -e .env.local -- drizzle-kit generate",
     "db:migrate": "dotenv -e .env.local -- drizzle-kit migrate",
     "db:push": "echo 'This is not what you think it is. Do not run this command. What you want is migrate.'",
-    "db:studio": "dotenv -e .env.local -- drizzle-kit studio"
+    "db:studio": "dotenv -e .env.local -- drizzle-kit studio",
+    "test": "vitest",
+    "test:run": "vitest run"
   },
   "dependencies": {
     "@base-ui/react": "1.0.0",
@@ -62,7 +64,8 @@
     "sharp": "0.34.5",
     "tailwindcss": "^4",
     "tsx": "4.21.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "4.1.5"
   },
   "pnpm": {
     "peerDependencyRules": {
