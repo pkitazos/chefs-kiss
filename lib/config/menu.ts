@@ -16,7 +16,6 @@ export interface Vendor {
   id: string;
   name: string;
   cuisine: string;
-  image: string;
   accent: VendorAccent;
   icon: VendorIcon;
   menu: MenuSection[];
@@ -24,43 +23,17 @@ export interface Vendor {
 
 const PLACEHOLDER_PRICE = 10;
 
-export const MENU_VENDORS: Vendor[] = [
-  {
-    id: "yozen",
-    name: "Yozen",
-    cuisine: "Frozen Yoghurt & Desserts",
-    image: "/vendors/yozen.jpg",
-    accent: "pink",
-    icon: "coffee",
-    menu: [
-      {
-        section: "Frozen Yoghurt",
-        items: [
-          { name: "Yozen Skinny", price: 4 },
-          { name: "Yozen Midi", price: 5 },
-          { name: "Yozen Parfait", price: 8 },
-          { name: "Yozen Cone", price: 3 },
-        ],
-      },
-      {
-        section: "Strawberry Delights",
-        items: [
-          { name: "Dubai Strawberry Delight", price: 9 },
-          { name: "Lotus Biscoff Strawberry Delight", price: 9 },
-          { name: "Nutella Strawberry Delight", price: 9 },
-        ],
-      },
-      {
-        section: "Extras",
-        items: [{ name: "Extra Toppings / Hot Dips / Nuts", price: 1 }],
-      },
-    ],
-  },
-  {
+function defineVendor<const Id extends string>(
+  v: { id: Id } & Omit<Vendor, "id">,
+) {
+  return v;
+}
+
+export const MENU_VENDORS = [
+  defineVendor({
     id: "to-glykatzidiko",
     name: "To Glykatzidiko",
     cuisine: "Desserts & Ice Cream",
-    image: "/vendors/to-glykatzidiko.jpg",
     accent: "green",
     icon: "coffee",
     menu: [
@@ -79,12 +52,11 @@ export const MENU_VENDORS: Vendor[] = [
         ],
       },
     ],
-  },
-  {
+  }),
+  defineVendor({
     id: "crepaland",
     name: "Crepaland",
     cuisine: "Crepes",
-    image: "/vendors/crepaland.jpg",
     accent: "amber",
     icon: "coffee",
     menu: [
@@ -96,12 +68,11 @@ export const MENU_VENDORS: Vendor[] = [
         ],
       },
     ],
-  },
-  {
+  }),
+  defineVendor({
     id: "por-favor",
     name: "Por Favor",
     cuisine: "Mexican",
-    image: "/vendors/por-favor.jpg",
     accent: "orange",
     icon: "pepper",
     menu: [
@@ -120,12 +91,41 @@ export const MENU_VENDORS: Vendor[] = [
         ],
       },
     ],
-  },
-  {
+  }),
+  defineVendor({
+    id: "yozen",
+    name: "Yozen",
+    cuisine: "Frozen Yoghurt & Desserts",
+    accent: "pink",
+    icon: "coffee",
+    menu: [
+      {
+        section: "Frozen Yoghurt",
+        items: [
+          { name: "Yozen Skinny", price: 4 },
+          { name: "Yozen Midi", price: 5 },
+          { name: "Yozen Parfait", price: 8 },
+          { name: "Yozen Cone", price: 3 },
+        ],
+      },
+      {
+        section: "Strawberry Delights",
+        items: [
+          { name: "Dubai", price: 9 },
+          { name: "Lotus Biscoff", price: 9 },
+          { name: "Nutella", price: 9 },
+        ],
+      },
+      {
+        section: "Extras",
+        items: [{ name: "Extra Toppings / Hot Dips / Nuts", price: 1 }],
+      },
+    ],
+  }),
+  defineVendor({
     id: "gems-food-truck",
     name: "Gems Food Truck",
     cuisine: "Street Food",
-    image: "/vendors/gems-food-truck.jpg",
     accent: "sky",
     icon: "grill",
     menu: [
@@ -144,12 +144,11 @@ export const MENU_VENDORS: Vendor[] = [
         ],
       },
     ],
-  },
-  {
+  }),
+  defineVendor({
     id: "mays-diner",
     name: "May's Diner",
     cuisine: "Burgers & BBQ",
-    image: "/vendors/mays-diner.jpg",
     accent: "amber",
     icon: "grill",
     menu: [
@@ -183,12 +182,11 @@ export const MENU_VENDORS: Vendor[] = [
         ],
       },
     ],
-  },
-  {
+  }),
+  defineVendor({
     id: "pizzella",
     name: "Pizzella",
     cuisine: "Pizza",
-    image: "/vendors/pizzella.jpg",
     accent: "green",
     icon: "pepper",
     menu: [
@@ -218,12 +216,11 @@ export const MENU_VENDORS: Vendor[] = [
         ],
       },
     ],
-  },
-  {
+  }),
+  defineVendor({
     id: "to-souvlaki-tou-soukri",
     name: "To Souvlaki tou Soukri",
     cuisine: "Greek Grill",
-    image: "/vendors/to-souvlaki-tou-soukri.jpg",
     accent: "amber",
     icon: "meat",
     menu: [
@@ -237,12 +234,11 @@ export const MENU_VENDORS: Vendor[] = [
         ],
       },
     ],
-  },
-  {
+  }),
+  defineVendor({
     id: "cacio-e-pepe",
     name: "Cacio e Pepe",
     cuisine: "Italian",
-    image: "/vendors/cacio-e-pepe.jpg",
     accent: "sky",
     icon: "pepper",
     menu: [
@@ -263,12 +259,11 @@ export const MENU_VENDORS: Vendor[] = [
         ],
       },
     ],
-  },
-  {
+  }),
+  defineVendor({
     id: "hard-rock-cafe",
     name: "Hard Rock Cafe",
     cuisine: "American",
-    image: "/vendors/hard-rock-cafe.jpg",
     accent: "amber",
     icon: "grill",
     menu: [
@@ -287,12 +282,11 @@ export const MENU_VENDORS: Vendor[] = [
         items: [{ name: "Fries", price: 4 }],
       },
     ],
-  },
-  {
+  }),
+  defineVendor({
     id: "zam-food-canteen",
     name: "Zam Food Canteen",
     cuisine: "Street Food",
-    image: "",
     accent: "orange",
     icon: "pepper",
     menu: [
@@ -315,12 +309,11 @@ export const MENU_VENDORS: Vendor[] = [
         ],
       },
     ],
-  },
-  {
+  }),
+  defineVendor({
     id: "wild-earth",
     name: "Wild Earth",
     cuisine: "Plant-Based",
-    image: "/vendors/wild-earth.jpg",
     accent: "green",
     icon: "salad",
     menu: [
@@ -343,12 +336,11 @@ export const MENU_VENDORS: Vendor[] = [
         ],
       },
     ],
-  },
-  {
+  }),
+  defineVendor({
     id: "mr-wurst",
     name: "Mr. Wurst",
     cuisine: "Hot Dogs",
-    image: "/vendors/mr-wurst.jpg",
     accent: "amber",
     icon: "meat",
     menu: [
@@ -362,12 +354,11 @@ export const MENU_VENDORS: Vendor[] = [
         ],
       },
     ],
-  },
-  {
+  }),
+  defineVendor({
     id: "garden-gourmet",
     name: "Garden Gourmet",
     cuisine: "Plant-Based",
-    image: "/vendors/garden-gourmet.jpg",
     accent: "green",
     icon: "salad",
     menu: [
@@ -406,12 +397,11 @@ export const MENU_VENDORS: Vendor[] = [
         ],
       },
     ],
-  },
-  {
+  }),
+  defineVendor({
     id: "omni-eats",
     name: "Omni Eats",
     cuisine: "Middle Eastern",
-    image: "/vendors/omni-eats.jpg",
     accent: "green",
     icon: "salad",
     menu: [
@@ -434,12 +424,11 @@ export const MENU_VENDORS: Vendor[] = [
         ],
       },
     ],
-  },
-  {
+  }),
+  defineVendor({
     id: "nikkei",
     name: "Nikkei",
     cuisine: "Asian Fusion & Burgers",
-    image: "/vendors/nikkei-peruvian-senses.jpg",
     accent: "pink",
     icon: "grill",
     menu: [
@@ -472,5 +461,7 @@ export const MENU_VENDORS: Vendor[] = [
         items: [{ name: "French Fries", price: 4 }],
       },
     ],
-  },
+  }),
 ];
+
+export type VendorId = (typeof MENU_VENDORS)[number]["id"];

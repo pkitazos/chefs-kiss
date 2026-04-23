@@ -5,10 +5,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { AnimateIn } from "@/components/animate-in";
+import { ImagePlaceholder } from "@/components/image-placeholder";
 import { PageLayout } from "@/components/page-layout";
 import { SectionLabel } from "@/components/ui/section-label";
 import { COMING_SOON } from "@/lib/config/mode";
 import { getWorkshopBySlug, WORKSHOPS } from "@/lib/config/workshops";
+import { getWorkshopImage } from "@/lib/images/workshop-images";
 import { WorkshopSlots } from "./workshop-slots";
 
 export function generateStaticParams() {
@@ -42,6 +44,8 @@ export default async function WorkshopPage({
     notFound();
   }
 
+  const img = getWorkshopImage(workshop.slug);
+
   return (
     <PageLayout>
       <div className="space-y-8">
@@ -65,17 +69,16 @@ export default async function WorkshopPage({
 
         <AnimateIn>
           <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-2">
-            <div className="aspect-4/3 bg-pink-600/30 rounded-md">
-              {workshop.image !== "" && (
+            <ImagePlaceholder className="aspect-4/3 bg-pink-600/30 rounded-md">
+              {img && (
                 <Image
                   className="size-full object-cover rounded-md"
-                  src={workshop.image}
+                  src={img}
                   alt={""}
-                  height={180}
-                  width={320}
+                  placeholder="blur"
                 />
               )}
-            </div>
+            </ImagePlaceholder>
             <div className="space-y-2">
               <h2 className="text-lg font-semibold">About this workshop</h2>
               <p className="text-muted-foreground">
