@@ -238,7 +238,7 @@ export const bookingsRouter = createTRPCRouter({
         .update(bookings)
         .set({
           status: "confirmed",
-          paymentReference,
+          // paymentReference,
           updatedAt: new Date(),
         })
         .where(eq(bookings.id, input.bookingId))

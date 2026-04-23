@@ -35,8 +35,12 @@ export const bookings = pgTable(
     seats: integer("seats").notNull(),
     totalAmount: integer("total_amount").notNull(),
 
-    paymentReference: text("payment_reference"),
     browserSessionId: text("browser_session_id"),
+
+    payablTransactionId: text("payabl_transaction_id"),
+    payablErrorCode: text("payabl_error_code"),
+    payablErrorMessage: text("payabl_error_message"),
+    paidAt: timestamp("paid_at"),
 
     eventId: uuid("event_id")
       .notNull()
