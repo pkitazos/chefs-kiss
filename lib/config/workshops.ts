@@ -33,7 +33,7 @@ const DEFAULT_WORKSHOP_PRICE = 10;
 export const WORKSHOPS: WorkshopConfig[] = [
   {
     slug: "boards-and-bordeaux",
-    title: "BOARDS & BORDEAUX",
+    title: "Boards & Bordeaux",
     hostedBy: "C(h)rystal art",
     tagline: "Wine, cheese, and handmade decor",
     shortDescription:
@@ -131,7 +131,7 @@ export const WORKSHOPS: WorkshopConfig[] = [
   },
   {
     slug: "tote-dalin",
-    title: "TOTE DALIN",
+    title: "Tote Dalin",
     hostedBy: "Alina",
     tagline: "Learn textile painting and create a hand-painted tote bag.",
     shortDescription:
@@ -181,7 +181,7 @@ export const WORKSHOPS: WorkshopConfig[] = [
   },
   {
     slug: "paint-your-own-bowl-edition",
-    title: "PAINT YOUR OWN — Bowl Edition",
+    title: "Paint Your Own — Bowl Edition",
     hostedBy: "Olga Askoti",
     tagline:
       "A refined, hands‑on ceramics experience with clay, colour, and wine.",
@@ -295,7 +295,7 @@ export const WORKSHOPS: WorkshopConfig[] = [
   },
   {
     slug: "cocktail-making",
-    title: "Cocktail Making by Payabl.",
+    title: "Cocktail Making",
     hostedBy: "Payabl.",
     tagline: "An interactive cocktail-making experience by the sea.",
     shortDescription:
