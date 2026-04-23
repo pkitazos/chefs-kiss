@@ -351,19 +351,16 @@ function WorkshopsSection() {
   const [slideWidth, setSlideWidth] = useState(0);
   const [gap, setGap] = useState(20);
 
-  // Measure the viewport and derive the per-slide width from it. We do
-  // this rather than reading getComputedStyle on the slides themselves
-  // because the slides' own width is what we're about to SET.
   useEffect(() => {
     const viewport = viewportRef.current;
     if (!viewport) return;
 
     const update = () => {
       const w = window.innerWidth;
-      // cardsPerView is a local variable now — we only need it to divide
-      // the viewport width into slots. Once we have the per-slide pixel
-      // value, nothing downstream cares how many cards are on screen.
-      const cardsPerView = w >= 1024 ? 3 : w >= 640 ? 2 : 1;
+      // Breakpoints match Tailwind defaults: sm 640, lg 1024, xl 1280, 2xl 1536.
+      // Ramp smoothly from 1 card on mobile up to 5 on very wide screens.
+      const cardsPerView =
+        w >= 1536 ? 5 : w >= 1280 ? 4 : w >= 1024 ? 3 : w >= 640 ? 2 : 1;
       const g = w >= 640 ? 24 : 20; // matches gap-5 sm:gap-6
 
       setGap(g);
@@ -518,9 +515,7 @@ function WorkshopsSection() {
                 aria-hidden={!isMiddleCopy ? true : undefined}
                 tabIndex={!isMiddleCopy ? -1 : undefined}
                 className="group flex shrink-0 flex-col gap-3"
-                style={{
-                  width: `${slideWidth}px`,
-                }}
+                style={{ width: `${slideWidth}px` }}
               >
                 <div
                   className={cn(
@@ -535,12 +530,16 @@ function WorkshopsSection() {
                   <div className="flex items-start justify-between gap-3">
                     <p className="font-display text-xl tracking-tight sm:text-2xl">
                       {workshop.title}
+                      <span className="font-sans ml-2 text-base tracking-tight">
+                        by {workshop.hostedBy}
+                      </span>
                     </p>
                     <span className="inline-flex items-center gap-1.5 shrink-0 pt-1 text-sm font-medium text-primary">
                       <IconClock size={16} />
                       {workshop.duration}
                     </span>
                   </div>
+
                   <p className="text-sm text-muted-foreground">
                     {workshop.tagline}
                   </p>
@@ -572,7 +571,7 @@ function MenuSection() {
           Taste the Festival
         </h2>
         <SectionLabel className="mt-3 block">
-          {vendors.length} vendors &middot; Hundreds of dishes
+          {truncateWithPlus(vendors.length)} vendors &middot; Hundreds of dishes
         </SectionLabel>
         <p className="mx-auto mt-6 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed">
           From smash burgers to handmade loukoumades — browse every vendor menu
@@ -594,6 +593,16 @@ function MenuSection() {
       </div>
     </motion.section>
   );
+}
+
+/**
+ *
+ * @example
+ * truncateWithPlus(19) => "15+"
+ * truncateWithPlus(21) => "20+"
+ */
+function truncateWithPlus(num: number): string {
+  return `${num - (num % 5)}+`;
 }
 
 /* ═══════════════════════════════════════════════
