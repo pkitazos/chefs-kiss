@@ -40,7 +40,7 @@ export const WORKSHOPS: WorkshopConfig[] = [
     longDescription:
       "Boards & Bordeaux is a relaxed, creative workshop where participants enjoy wine, cheese, and delicious accompaniments while designing and painting their own plaster board. With simple techniques and guidance from the team, each guest leaves with a unique handmade piece of décor to take home.",
     duration: "1 hour",
-    image: "/workshops/boards-and-bordeaux.png",
+    image: "/workshops/boards-and-bordeaux.jpg",
     maxSeatsPerBooking: DEFAULT_MAX_SEATS_PER_BOOKING,
     days: [
       {
@@ -147,7 +147,7 @@ export const WORKSHOPS: WorkshopConfig[] = [
     longDescription:
       "The workshop introduces participants to basic textile painting techniques before guiding them through creating their own custom tote bag design. Beyond learning practical skills, they’ll enjoy a relaxed, creative experience, build confidence in their artistic expression, and leave with a unique, hand-painted tote bag they can proudly use.",
     duration: "2 hours",
-    image: "/workshops/tote-dalin-2.jpeg",
+    image: "/workshops/tote-dalin.jpg",
     maxSeatsPerBooking: DEFAULT_MAX_SEATS_PER_BOOKING,
     days: [
       {

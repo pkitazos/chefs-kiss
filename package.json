@@ -9,6 +9,7 @@
     "lint": "eslint",
     "email": "email dev --port 3001",
     "toggle-routes": "tsx scripts/toggle-routes.ts",
+    "images:optimize": "tsx scripts/optimize-images.ts",
     "db:generate": "dotenv -e .env.local -- drizzle-kit generate",
     "db:migrate": "dotenv -e .env.local -- drizzle-kit migrate",
     "db:push": "echo 'This is not what you think it is. Do not run this command. What you want is migrate.'",
@@ -58,8 +59,16 @@
     "drizzle-kit": "0.31.8",
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
+    "sharp": "0.34.5",
     "tailwindcss": "^4",
     "tsx": "4.21.0",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "better-auth>drizzle-orm": "0.45.x"
+      }
+    }
   }
 }

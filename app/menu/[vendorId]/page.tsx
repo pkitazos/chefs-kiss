@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { IconArrowLeft } from "@tabler/icons-react";
-import { vendors } from "@/lib/config/menu";
+import { MENU_VENDORS } from "@/lib/config/menu";
 import { AnimateIn } from "@/components/animate-in";
 import { WavyPattern } from "@/components/brand-pattern";
 import { SectionLabel } from "@/components/ui/section-label";
@@ -17,7 +17,7 @@ export default async function VendorPage({ params }: Props) {
 }
 
 function VendorMenu({ vendorId }: { vendorId: string }) {
-  const vendor = vendors.find((v) => v.id === vendorId);
+  const vendor = MENU_VENDORS.find((v) => v.id === vendorId);
 
   if (!vendor) {
     return (
