@@ -9,15 +9,28 @@ export function createBookingFormSchema(maxSeats: number) {
   });
 }
 
-export const createBookingSchema = z.object({
+const baseBookingFields = {
   fullName: z.string().min(1),
   email: z.email(),
   phone: z.string().min(1),
   seats: z.coerce.number<number>().int().min(1),
   slotId: z.string().min(1),
-  type: z.enum(["private-dining", "workshop"]),
   browserSessionId: z.string().optional(),
-});
+};
 
-export type BookingFormData = z.infer<ReturnType<typeof createBookingFormSchema>>;
+export const createBookingSchema = z.discriminatedUnion("type", [
+  z.object({
+    ...baseBookingFields,
+    type: z.literal("workshop"),
+    workshopSlug: z.string().min(1),
+  }),
+  z.object({
+    ...baseBookingFields,
+    type: z.literal("private-dining"),
+  }),
+]);
+
+export type BookingFormData = z.infer<
+  ReturnType<typeof createBookingFormSchema>
+>;
 export type CreateBookingInput = z.infer<typeof createBookingSchema>;

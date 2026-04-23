@@ -1,20 +1,18 @@
 "use client";
 
-import { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { toast } from "sonner";
 import {
+  IconAlertCircle,
   IconCircleCheck,
   IconClock,
-  IconAlertCircle,
   IconLoader2,
 } from "@tabler/icons-react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { PageLayout } from "@/components/page-layout";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SectionLabel } from "@/components/ui/section-label";
 import { api } from "@/lib/trpc/client";
 
@@ -35,24 +33,11 @@ export default function PrivateDiningStatusPage() {
 function PrivateDiningStatusContent() {
   const searchParams = useSearchParams();
   const bookingId = searchParams.get("ref");
-  const utils = api.useUtils();
 
   const { data: booking, isLoading } = api.bookings.getStatus.useQuery(
     { bookingId: bookingId! },
     { enabled: !!bookingId, refetchInterval: 10_000 },
   );
-
-  const simulatePayment = api.bookings.simulatePayment.useMutation({
-    onSuccess: () => {
-      toast.success("Payment simulated successfully!");
-      utils.bookings.getStatus.invalidate({ bookingId: bookingId! });
-    },
-    onError: (error) => {
-      toast.error("Payment simulation failed", {
-        description: error.message,
-      });
-    },
-  });
 
   if (!bookingId) {
     return (
@@ -125,38 +110,7 @@ function PrivateDiningStatusContent() {
                 <span className="text-muted-foreground">Total:</span> &euro;
                 {(booking.totalAmount / 100).toFixed(2)}
               </p>
-              {/*{booking.paymentReference && (
-                  <p>
-                    <span className="text-muted-foreground">Payment Ref:</span>{" "}
-                    {booking.paymentReference}
-                  </p>
-                )}*/}
             </div>
-
-            {booking.status === "pending" && (
-              <div className="border-t pt-4">
-                <p className="text-muted-foreground mb-3 text-xs">
-                  Payment integration is not yet live. Use the button below to
-                  simulate a successful payment.
-                </p>
-                <Button
-                  size="lg"
-                  onClick={() =>
-                    simulatePayment.mutate({ bookingId: booking.id })
-                  }
-                  disabled={simulatePayment.isPending}
-                >
-                  {simulatePayment.isPending ? (
-                    <>
-                      <IconLoader2 className="animate-spin" />
-                      Processing…
-                    </>
-                  ) : (
-                    "Simulate Payment"
-                  )}
-                </Button>
-              </div>
-            )}
           </div>
         </CardContent>
       </Card>
