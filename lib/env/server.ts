@@ -54,6 +54,24 @@ const serverEnvSchema = z.object({
     .email()
     .describe("Default from email address for Resend"),
 
+  // Payabl. (Payments)
+  PAYABL_BASE_URL: z
+    .url()
+    .default("http://localhost:4000")
+    .describe(
+      "Base URL of the payabl API. Points to local mock sim in development, to sandbox.payabl.com in staging, and to payabl production in production.",
+    ),
+  PAYABL_MERCHANT_ID: z
+    .string()
+    .min(1)
+    .describe("Merchant ID assigned by payabl during account creation"),
+  PAYABL_SECRET: z
+    .string()
+    .min(1)
+    .describe(
+      "Shared secret for signing requests and verifying callbacks. Provided by payabl over email during onboarding.",
+    ),
+
   // Uploadthing (File Upload)
   UPLOADTHING_TOKEN: z
     .string()
