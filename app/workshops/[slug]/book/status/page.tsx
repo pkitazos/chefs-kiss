@@ -60,10 +60,11 @@ function WorkshopStatusContent() {
   if (!bookingId) {
     return (
       <PageLayout className="max-w-2xl">
-        <p className="text-muted-foreground">
-          No booking reference provided.
-        </p>
-        <Link href={backLink} className="text-primary mt-2 block text-sm underline">
+        <p className="text-muted-foreground">No booking reference provided.</p>
+        <Link
+          href={backLink}
+          className="text-primary mt-2 block text-sm underline"
+        >
           Back to Workshop
         </Link>
       </PageLayout>
@@ -82,7 +83,10 @@ function WorkshopStatusContent() {
     return (
       <PageLayout className="max-w-2xl">
         <p className="text-muted-foreground">Booking not found.</p>
-        <Link href={backLink} className="text-primary mt-2 block text-sm underline">
+        <Link
+          href={backLink}
+          className="text-primary mt-2 block text-sm underline"
+        >
           Back to Workshop
         </Link>
       </PageLayout>
@@ -124,12 +128,12 @@ function WorkshopStatusContent() {
                 <span className="text-muted-foreground">Total:</span> &euro;
                 {(booking.totalAmount / 100).toFixed(2)}
               </p>
-              {booking.paymentReference && (
+              {/*{booking.paymentReference && (
                 <p>
                   <span className="text-muted-foreground">Payment Ref:</span>{" "}
                   {booking.paymentReference}
                 </p>
-              )}
+              )}*/}
             </div>
 
             {booking.status === "pending" && (

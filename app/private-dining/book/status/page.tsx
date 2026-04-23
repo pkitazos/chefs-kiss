@@ -57,9 +57,7 @@ function PrivateDiningStatusContent() {
   if (!bookingId) {
     return (
       <PageLayout className="max-w-2xl">
-        <p className="text-muted-foreground">
-          No booking reference provided.
-        </p>
+        <p className="text-muted-foreground">No booking reference provided.</p>
         <Link
           href="/private-dining"
           className="text-primary mt-2 block text-sm underline"
@@ -100,68 +98,68 @@ function PrivateDiningStatusContent() {
       </div>
 
       <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>Booking {booking.id}</CardTitle>
-              <StatusBadge status={booking.status} />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <StatusMessage status={booking.status} />
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle>Booking {booking.id}</CardTitle>
+            <StatusBadge status={booking.status} />
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <StatusMessage status={booking.status} />
 
-              <div className="text-sm space-y-1.5">
-                <p>
-                  <span className="text-muted-foreground">Name:</span>{" "}
-                  {booking.fullName}
-                </p>
-                <p>
-                  <span className="text-muted-foreground">Email:</span>{" "}
-                  {booking.email}
-                </p>
-                <p>
-                  <span className="text-muted-foreground">Seats:</span>{" "}
-                  {booking.seats}
-                </p>
-                <p>
-                  <span className="text-muted-foreground">Total:</span> &euro;
-                  {(booking.totalAmount / 100).toFixed(2)}
-                </p>
-                {booking.paymentReference && (
+            <div className="text-sm space-y-1.5">
+              <p>
+                <span className="text-muted-foreground">Name:</span>{" "}
+                {booking.fullName}
+              </p>
+              <p>
+                <span className="text-muted-foreground">Email:</span>{" "}
+                {booking.email}
+              </p>
+              <p>
+                <span className="text-muted-foreground">Seats:</span>{" "}
+                {booking.seats}
+              </p>
+              <p>
+                <span className="text-muted-foreground">Total:</span> &euro;
+                {(booking.totalAmount / 100).toFixed(2)}
+              </p>
+              {/*{booking.paymentReference && (
                   <p>
                     <span className="text-muted-foreground">Payment Ref:</span>{" "}
                     {booking.paymentReference}
                   </p>
-                )}
-              </div>
-
-              {booking.status === "pending" && (
-                <div className="border-t pt-4">
-                  <p className="text-muted-foreground mb-3 text-xs">
-                    Payment integration is not yet live. Use the button below to
-                    simulate a successful payment.
-                  </p>
-                  <Button
-                    size="lg"
-                    onClick={() =>
-                      simulatePayment.mutate({ bookingId: booking.id })
-                    }
-                    disabled={simulatePayment.isPending}
-                  >
-                    {simulatePayment.isPending ? (
-                      <>
-                        <IconLoader2 className="animate-spin" />
-                        Processing…
-                      </>
-                    ) : (
-                      "Simulate Payment"
-                    )}
-                  </Button>
-                </div>
-              )}
+                )}*/}
             </div>
-          </CardContent>
-        </Card>
+
+            {booking.status === "pending" && (
+              <div className="border-t pt-4">
+                <p className="text-muted-foreground mb-3 text-xs">
+                  Payment integration is not yet live. Use the button below to
+                  simulate a successful payment.
+                </p>
+                <Button
+                  size="lg"
+                  onClick={() =>
+                    simulatePayment.mutate({ bookingId: booking.id })
+                  }
+                  disabled={simulatePayment.isPending}
+                >
+                  {simulatePayment.isPending ? (
+                    <>
+                      <IconLoader2 className="animate-spin" />
+                      Processing…
+                    </>
+                  ) : (
+                    "Simulate Payment"
+                  )}
+                </Button>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
       <Link
         href="/private-dining"
