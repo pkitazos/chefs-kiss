@@ -42,7 +42,7 @@ function resolveSlotDetails(
 
   return {
     label: `${result.workshop.title} - ${eventDateFormat.dayName(result.day.date)} at ${result.slot.time}`,
-    price: result.workshop.price,
+    price: result.slot.price,
   };
 }
 

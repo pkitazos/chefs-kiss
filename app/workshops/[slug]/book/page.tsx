@@ -47,8 +47,9 @@ export default async function WorkshopBookPage({
         slotId={slotResult.slot.id}
         slotTime={slotResult.slot.time}
         slotLocation={slotResult.slot.location}
+        slotShortDescription={slotResult.slot.shortDescription}
         slotDate={slotResult.day.date.toISOString()}
-        price={workshop.price}
+        price={slotResult.slot.price}
         capacity={slotResult.slot.capacity}
         maxSeatsPerBooking={workshop.maxSeatsPerBooking}
       />
