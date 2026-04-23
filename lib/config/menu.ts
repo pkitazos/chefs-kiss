@@ -16,6 +16,7 @@ export interface Vendor {
   id: string;
   name: string;
   cuisine: string;
+  image: string;
   accent: VendorAccent;
   icon: VendorIcon;
   menu: MenuSection[];
@@ -28,6 +29,7 @@ export const vendors: Vendor[] = [
     id: "yozen",
     name: "Yozen",
     cuisine: "Frozen Yoghurt & Desserts",
+    image: "/vendors/yozen.png",
     accent: "pink",
     icon: "coffee",
     menu: [
@@ -58,6 +60,7 @@ export const vendors: Vendor[] = [
     id: "to-glykatzidiko",
     name: "To Glykatzidiko",
     cuisine: "Desserts & Ice Cream",
+    image: "/vendors/to-glykatzidiko.png",
     accent: "green",
     icon: "coffee",
     menu: [
@@ -81,16 +84,16 @@ export const vendors: Vendor[] = [
     id: "crepaland",
     name: "Crepaland",
     cuisine: "Crepes",
+    image: "/vendors/crepaland-2.png",
     accent: "amber",
     icon: "coffee",
     menu: [
       {
-        section: "ΓΛΥΚΕΣ ΚΡΕΠΕΣ",
-        items: [{ name: "Dish 1", price: 6 }],
-      },
-      {
-        section: "ΑΛΜΥΡΕΣ ΚΡΕΠΕΣ",
-        items: [{ name: "Dish 2", price: 7 }],
+        section: "Crepes",
+        items: [
+          { name: "Sweet", price: 6 },
+          { name: "Savoury", price: 7 },
+        ],
       },
     ],
   },
@@ -98,6 +101,7 @@ export const vendors: Vendor[] = [
     id: "por-favor",
     name: "Por Favor",
     cuisine: "Mexican",
+    image: "/vendors/por-favor.png",
     accent: "orange",
     icon: "pepper",
     menu: [
@@ -121,21 +125,22 @@ export const vendors: Vendor[] = [
     id: "gems-food-truck",
     name: "Gems Food Truck",
     cuisine: "Street Food",
+    image: "/vendors/gems-food-truck.png",
     accent: "sky",
     icon: "grill",
     menu: [
-      {
-        section: "Sides",
-        items: [
-          { name: "Πατάτες", price: 4 },
-          { name: "Γλυκοπατάτες", price: 6 },
-        ],
-      },
       {
         section: "Mains",
         items: [
           { name: "Κοτόπουλο με Σισάμι", price: 12 },
           { name: "Γαρίδες και Κοτόπουλο σε Ψωμάκι", price: 12 },
+        ],
+      },
+      {
+        section: "Sides",
+        items: [
+          { name: "Πατάτες", price: 4 },
+          { name: "Γλυκοπατάτες", price: 6 },
         ],
       },
     ],
@@ -144,6 +149,7 @@ export const vendors: Vendor[] = [
     id: "mays-diner",
     name: "May's Diner",
     cuisine: "Burgers & BBQ",
+    image: "/vendors/mays-diner.png",
     accent: "amber",
     icon: "grill",
     menu: [
@@ -182,6 +188,7 @@ export const vendors: Vendor[] = [
     id: "pizzella",
     name: "Pizzella",
     cuisine: "Pizza",
+    image: "/vendors/pizzella.png",
     accent: "green",
     icon: "pepper",
     menu: [
@@ -216,6 +223,7 @@ export const vendors: Vendor[] = [
     id: "to-souvlaki-tou-soukri",
     name: "To Souvlaki tou Soukri",
     cuisine: "Greek Grill",
+    image: "/vendors/to-souvlaki-tou-soukri.png",
     accent: "amber",
     icon: "meat",
     menu: [
@@ -234,6 +242,7 @@ export const vendors: Vendor[] = [
     id: "cacio-e-pepe",
     name: "Cacio e Pepe",
     cuisine: "Italian",
+    image: "/vendors/cacio-e-pepe.png",
     accent: "sky",
     icon: "pepper",
     menu: [
@@ -259,6 +268,7 @@ export const vendors: Vendor[] = [
     id: "hard-rock-cafe",
     name: "Hard Rock Cafe",
     cuisine: "American",
+    image: "/vendors/hard-rock-cafe.png",
     accent: "amber",
     icon: "grill",
     menu: [
@@ -282,25 +292,26 @@ export const vendors: Vendor[] = [
     id: "zam-food-canteen",
     name: "Zam Food Canteen",
     cuisine: "Street Food",
+    image: "",
     accent: "orange",
     icon: "pepper",
     menu: [
       {
-        section: "Nachos",
+        section: "Jacket Potatoes",
         items: [
-          { name: "Boring Nachos", price: 7 },
-          { name: "Nuevayol Nachos", price: 9 },
-          { name: "The Explosion Nachos", price: 11 },
+          { name: "Dirty Diana", price: 12 },
+          { name: "Hot AF", price: 10 },
+          { name: "Simple but Juicy", price: 9 },
+          { name: "Veggie Vibez", price: 8 },
+          { name: "Call-Slaw Me Baby", price: 10 },
         ],
       },
       {
-        section: "Jacket Potatoes",
+        section: "Nachos",
         items: [
-          { name: "Dirty Diana Jacket Potato", price: 12 },
-          { name: "Hot AF Jacket Potato", price: 10 },
-          { name: "Simple but Juicy Jacket Potato", price: 9 },
-          { name: "Veggie Vibez Jacket Potato", price: 8 },
-          { name: "Call-Slaw Me Baby Jacket Potato", price: 10 },
+          { name: "Boring", price: 7 },
+          { name: "Nuevayol", price: 9 },
+          { name: "The Explosion", price: 11 },
         ],
       },
     ],
@@ -309,6 +320,7 @@ export const vendors: Vendor[] = [
     id: "wild-earth",
     name: "Wild Earth",
     cuisine: "Plant-Based",
+    image: "/vendors/wild-earth.jpg",
     accent: "green",
     icon: "salad",
     menu: [
@@ -336,6 +348,7 @@ export const vendors: Vendor[] = [
     id: "mr-wurst",
     name: "Mr. Wurst",
     cuisine: "Hot Dogs",
+    image: "/vendors/mr-wurst.png",
     accent: "amber",
     icon: "meat",
     menu: [
@@ -354,17 +367,19 @@ export const vendors: Vendor[] = [
     id: "garden-gourmet",
     name: "Garden Gourmet",
     cuisine: "Plant-Based",
+    image: "/vendors/garden-gourmet.png",
     accent: "green",
     icon: "salad",
     menu: [
+      // todo: shorten descriptions
       {
         section: "Burgers",
         items: [
           {
             name: "Garden Gourmet Burger",
             price: 10,
-            description:
-              "Signature plant-based patty on a house-made plant-based brioche bun, with caramelised onions, melted plant-based cheese, sliced tomatoes, cucumber pickles, crisp iceberg lettuce, and red onion. Finished with smoky BBQ mayo. All made from scratch.",
+            description: "",
+            // "Signature plant-based patty on a house-made plant-based brioche bun, with caramelised onions, melted plant-based cheese, sliced tomatoes, cucumber pickles, crisp iceberg lettuce, and red onion. Finished with smoky BBQ mayo. All made from scratch.",
           },
         ],
       },
@@ -374,8 +389,8 @@ export const vendors: Vendor[] = [
           {
             name: "Umami Noodles",
             price: 9,
-            description:
-              "Wok-tossed noodles with fresh vegetables in our house-made teriyaki & black pepper sauce, finished with toasted sesame seeds, spring onions, and fresh coriander.",
+            description: "",
+            // "Wok-tossed noodles with fresh vegetables in our house-made teriyaki & black pepper sauce, finished with toasted sesame seeds, spring onions, and fresh coriander.",
           },
         ],
       },
@@ -385,8 +400,8 @@ export const vendors: Vendor[] = [
           {
             name: "Country-Style Fried Potatoes",
             price: PLACEHOLDER_PRICE,
-            description:
-              "Fresh potatoes, oven-baked and hand-cut into rustic pieces, then fried until golden and crispy, finished with our signature seasoning.",
+            description: "",
+            // "Fresh potatoes, oven-baked and hand-cut into rustic pieces, then fried until golden and crispy, finished with our signature seasoning.",
           },
         ],
       },
@@ -396,6 +411,7 @@ export const vendors: Vendor[] = [
     id: "omni-eats",
     name: "Omni Eats",
     cuisine: "Middle Eastern",
+    image: "/vendors/omni-eats.png",
     accent: "green",
     icon: "salad",
     menu: [
@@ -416,6 +432,44 @@ export const vendors: Vendor[] = [
             description: "Upgrade to Loaded Chicken Shawarma fries for +€3.50",
           },
         ],
+      },
+    ],
+  },
+  {
+    id: "nikkei",
+    name: "Nikkei",
+    cuisine: "Asian Fusion & Burgers",
+    image: "/vendors/nikkei-peruvian-senses.png",
+    accent: "pink",
+    icon: "grill",
+    menu: [
+      {
+        section: "Nikkei Signature",
+        items: [
+          {
+            name: "Spicy Tuna roll",
+            price: 8,
+            description: "4 pieces",
+          },
+          {
+            name: "Salmon roll",
+            price: 8,
+            description: "4 pieces",
+          },
+          { name: "Duck bao bun", price: 7 },
+        ],
+      },
+      {
+        section: "Nikkei Smash",
+        items: [
+          { name: "Street signature", price: 12 },
+          { name: "1976", price: 12 },
+          { name: "The classic", price: 12 },
+        ],
+      },
+      {
+        section: "Sides",
+        items: [{ name: "French Fries", price: 4 }],
       },
     ],
   },

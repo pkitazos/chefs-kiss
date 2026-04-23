@@ -17,6 +17,7 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 import type { ComponentType } from "react";
+import Image from "next/image";
 
 const ACCENT_CLASSES: Record<
   VendorAccent,
@@ -133,7 +134,17 @@ export default function MenuPage() {
                     a.card,
                   )}
                 >
-                  <Icon size={48} className="text-white/40" />
+                  {vendor.image !== "" ? (
+                    <Image
+                      className="size-full object-cover"
+                      src={vendor.image}
+                      alt={""}
+                      height={180}
+                      width={320}
+                    />
+                  ) : (
+                    <Icon size={48} className="text-white/40" />
+                  )}
                 </div>
                 <div className="flex flex-1 flex-col gap-2 p-5">
                   <p
