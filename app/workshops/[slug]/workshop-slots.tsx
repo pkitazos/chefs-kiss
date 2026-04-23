@@ -4,7 +4,7 @@ import { buttonVariants } from "@/components/ui/button";
 import type { WorkshopConfig } from "@/lib/config/workshops";
 import { api } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils";
-import { IconTools } from "@tabler/icons-react";
+import { IconMapPin, IconTools } from "@tabler/icons-react";
 import { format } from "date-fns";
 import Link from "next/link";
 import { useState } from "react";
@@ -49,6 +49,8 @@ export function WorkshopSlots({ workshop }: { workshop: WorkshopConfig }) {
             slotId={slot.id}
             time={slot.time}
             location={slot.location}
+            price={slot.price}
+            shortDescription={slot.shortDescription}
             workshopSlug={workshop.slug}
           />
         ))}
@@ -61,11 +63,15 @@ function SlotRow({
   slotId,
   time,
   location,
+  price,
+  shortDescription,
   workshopSlug,
 }: {
   slotId: string;
   time: string;
   location: string;
+  price: number;
+  shortDescription?: string;
   workshopSlug: string;
 }) {
   const availability = api.bookings.getSlotAvailability.useQuery({
@@ -78,8 +84,20 @@ function SlotRow({
   return (
     <div className="flex flex-col gap-3 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="space-y-0.5">
-        <p className="text-sm font-medium">{time}</p>
-        <p className="text-muted-foreground text-sm">{location}</p>
+        <p className="text-sm font-medium">
+          {time}
+          <span className="text-primary font-semibold">
+            {" "}
+            &middot; &euro;{price}
+          </span>
+        </p>
+        <p className="text-muted-foreground text-sm inline-flex items-center">
+          <IconMapPin className="size-3 mr-2 text-primary" />
+          {location}
+        </p>
+        {shortDescription && (
+          <p className="text-muted-foreground text-sm">{shortDescription}</p>
+        )}
         {remaining !== undefined && (
           <p className="text-muted-foreground text-xs">
             {isFullyBooked

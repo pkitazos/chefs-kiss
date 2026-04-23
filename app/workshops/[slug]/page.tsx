@@ -1,4 +1,6 @@
+import { IconArrowLeft } from "@tabler/icons-react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -7,7 +9,6 @@ import { PageLayout } from "@/components/page-layout";
 import { SectionLabel } from "@/components/ui/section-label";
 import { COMING_SOON } from "@/lib/config/mode";
 import { getWorkshopBySlug, WORKSHOPS } from "@/lib/config/workshops";
-import { IconArrowLeft } from "@tabler/icons-react";
 import { WorkshopSlots } from "./workshop-slots";
 
 export function generateStaticParams() {
@@ -25,7 +26,7 @@ export async function generateMetadata({
 
   return {
     title: `${workshop.title} | Chef's Kiss Festival`,
-    description: workshop.shortDescription,
+    description: workshop.tagline,
   };
 }
 
@@ -57,24 +58,24 @@ export default async function WorkshopPage({
           <h1 className="font-display text-4xl tracking-tight">
             {workshop.title}
           </h1>
-          <p className="text-muted-foreground text-lg">
+          <p className="-mt-2 text-muted-foreground text-lg">
             by {workshop.hostedBy}
           </p>
-          <p className="text-muted-foreground text-lg">{workshop.tagline}</p>
-          <div className="text-sm">
-            <span className="font-semibold text-primary">
-              &euro;{workshop.price}
-            </span>
-            <span className="text-muted-foreground">
-              {" "}
-              &middot; {workshop.duration}
-            </span>
-          </div>
         </AnimateIn>
 
         <AnimateIn>
           <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-2">
-            <div className="aspect-4/3 rounded-2xl bg-muted" />
+            <div className="aspect-4/3 bg-pink-600/30 rounded-md">
+              {workshop.image !== "" && (
+                <Image
+                  className="size-full object-cover rounded-md"
+                  src={workshop.image}
+                  alt={""}
+                  height={180}
+                  width={320}
+                />
+              )}
+            </div>
             <div className="space-y-2">
               <h2 className="text-lg font-semibold">About this workshop</h2>
               <p className="text-muted-foreground">

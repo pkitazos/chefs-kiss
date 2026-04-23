@@ -51,6 +51,7 @@ interface WorkshopBookingFormProps {
   slotId: string;
   slotTime: string;
   slotLocation: string;
+  slotShortDescription?: string;
   slotDate: string;
   price: number;
   capacity: number;
@@ -63,6 +64,7 @@ export function WorkshopBookingForm({
   slotId,
   slotTime,
   slotLocation,
+  slotShortDescription,
   slotDate,
   price,
   capacity,
@@ -147,6 +149,7 @@ export function WorkshopBookingForm({
             <p>
               {slotTime} &middot; {slotLocation}
             </p>
+            {slotShortDescription && <p>{slotShortDescription}</p>}
             <p className="font-medium text-foreground">
               &euro;{price}
               <span className="text-muted-foreground font-normal">/person</span>

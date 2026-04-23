@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 import { AnimateIn } from "@/components/animate-in";
@@ -6,7 +7,11 @@ import { WavyPattern } from "@/components/brand-pattern";
 import { PageLayout } from "@/components/page-layout";
 import { buttonVariants } from "@/components/ui/button";
 import { SectionLabel } from "@/components/ui/section-label";
-import { WORKSHOPS } from "@/lib/config/workshops";
+import {
+  getWorkshopPriceSummary,
+  type WorkshopConfig,
+  WORKSHOPS,
+} from "@/lib/config/workshops";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -49,7 +54,17 @@ export default function WorkshopsPage() {
                 transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.1 }}
               >
                 <div className="flex h-full flex-col overflow-hidden rounded-lg border transition-colors hover:border-primary/30 hover:bg-muted/50">
-                  <div className="aspect-video bg-muted" />
+                  <div className="flex aspect-video h-60 items-center justify-center bg-pink-600/30">
+                    {workshop.image !== "" && (
+                      <Image
+                        className="size-full object-cover"
+                        src={workshop.image}
+                        alt={""}
+                        height={180}
+                        width={320}
+                      />
+                    )}
+                  </div>
                   <div className="flex flex-1 flex-col gap-3 p-5">
                     <div>
                       <h2 className="text-lg font-display font-semibold">
@@ -60,17 +75,11 @@ export default function WorkshopsPage() {
                       </p>
                     </div>
                     <p className="text-muted-foreground text-sm">
-                      {workshop.shortDescription}
+                      {workshop.tagline}
                     </p>
                     <div className="mt-auto flex items-center justify-between pt-2">
                       <div className="text-sm">
-                        <span className="font-semibold text-primary">
-                          &euro;{workshop.price}
-                        </span>
-                        <span className="text-muted-foreground">
-                          {" "}
-                          &middot; {workshop.duration}
-                        </span>
+                        <WorkshopPriceSummary workshop={workshop} />
                       </div>
                       <Link
                         href={`/workshops/${workshop.slug}`}
@@ -86,6 +95,30 @@ export default function WorkshopsPage() {
           </div>
         </AnimateIn>
       </PageLayout>
+    </>
+  );
+}
+
+function WorkshopPriceSummary({ workshop }: { workshop: WorkshopConfig }) {
+  const summary = getWorkshopPriceSummary(workshop);
+  if (summary === null) {
+    return (
+      <span className="text-muted-foreground">
+        TBC &middot; {workshop.duration}
+      </span>
+    );
+  }
+
+  return (
+    <>
+      <span className="font-semibold text-primary">
+        {summary.varies ? "from " : ""}&euro;
+        {summary.min}
+      </span>
+      <span className="text-muted-foreground">
+        {" "}
+        &middot; {workshop.duration}
+      </span>
     </>
   );
 }

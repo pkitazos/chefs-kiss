@@ -298,7 +298,7 @@ function getSlotConfig(slotId: string, type: "private-dining" | "workshop") {
 
   const result = getWorkshopSlotById(slotId);
   if (!result) return null;
-  return { capacity: result.slot.capacity, price: result.workshop.price };
+  return { capacity: result.slot.capacity, price: result.slot.price };
 }
 
 /** Expire all stale pending bookings (older than 15 min) in one UPDATE. */
