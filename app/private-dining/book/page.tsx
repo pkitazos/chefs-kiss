@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { getDiningSessionById } from "@/lib/config/event";
+import { getDiningSessionById } from "@/lib/config/private-dining";
 import { COMING_SOON } from "@/lib/config/mode";
 import { PageLayout } from "@/components/page-layout";
 import { PrivateDiningBookingForm } from "./booking-form";

@@ -2,7 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { and, count, desc, eq, inArray, lt, sql } from "drizzle-orm";
 import { z } from "zod";
 
-import { getDiningSessionById } from "@/lib/config/event";
+import { getDiningSessionById } from "@/lib/config/private-dining";
 import { COMING_SOON } from "@/lib/config/mode";
 import { getWorkshopSlotById } from "@/lib/config/workshops";
 import { bookings, events } from "@/lib/db/schema";
