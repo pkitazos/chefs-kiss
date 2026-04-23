@@ -1,11 +1,8 @@
 import { render } from "@react-email/render";
 import { sendEmail } from "./index";
 import BookingConfirmationEmail from "@/emails/booking-confirmation";
-import {
-  CURRENT_EVENT,
-  eventDateFormat,
-  getDiningSessionById,
-} from "@/lib/config/event";
+import { CURRENT_EVENT, eventDateFormat } from "@/lib/config/event";
+import { getDiningSessionById } from "../config/private-dining";
 import { getWorkshopSlotById } from "@/lib/config/workshops";
 
 type SendBookingConfirmationParams = {
