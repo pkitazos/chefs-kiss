@@ -46,3 +46,6 @@ next-env.d.ts
 
 # react-email
 .react-email
+
+# unprocessed images
+images-raw/
