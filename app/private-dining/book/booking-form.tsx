@@ -94,7 +94,8 @@ export function PrivateDiningBookingForm({
 
   const createBooking = api.bookings.create.useMutation({
     onSuccess: (data) => {
-      router.push(`/private-dining/book/status?ref=${data.bookingId}`);
+      if (data.paymentUrl) window.location.replace(data.paymentUrl);
+      else router.push(`/private-dining/book/status?ref=${data.bookingId}`);
     },
     onError: (error) => {
       toast.error("Booking failed", { description: error.message });

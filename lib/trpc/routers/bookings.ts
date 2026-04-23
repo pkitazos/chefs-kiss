@@ -2,11 +2,15 @@ import { TRPCError } from "@trpc/server";
 import { and, count, desc, eq, inArray, lt, sql } from "drizzle-orm";
 import { z } from "zod";
 
-import { getDiningSessionById } from "@/lib/config/private-dining";
 import { COMING_SOON } from "@/lib/config/mode";
+import { getDiningSessionById } from "@/lib/config/private-dining";
 import { getWorkshopSlotById } from "@/lib/config/workshops";
 import { bookings, events } from "@/lib/db/schema";
-import { sendBookingConfirmation } from "@/lib/email/booking-emails";
+import {
+  buildNotificationUrl,
+  buildReturnUrl,
+  initPayablTransaction,
+} from "@/lib/payments/payabl";
 import { generateId } from "@/lib/utils/construct-id";
 import { createBookingSchema } from "@/lib/validations/booking";
 import { type Event } from "@/lib/validations/event";
@@ -31,7 +35,6 @@ export const bookingsRouter = createTRPCRouter({
         });
       }
 
-      // Get active event
       const [activeEvent] = await ctx.db
         .select()
         .from(events)
@@ -45,7 +48,6 @@ export const bookingsRouter = createTRPCRouter({
         });
       }
 
-      // Expire stale pending bookings, then check capacity
       await expireStalePendingBookings(ctx.db);
 
       const [booked] = await ctx.db
@@ -87,6 +89,7 @@ export const bookingsRouter = createTRPCRouter({
 
       const totalAmount = slotConfig.price * input.seats * 100; // cents
 
+      // Insert the pending row first so every attempt produces an audit trail.
       await ctx.db.insert(bookings).values({
         id: bookingId,
         type: input.type,
@@ -101,7 +104,95 @@ export const bookingsRouter = createTRPCRouter({
         expiresAt: new Date(Date.now() + 15 * 60 * 1000),
       });
 
-      return { bookingId, paymentUrl: null };
+      // Kick off the payabl init. Two failure modes handled separately:
+      //   - Network/exceptional failure (fetch throws): mark the booking
+      //     failed and surface as INTERNAL_SERVER_ERROR so the frontend
+      //     can show a "please try again" message.
+      //   - Payabl returned errorcode != 0: mark the booking failed with
+      //     the provided code/message; frontend still redirects to the
+      //     status page which will show the failure.
+      const [firstName, ...restName] = input.fullName.trim().split(/\s+/);
+      const lastName = restName.join(" ") || firstName;
+
+      // Determine the return URL based on booking type
+      // Append the booking ref to the return URL so the status page can
+      // pick it up from the search params.
+      const url_return =
+        input.type === "workshop"
+          ? `${buildReturnUrl("workshop", input.workshopSlug)}?ref=${bookingId}`
+          : `${buildReturnUrl("private-dining", null)}?ref=${bookingId}`;
+
+      try {
+        const initResult = await initPayablTransaction({
+          amount: (totalAmount / 100).toFixed(2), // cents -> "50.00"
+          currency: "EUR",
+          orderid: bookingId,
+          firstname: firstName,
+          lastname: lastName,
+          email: input.email,
+          notification_url: buildNotificationUrl(bookingId),
+          url_return,
+        });
+
+        if (!initResult.ok) {
+          console.warn(
+            `[bookings.create] payabl init failed for ${bookingId}: ${initResult.errorcode} ${initResult.errormessage}`,
+          );
+
+          await ctx.db
+            .update(bookings)
+            .set({
+              status: "failed",
+              payablErrorCode: initResult.errorcode,
+              payablErrorMessage: initResult.errormessage || null,
+              updatedAt: new Date(),
+            })
+            .where(eq(bookings.id, bookingId));
+
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message:
+              "Could not initiate payment. Please try again or contact support.",
+          });
+        }
+
+        // Persist the payabl transactionid so we have a back-reference
+        // before the user even completes payment.
+        await ctx.db
+          .update(bookings)
+          .set({
+            payablTransactionId: initResult.transactionid,
+            updatedAt: new Date(),
+          })
+          .where(eq(bookings.id, bookingId));
+
+        return { bookingId, paymentUrl: initResult.start_url };
+      } catch (err) {
+        // If this is already a TRPCError we threw above, rethrow as-is.
+        if (err instanceof TRPCError) throw err;
+
+        // Otherwise it's a network/fetch exception. Mark failed for the
+        // audit trail, then surface.
+        console.error(
+          `[bookings.create] payabl init threw for ${bookingId}:`,
+          err instanceof Error ? err.message : err,
+        );
+
+        await ctx.db
+          .update(bookings)
+          .set({
+            status: "failed",
+            payablErrorMessage: "Payment provider unreachable",
+            updatedAt: new Date(),
+          })
+          .where(eq(bookings.id, bookingId));
+
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message:
+            "Could not reach payment provider. Please try again in a moment.",
+        });
+      }
     }),
 
   checkOverlaps: publicProcedure
@@ -207,55 +298,6 @@ export const bookingsRouter = createTRPCRouter({
       return { capacity, booked, remaining: capacity - booked };
     }),
 
-  simulatePayment: publicProcedure
-    .input(z.object({ bookingId: z.string() }))
-    .mutation(async ({ ctx, input }) => {
-      if (COMING_SOON) {
-        throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "Bookings are not open yet.",
-        });
-      }
-
-      await expireStalePendingBookings(ctx.db);
-
-      const [booking] = await ctx.db
-        .select()
-        .from(bookings)
-        .where(eq(bookings.id, input.bookingId))
-        .limit(1);
-
-      if (!booking || booking.status !== "pending") {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Booking not found or not in pending status.",
-        });
-      }
-
-      const paymentReference = `SIM-${Date.now()}`;
-
-      const [updated] = await ctx.db
-        .update(bookings)
-        .set({
-          status: "confirmed",
-          // paymentReference,
-          updatedAt: new Date(),
-        })
-        .where(eq(bookings.id, input.bookingId))
-        .returning();
-
-      await sendBookingConfirmation({
-        email: updated.email,
-        fullName: updated.fullName,
-        bookingId: updated.id,
-        type: updated.type,
-        seats: updated.seats,
-        slotId: updated.slotId,
-      });
-
-      return { success: true, paymentReference };
-    }),
-
   adminList: protectedProcedure
     .input(
       z
@@ -291,12 +333,12 @@ export const bookingsRouter = createTRPCRouter({
 
 function getSlotConfig(slotId: string, type: "private-dining" | "workshop") {
   if (type === "private-dining") {
-    const result = getDiningSessionById(slotId);
+    const result = getDiningSessionById(slotId); // returns  { day: DiningDay; session: DiningSession; } | null
     if (!result) return null;
     return { capacity: result.session.capacity, price: result.session.price };
   }
 
-  const result = getWorkshopSlotById(slotId);
+  const result = getWorkshopSlotById(slotId); // returns  { day: WorkshopDay; slot: WorkshopSlot; } | null
   if (!result) return null;
   return { capacity: result.slot.capacity, price: result.slot.price };
 }

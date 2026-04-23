@@ -110,9 +110,18 @@ export function WorkshopBookingForm({
 
   const createBooking = api.bookings.create.useMutation({
     onSuccess: (data) => {
-      router.push(
-        `/workshops/${workshopSlug}/book/status?ref=${data.bookingId}`,
-      );
+      if (data.paymentUrl) {
+        // Redirect to payabl hosted payment page. Use replace so Back
+        // doesn't return to the form in a half-submitted state.
+        window.location.replace(data.paymentUrl);
+      } else {
+        // Fallback — shouldn't normally happen once payments are wired,
+        // but if we ever return a booking without a payment URL, at
+        // least get the user to the status page.
+        router.push(
+          `/workshops/${workshopSlug}/book/status?ref=${data.bookingId}`,
+        );
+      }
     },
     onError: (error) => {
       toast.error("Booking failed", { description: error.message });
@@ -126,6 +135,7 @@ export function WorkshopBookingForm({
       ...data,
       slotId,
       type: "workshop",
+      workshopSlug,
       browserSessionId: getBrowserSessionId(),
     });
   };
