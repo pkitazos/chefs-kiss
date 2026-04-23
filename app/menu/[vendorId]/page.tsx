@@ -39,18 +39,18 @@ function VendorMenu({ vendorId }: { vendorId: string }) {
       <div className="relative overflow-hidden bg-[#edede9]">
         <WavyPattern className="absolute inset-0 text-secondary/25" />
 
-        {/* Back button */}
-        <Link
-          href="/menu"
-          className="absolute top-4 left-4 z-20 flex items-center gap-1.5 bg-card/80 backdrop-blur-sm text-foreground text-sm font-medium px-3 py-1.5 rounded-full shadow-sm hover:bg-card transition-colors"
-        >
-          <IconArrowLeft size={15} />
-          <span>Vendors</span>
-        </Link>
-
         {/* Vendor name */}
         <div className="relative mx-auto max-w-4xl px-4 pb-10 pt-20 sm:px-6 md:pb-12 md:pt-24 lg:px-8">
           <AnimateIn>
+            {/* Back button */}
+            <Link
+              href="/menu"
+              className="mb-4 w-max flex items-center gap-1.5 bg-card/10 backdrop-blur-sm text-foreground text-sm font-medium px-3 py-1.5 rounded-full shadow-sm hover:bg-card transition-colors"
+            >
+              <IconArrowLeft size={15} />
+              <span>All Vendors</span>
+            </Link>
+
             <SectionLabel>{vendor.cuisine}</SectionLabel>
             <h1 className="mt-2 font-display text-3xl tracking-tight md:text-5xl">
               {vendor.name}
