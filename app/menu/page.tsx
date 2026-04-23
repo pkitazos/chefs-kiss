@@ -2,6 +2,7 @@
 
 import { AnimateIn } from "@/components/animate-in";
 import { DotsPattern } from "@/components/brand-pattern";
+import { ImagePlaceholder } from "@/components/image-placeholder";
 import { PageLayout } from "@/components/page-layout";
 import { buttonVariants } from "@/components/ui/button";
 import { SectionLabel } from "@/components/ui/section-label";
@@ -10,6 +11,7 @@ import {
   type VendorAccent,
   type VendorIcon,
 } from "@/lib/config/menu";
+import { getVendorImage } from "@/lib/images/vendor-images";
 import { cn } from "@/lib/utils";
 import {
   IconChevronRight,
@@ -126,30 +128,25 @@ export default function MenuPage() {
           {MENU_VENDORS.map((vendor) => {
             const a = ACCENT_CLASSES[vendor.accent];
             const Icon = ICON_MAP[vendor.icon];
+            const img = getVendorImage(vendor.id);
             return (
               <Link
                 key={vendor.id}
                 href={`/menu/${vendor.id}`}
                 className="group flex h-full flex-col overflow-hidden rounded-lg border transition-colors hover:border-primary/30 hover:bg-muted/50"
               >
-                <div
-                  className={cn(
-                    "flex aspect-video items-center justify-center",
-                    a.card,
-                  )}
-                >
-                  {vendor.image !== "" ? (
+                <ImagePlaceholder className={cn("aspect-video", a.card)}>
+                  {img ? (
                     <Image
                       className="size-full object-cover"
-                      src={vendor.image}
+                      src={img}
                       alt={""}
-                      height={180}
-                      width={320}
+                      placeholder="blur"
                     />
                   ) : (
                     <Icon size={48} className="text-white/40" />
                   )}
-                </div>
+                </ImagePlaceholder>
                 <div className="flex flex-1 flex-col gap-2 p-5">
                   <p
                     className={cn(

@@ -21,7 +21,6 @@ export type WorkshopConfig = {
   tagline: string;
   longDescription: string;
   duration: string;
-  image: string;
   maxSeatsPerBooking: number;
   days: WorkshopDay[];
 };
@@ -30,8 +29,14 @@ const DEFAULT_WORKSHOP_LOCATION = "TBC";
 const DEFAULT_MAX_SEATS_PER_BOOKING = 6;
 const DEFAULT_WORKSHOP_PRICE = " TBC";
 
-export const WORKSHOPS: WorkshopConfig[] = [
-  {
+function defineWorkshop<const Slug extends string>(
+  w: { slug: Slug } & Omit<WorkshopConfig, "slug">,
+) {
+  return w;
+}
+
+export const WORKSHOPS = [
+  defineWorkshop({
     slug: "boards-and-bordeaux",
     title: "Boards & Bordeaux",
     hostedBy: "C(h)rystal art",
@@ -40,7 +45,6 @@ export const WORKSHOPS: WorkshopConfig[] = [
     longDescription:
       "Boards & Bordeaux is a relaxed, creative workshop where participants enjoy wine, cheese, and delicious accompaniments while designing and painting their own plaster board. With simple techniques and guidance from the team, each guest leaves with a unique handmade piece of décor to take home.",
     duration: "1 hour",
-    image: "/workshops/boards-and-bordeaux.jpg",
     maxSeatsPerBooking: DEFAULT_MAX_SEATS_PER_BOOKING,
     days: [
       {
@@ -138,8 +142,8 @@ export const WORKSHOPS: WorkshopConfig[] = [
         ],
       },
     ],
-  },
-  {
+  }),
+  defineWorkshop({
     slug: "tote-dalin",
     title: "Tote Dalin",
     hostedBy: "Alina",
@@ -147,7 +151,6 @@ export const WORKSHOPS: WorkshopConfig[] = [
     longDescription:
       "The workshop introduces participants to basic textile painting techniques before guiding them through creating their own custom tote bag design. Beyond learning practical skills, they’ll enjoy a relaxed, creative experience, build confidence in their artistic expression, and leave with a unique, hand-painted tote bag they can proudly use.",
     duration: "2 hours",
-    image: "/workshops/tote-dalin.jpg",
     maxSeatsPerBooking: DEFAULT_MAX_SEATS_PER_BOOKING,
     days: [
       {
@@ -189,8 +192,8 @@ export const WORKSHOPS: WorkshopConfig[] = [
         ],
       },
     ],
-  },
-  {
+  }),
+  defineWorkshop({
     slug: "bead-and-sip",
     title: "Bead & Sip",
     hostedBy: "Lolsies",
@@ -199,7 +202,6 @@ export const WORKSHOPS: WorkshopConfig[] = [
     longDescription:
       "Your 20s are basically split between running marathons… or healing your inner child. We know which one we’re picking! Come hang with us at Chefs Kiss for a little sip & bead moment - where your tea is safe, your creativity runs wild, and everything gets a little more sparkly. Think: bag charms, phone charms, or anything you feel like charming. All ages welcome - leaving with a smiley is guaranteed.",
     duration: "1.5 hours",
-    image: "",
     maxSeatsPerBooking: DEFAULT_MAX_SEATS_PER_BOOKING,
     days: [
       {
@@ -241,8 +243,8 @@ export const WORKSHOPS: WorkshopConfig[] = [
         ],
       },
     ],
-  },
-  {
+  }),
+  defineWorkshop({
     slug: "pottery-and-wine",
     title: "Pottery & Wine",
     hostedBy: "Olga Askoti",
@@ -251,7 +253,6 @@ export const WORKSHOPS: WorkshopConfig[] = [
     longDescription:
       "These relaxed, hands‑on ceramic workshops invite participants to slow down, create, and enjoy the moment through pottery or painting experiences. Whether shaping a piece from scratch or painting a mug or bowl, participants explore creativity, colour, and form in a welcoming social setting. No prior experience is needed, and all pieces are glazed, kiln‑fired, food‑safe, and shipped directly to your door.",
     duration: "1.5 hours",
-    image: "/workshops/pottery-and-wine.jpg",
     maxSeatsPerBooking: DEFAULT_MAX_SEATS_PER_BOOKING,
     days: [
       {
@@ -311,8 +312,8 @@ export const WORKSHOPS: WorkshopConfig[] = [
         ],
       },
     ],
-  },
-  {
+  }),
+  defineWorkshop({
     slug: "whiskey-and-cigar-experience",
     title: "Whiskey & Cigar Experience",
     hostedBy: "Cavaway",
@@ -320,7 +321,6 @@ export const WORKSHOPS: WorkshopConfig[] = [
     longDescription:
       "Whiskey & Cigar is a relaxed tasting experience taking place at the Sundeck of Ayia Napa Marina, where participants can enjoy premium whiskey and cigars while exploring rich flavours, aromas, and pairing notes in a refined waterfront setting.",
     duration: "TBC",
-    image: "",
     maxSeatsPerBooking: 4,
     days: [
       {
@@ -332,8 +332,8 @@ export const WORKSHOPS: WorkshopConfig[] = [
         slots: [],
       },
     ],
-  },
-  {
+  }),
+  defineWorkshop({
     slug: "cocktail-making",
     title: "Cocktail Making",
     hostedBy: "Payabl.",
@@ -341,7 +341,6 @@ export const WORKSHOPS: WorkshopConfig[] = [
     longDescription:
       "Cocktail Making Workshop is an interactive experience at the Sundeck of Ayia Napa Marina, where participants learn how to craft refreshing cocktails, discover mixing techniques, and enjoy a fun, lively atmosphere by the water.",
     duration: "TBC",
-    image: "/workshops/cocktail-making.jpg",
     maxSeatsPerBooking: 4,
     days: [
       {
@@ -353,8 +352,8 @@ export const WORKSHOPS: WorkshopConfig[] = [
         slots: [],
       },
     ],
-  },
-  {
+  }),
+  defineWorkshop({
     slug: "koupepia-by-cocones",
     title: "Koupepia",
     hostedBy: "Cocones",
@@ -363,7 +362,6 @@ export const WORKSHOPS: WorkshopConfig[] = [
     longDescription:
       "Roll Your Own Koupepia by Lisko is a hands-on workshop where participants learn how to prepare and roll traditional koupepia with guidance from the Cokones Team. Guests can choose between pork mince and vegetarian/vegan sessions, enjoy an authentic culinary experience, and discover the flavours of a beloved Cypriot recipe in a fun and interactive setting.",
     duration: "45 minutes",
-    image: "",
     maxSeatsPerBooking: 4,
     days: [
       {
@@ -420,8 +418,8 @@ export const WORKSHOPS: WorkshopConfig[] = [
         ],
       },
     ],
-  },
-  {
+  }),
+  defineWorkshop({
     slug: "plates-and-paints",
     title: "Plates & Paints",
     hostedBy: "Creative Sips",
@@ -429,7 +427,6 @@ export const WORKSHOPS: WorkshopConfig[] = [
     longDescription:
       "Plates & Paints is a relaxed 45-minute creative workshop where participants can enjoy a glass of fine wine while designing and painting their own plate. It is a fun and expressive experience designed for all skill levels, with all materials provided and no previous experience needed.",
     duration: "45 minutes",
-    image: "/workshops/plates-and-paints.jpg",
     maxSeatsPerBooking: 4,
     days: [
       {
@@ -459,8 +456,10 @@ export const WORKSHOPS: WorkshopConfig[] = [
         ],
       },
     ],
-  },
+  }),
 ];
+
+export type WorkshopSlug = (typeof WORKSHOPS)[number]["slug"];
 
 export function getWorkshopBySlug(slug: string) {
   return WORKSHOPS.find((w) => w.slug === slug) ?? null;

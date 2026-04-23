@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { AnimateIn } from "@/components/animate-in";
 import { WavyPattern } from "@/components/brand-pattern";
+import { ImagePlaceholder } from "@/components/image-placeholder";
 import { PageLayout } from "@/components/page-layout";
 import { buttonVariants } from "@/components/ui/button";
 import { SectionLabel } from "@/components/ui/section-label";
@@ -12,6 +13,7 @@ import {
   type WorkshopConfig,
   WORKSHOPS,
 } from "@/lib/config/workshops";
+import { getWorkshopImage } from "@/lib/images/workshop-images";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -48,23 +50,24 @@ export default function WorkshopsPage() {
       <PageLayout className="max-w-6xl">
         <AnimateIn>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {WORKSHOPS.map((workshop, i) => (
+            {WORKSHOPS.map((workshop, i) => {
+              const img = getWorkshopImage(workshop.slug);
+              return (
               <AnimateIn
                 key={workshop.slug}
                 transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.1 }}
               >
                 <div className="flex h-full flex-col overflow-hidden rounded-lg border transition-colors hover:border-primary/30 hover:bg-muted/50">
-                  <div className="flex aspect-video h-60 items-center justify-center bg-pink-600/30">
-                    {workshop.image !== "" && (
+                  <ImagePlaceholder className="aspect-video h-60 bg-pink-600/30">
+                    {img && (
                       <Image
                         className="size-full object-cover"
-                        src={workshop.image}
+                        src={img}
                         alt={""}
-                        height={180}
-                        width={320}
+                        placeholder="blur"
                       />
                     )}
-                  </div>
+                  </ImagePlaceholder>
                   <div className="flex flex-1 flex-col gap-3 p-5">
                     <div>
                       <h2 className="text-lg font-display font-semibold">
@@ -91,7 +94,8 @@ export default function WorkshopsPage() {
                   </div>
                 </div>
               </AnimateIn>
-            ))}
+              );
+            })}
           </div>
         </AnimateIn>
       </PageLayout>
