@@ -1,15 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { eventDateFormat } from "@/lib/config/event";
-import { DINING_DAYS, DiningDay } from "@/lib/config/private-dining";
-import { COMING_SOON } from "@/lib/config/mode";
+import { DINING_DAYS } from "@/lib/config/private-dining";
 import { PageLayout } from "@/components/page-layout";
 import { SectionLabel } from "@/components/ui/section-label";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { AnimateIn } from "@/components/animate-in";
 import { DashPattern } from "@/components/brand-pattern";
-import { IconToolsKitchen2 } from "@tabler/icons-react";
+import { DiningDaySlot } from "./dining-day-slot";
 
 export const metadata: Metadata = {
   title: "Private Dining | Chef's Kiss Festival",
@@ -64,57 +59,5 @@ export default function PrivateDiningPage() {
         </div>
       </PageLayout>
     </>
-  );
-}
-
-function DiningDaySlot({ day }: { day: DiningDay }) {
-  return (
-    <div className="space-y-4">
-      {day.sessions.map((session) => (
-        <div
-          key={session.id}
-          className="flex flex-col gap-4 rounded-lg border p-5 transition-colors hover:border-primary/30 hover:bg-muted/50 sm:flex-row sm:items-center sm:justify-between"
-        >
-          <div className="space-y-1">
-            <h3 className="font-display text-lg font-semibold">
-              {eventDateFormat.dayName(day.date)}
-            </h3>
-            <p className="text-muted-foreground text-sm">
-              {session.time} &middot; {session.location}
-            </p>
-          </div>
-          <div className="flex shrink-0 items-center gap-4">
-            {!COMING_SOON && (
-              <span className="text-sm font-semibold text-primary">
-                &euro;{session.price}
-                <span className="text-muted-foreground font-normal">
-                  /person
-                </span>
-              </span>
-            )}
-            {COMING_SOON ? (
-              <button
-                type="button"
-                disabled
-                className={cn(
-                  buttonVariants({ size: "cta" }),
-                  "cursor-not-allowed opacity-60",
-                )}
-              >
-                Reservations opening soon…
-              </button>
-            ) : (
-              <Link
-                href={`/private-dining/book?session=${session.id}`}
-                className={cn(buttonVariants({ size: "cta" }))}
-              >
-                <IconToolsKitchen2 />
-                Reserve
-              </Link>
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
   );
 }
