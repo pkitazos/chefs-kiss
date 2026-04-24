@@ -1,11 +1,14 @@
 import { z } from "zod";
 
-export function createBookingFormSchema(maxSeats: number) {
+export function createBookingFormSchema(maxSeats: number, minSeats = 1) {
   return z.object({
     fullName: z.string().min(1, "Full name is required"),
     email: z.email("Invalid email address"),
     phone: z.string().min(1, "Phone number is required"),
-    seats: z.coerce.number<number>().int().min(1).max(maxSeats),
+    seats: z.coerce.number<number>().int().min(minSeats).max(maxSeats),
+    agreeToTerms: z.boolean().refine((v) => v === true, {
+      message: "You must agree to the Terms & Conditions and Privacy Policy",
+    }),
   });
 }
 
