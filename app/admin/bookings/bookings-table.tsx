@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { IconLoader2 } from "@tabler/icons-react";
 import { api } from "@/lib/trpc/client";
+import { PaymentBadge } from "./payment-badge";
 
 const statusVariants = {
   pending: "secondary",
@@ -106,6 +107,7 @@ export function BookingsTable() {
                 <TableHead>Seats</TableHead>
                 <TableHead>Slot</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Payment</TableHead>
                 <TableHead>Amount</TableHead>
                 <TableHead>Created</TableHead>
               </TableRow>
@@ -133,6 +135,12 @@ export function BookingsTable() {
                     <Badge variant={statusVariants[booking.status]}>
                       {booking.status}
                     </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <PaymentBadge
+                      paymentMethod={booking.paymentMethod}
+                      paidAt={booking.paidAt}
+                    />
                   </TableCell>
                   <TableCell>
                     &euro;{(booking.totalAmount / 100).toFixed(2)}

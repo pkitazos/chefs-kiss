@@ -64,6 +64,13 @@
       "when": 1777029001626,
       "tag": "0008_create_waitlist_entries",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1777038865461,
+      "tag": "0009_add_payment_method",
+      "breakpoints": true
     }
   ]
 }

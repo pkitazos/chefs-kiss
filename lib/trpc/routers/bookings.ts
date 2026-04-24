@@ -1,10 +1,11 @@
 import { TRPCError } from "@trpc/server";
-import { and, count, desc, eq, inArray, lt, sql } from "drizzle-orm";
+import { and, count, desc, eq, inArray, sql } from "drizzle-orm";
 import { z } from "zod";
 
 import { COMING_SOON } from "@/lib/config/mode";
 import { getDiningSessionById } from "@/lib/config/private-dining";
 import { getWorkshopSlotById } from "@/lib/config/workshops";
+import { expireStalePendingBookings } from "@/lib/db/expire-stale-bookings";
 import { bookings, events } from "@/lib/db/schema";
 import {
   buildNotificationUrl,
@@ -298,6 +299,45 @@ export const bookingsRouter = createTRPCRouter({
       return { capacity, booked, remaining: capacity - booked };
     }),
 
+  markPaid: protectedProcedure
+    .input(z.object({ id: z.string().min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      const [booking] = await ctx.db
+        .select()
+        .from(bookings)
+        .where(eq(bookings.id, input.id))
+        .limit(1);
+
+      if (!booking) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Booking not found.",
+        });
+      }
+
+      if (booking.paymentMethod !== "in-person") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Only in-person bookings can be marked as paid.",
+        });
+      }
+
+      if (booking.paidAt !== null) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Booking is already marked as paid.",
+        });
+      }
+
+      const [updated] = await ctx.db
+        .update(bookings)
+        .set({ paidAt: new Date(), updatedAt: new Date() })
+        .where(eq(bookings.id, input.id))
+        .returning();
+
+      return updated;
+    }),
+
   adminList: protectedProcedure
     .input(
       z
@@ -341,14 +381,4 @@ function getSlotConfig(slotId: string, type: "private-dining" | "workshop") {
   const result = getWorkshopSlotById(slotId); // returns  { day: WorkshopDay; slot: WorkshopSlot; } | null
   if (!result) return null;
   return { capacity: result.slot.capacity, price: result.slot.price };
-}
-
-/** Expire all stale pending bookings (older than 15 min) in one UPDATE. */
-async function expireStalePendingBookings(db: typeof import("@/lib/db").db) {
-  await db
-    .update(bookings)
-    .set({ status: "expired", updatedAt: new Date() })
-    .where(
-      and(eq(bookings.status, "pending"), lt(bookings.expiresAt, new Date())),
-    );
 }
