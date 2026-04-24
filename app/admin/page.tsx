@@ -17,6 +17,7 @@ import {
   IconMapPin,
   IconUsers,
   IconTicket,
+  IconClockPause,
 } from "@tabler/icons-react";
 
 function formatDate(date: Date) {
@@ -36,8 +37,19 @@ export default function AdminPage() {
     api.events.getAllEvents.useQuery();
   const { data: allBookings, isLoading: bookingsLoading } =
     api.bookings.adminList.useQuery({});
+  const { data: slotSummary, isLoading: slotsLoading } =
+    api.slots.summary.useQuery();
 
-  const isLoading = eventLoading || eventsLoading || bookingsLoading;
+  const isLoading =
+    eventLoading || eventsLoading || bookingsLoading || slotsLoading;
+
+  const totalWaiting = (slotSummary ?? []).reduce(
+    (sum, s) => sum + s.waitlist,
+    0,
+  );
+  const slotsWithWaitlist = (slotSummary ?? []).filter(
+    (s) => s.waitlist > 0,
+  ).length;
 
   if (isLoading) {
     return (
@@ -173,6 +185,33 @@ export default function AdminPage() {
                   </div>
                 </div>
               )}
+            </div>
+            <div className="flex flex-col">
+              <div className="flex justify-start items-center gap-2">
+                <h3 className="font-medium my-4">Slots & Waitlist</h3>
+                <Link href="/admin/slots">
+                  <Button variant="link">
+                    <IconClockPause className="mr-2 size-4" />
+                    Manage Slots
+                  </Button>
+                </Link>
+              </div>
+              <div className="mb-4 grid grid-cols-4 gap-4">
+                <div className="rounded-lg bg-background p-3 text-center">
+                  <p className="text-2xl font-bold">{totalWaiting}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Total Waiting
+                  </p>
+                </div>
+                <div className="rounded-lg bg-background p-3 text-center">
+                  <p className="text-2xl font-bold text-amber-600">
+                    {slotsWithWaitlist}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Slots with Waitlist
+                  </p>
+                </div>
+              </div>
             </div>
             <div className="flex flex-col">
               <div className="flex justify-start items-center gap-2">
