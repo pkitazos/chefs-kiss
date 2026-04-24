@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IconLoader2, IconShoppingCart } from "@tabler/icons-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -9,6 +10,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Field,
   FieldError,
@@ -41,6 +43,13 @@ function getBrowserSessionId() {
   return id;
 }
 
+function getSeatPairOptions(maxSeats: number): number[] {
+  return Array.from(
+    { length: Math.floor(maxSeats / 2) },
+    (_, i) => (i + 1) * 2,
+  );
+}
+
 interface PrivateDiningBookingFormProps {
   sessionId: string;
   sessionTitle: string;
@@ -65,7 +74,7 @@ export function PrivateDiningBookingForm({
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const schema = createBookingFormSchema(MAX_SEATS);
+  const schema = createBookingFormSchema(MAX_SEATS, 2);
   const {
     register,
     control,
@@ -78,12 +87,15 @@ export function PrivateDiningBookingForm({
       fullName: "",
       email: "",
       phone: "",
-      seats: 1,
+      seats: 2,
+      agreeToTerms: false,
     },
   });
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const seats = watch("seats");
+
+  const agreeToTerms = watch("agreeToTerms");
 
   const availability = api.bookings.getSlotAvailability.useQuery({
     slotId: sessionId,
@@ -106,7 +118,10 @@ export function PrivateDiningBookingForm({
   const onSubmit = (data: BookingFormData) => {
     setIsSubmitting(true);
     createBooking.mutate({
-      ...data,
+      fullName: data.fullName,
+      email: data.email,
+      phone: data.phone,
+      seats: data.seats,
       slotId: sessionId,
       type: "private-dining",
       browserSessionId: getBrowserSessionId(),
@@ -220,12 +235,9 @@ export function PrivateDiningBookingForm({
                           <SelectValue placeholder="Select seats" />
                         </SelectTrigger>
                         <SelectContent>
-                          {Array.from(
-                            { length: maxBookable },
-                            (_, i) => i + 1,
-                          ).map((n) => (
+                          {getSeatPairOptions(maxBookable).map((n) => (
                             <SelectItem key={n} value={String(n)}>
-                              {n} {n === 1 ? "seat" : "seats"}
+                              {n} seats
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -240,28 +252,89 @@ export function PrivateDiningBookingForm({
             </CardContent>
           </Card>
 
-          <div className="mt-6 flex items-center justify-between">
-            <p className="text-sm font-semibold">
-              Total: &euro;{price * (seats || 1)}
-            </p>
-            <Button
-              type="submit"
-              size="cta-md"
-              disabled={isSubmitting || remaining === 0}
-            >
-              {isSubmitting ? (
-                <>
-                  <IconLoader2 className="animate-spin" />
-                  Reserving…
-                </>
-              ) : (
-                <>
-                  <IconShoppingCart />
-                  {/*<IconCreditCard />*/}
-                  Pay
-                </>
+          <div className="mt-6 space-y-4">
+            <Field>
+              <div className="flex flex-row items-start gap-3">
+                <Controller
+                  control={control}
+                  name="agreeToTerms"
+                  render={({ field }) => (
+                    <Checkbox
+                      id="agreeToTerms"
+                      checked={field.value}
+                      onCheckedChange={(checked) =>
+                        field.onChange(checked === true)
+                      }
+                      aria-invalid={!!errors.agreeToTerms}
+                      className="mt-0.5"
+                    />
+                  )}
+                />
+                <FieldLabel
+                  htmlFor="agreeToTerms"
+                  className="text-sm font-normal leading-snug"
+                >
+                  I agree to the{" "}
+                  <Link href="/toc" className="underline underline-offset-2">
+                    Terms &amp; Conditions
+                  </Link>{" "}
+                  and{" "}
+                  <Link
+                    href="/privacy"
+                    className="underline underline-offset-2"
+                  >
+                    Privacy Policy
+                  </Link>
+                  .
+                </FieldLabel>
+              </div>
+              {errors.agreeToTerms && (
+                <FieldError>{errors.agreeToTerms.message}</FieldError>
               )}
-            </Button>
+            </Field>
+
+            <p className="text-muted-foreground text-xs leading-relaxed">
+              By completing this booking you confirm you have read the{" "}
+              <Link
+                href="/refund-policy"
+                className="underline underline-offset-2"
+              >
+                Refund &amp; Cancellation Policy
+              </Link>{" "}
+              and understand that photography may take place at the event. If
+              you do not wish to appear in promotional material, contact us at{" "}
+              <a
+                href="mailto:info@chefskiss.com.cy"
+                className="underline underline-offset-2"
+              >
+                info@chefskiss.com.cy
+              </a>
+              .
+            </p>
+
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold">
+                Total: &euro;{price * (seats || 2)}
+              </p>
+              <Button
+                type="submit"
+                size="cta-md"
+                disabled={isSubmitting || remaining === 0 || !agreeToTerms}
+              >
+                {isSubmitting ? (
+                  <>
+                    <IconLoader2 className="animate-spin" />
+                    Reserving…
+                  </>
+                ) : (
+                  <>
+                    <IconShoppingCart />
+                    {/*<IconCreditCard />*/}
+                    Pay
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
         </form>
       ) : (
