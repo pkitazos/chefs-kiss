@@ -21,6 +21,11 @@ export const bookingTypeEnum = pgEnum("booking_type", [
   "workshop",
 ]);
 
+export const paymentMethodEnum = pgEnum("payment_method", [
+  "online",
+  "in-person",
+]);
+
 export const bookings = pgTable(
   "bookings",
   {
@@ -34,6 +39,9 @@ export const bookings = pgTable(
     phone: text("phone").notNull(),
     seats: integer("seats").notNull(),
     totalAmount: integer("total_amount").notNull(),
+    paymentMethod: paymentMethodEnum("payment_method")
+      .notNull()
+      .default("online"),
 
     browserSessionId: text("browser_session_id"),
 

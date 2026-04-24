@@ -79,6 +79,8 @@ export const ROUTES = {
   "admin/login": true, // Admin login page
   "admin/applications": true, // Vendor applications management
   "admin/bookings": true, // Booking management
+  "admin/slots": true, // Slot roster + waitlist management
+  "admin/workshops": true, // Per-workshop waitlist rollup
   "admin/registrations": true, // Workshop registrations management
   "admin/analytics": true, // Event analytics
 } as const;
@@ -110,6 +112,8 @@ export const POST_EVENT_CONFIG = {
   "admin/login": true,
   "admin/applications": true,
   "admin/bookings": true,
+  "admin/slots": true,
+  "admin/workshops": true,
   "admin/registrations": true,
   "admin/analytics": true,
 };
@@ -137,6 +141,8 @@ export const HIBERNATION_CONFIG = {
   "admin/login": true,
   "admin/applications": true,
   "admin/bookings": true,
+  "admin/slots": true,
+  "admin/workshops": true,
   "admin/registrations": true,
   "admin/analytics": true,
 };
@@ -164,6 +170,8 @@ export const VENDOR_APPLICATIONS_CONFIG = {
   "admin/login": true,
   "admin/applications": true,
   "admin/bookings": true,
+  "admin/slots": true,
+  "admin/workshops": true,
   "admin/registrations": true,
   "admin/analytics": true,
 };
@@ -191,6 +199,8 @@ export const VENDORS_LIVE_CONFIG = {
   "admin/login": true,
   "admin/applications": true,
   "admin/bookings": true,
+  "admin/slots": true,
+  "admin/workshops": true,
   "admin/registrations": true,
   "admin/analytics": true,
 };
@@ -218,6 +228,8 @@ export const WORKSHOPS_LIVE_CONFIG = {
   "admin/login": true,
   "admin/applications": true,
   "admin/bookings": true,
+  "admin/slots": true,
+  "admin/workshops": true,
   "admin/registrations": true,
   "admin/analytics": true,
 };
@@ -245,6 +257,8 @@ export const FULL_EVENT_CONFIG = {
   "admin/login": true,
   "admin/applications": true,
   "admin/bookings": true,
+  "admin/slots": true,
+  "admin/workshops": true,
   "admin/registrations": true,
   "admin/analytics": true,
 };
