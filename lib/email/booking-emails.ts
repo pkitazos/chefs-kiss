@@ -14,10 +14,10 @@ type SendBookingConfirmationParams = {
   slotId: string;
 };
 
-function resolveSlotDetails(
+export function resolveSlotLabel(
   slotId: string,
   type: "private-dining" | "workshop",
-): { label: string; price: number } {
+): string {
   if (type === "private-dining") {
     const result = getDiningSessionById(slotId);
 
@@ -26,10 +26,7 @@ function resolveSlotDetails(
         `Private dining session not found for slot ID: ${slotId}`,
       );
 
-    return {
-      label: `${result.session.title} - ${eventDateFormat.dayName(result.day.date)} at ${result.session.time}`,
-      price: result.session.price,
-    };
+    return `${result.session.title} - ${eventDateFormat.dayName(result.day.date)} at ${result.session.time}`;
   }
 
   const result = getWorkshopSlotById(slotId);
@@ -37,10 +34,19 @@ function resolveSlotDetails(
   if (!result)
     throw new Error(`Workshop slot not found for slot ID: ${slotId}`);
 
-  return {
-    label: `${result.workshop.title} - ${eventDateFormat.dayName(result.day.date)} at ${result.slot.time}`,
-    price: result.slot.price,
-  };
+  return `${result.workshop.title} - ${eventDateFormat.dayName(result.day.date)} at ${result.slot.time}`;
+}
+
+function resolveSlotDetails(
+  slotId: string,
+  type: "private-dining" | "workshop",
+): { label: string; price: number } {
+  const label = resolveSlotLabel(slotId, type);
+  const price =
+    type === "private-dining"
+      ? getDiningSessionById(slotId)!.session.price
+      : getWorkshopSlotById(slotId)!.slot.price;
+  return { label, price };
 }
 
 export async function sendBookingConfirmation({

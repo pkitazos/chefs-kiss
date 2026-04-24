@@ -5,16 +5,14 @@ import type { WorkshopConfig } from "@/lib/config/workshops";
 import { api } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils";
 import {
+  IconHourglass,
   IconLoader2,
-  IconMailFilled,
   IconMapPin,
   IconTools,
 } from "@tabler/icons-react";
 import { format } from "date-fns";
 import Link from "next/link";
 import { useState } from "react";
-
-const WAITLIST_MAILTO = "mailto:info@chefskiss.com.cy?subject=Waitlist%20request";
 
 export function WorkshopSlots({ workshop }: { workshop: WorkshopConfig }) {
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
@@ -121,10 +119,10 @@ function SlotRow({
         </Button>
       ) : isFullyBooked ? (
         <Link
-          href={WAITLIST_MAILTO}
+          href={`/workshops/${workshopSlug}/waitlist?slot=${slotId}`}
           className={cn(buttonVariants({ size: "cta", variant: "outline" }))}
         >
-          <IconMailFilled />
+          <IconHourglass />
           Join the Waitlist
         </Link>
       ) : (

@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import {
+  IconHourglass,
   IconLoader2,
-  IconMailFilled,
   IconToolsKitchen2,
 } from "@tabler/icons-react";
 
@@ -13,8 +13,6 @@ import { COMING_SOON } from "@/lib/config/mode";
 import type { DiningDay, DiningSession } from "@/lib/config/private-dining";
 import { api } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils";
-
-const WAITLIST_MAILTO = "mailto:info@chefskiss.com.cy?subject=Waitlist%20request";
 
 export function DiningDaySlot({ day }: { day: DiningDay }) {
   return (
@@ -90,10 +88,10 @@ function SessionActionButton({ sessionId }: { sessionId: string }) {
   if (isFullyBooked) {
     return (
       <Link
-        href={WAITLIST_MAILTO}
+        href={`/private-dining/waitlist?session=${sessionId}`}
         className={cn(buttonVariants({ size: "cta", variant: "outline" }))}
       >
-        <IconMailFilled />
+        <IconHourglass />
         Join the Waitlist
       </Link>
     );

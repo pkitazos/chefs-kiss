@@ -6,6 +6,7 @@ import { getDiningSessionById } from "@/lib/config/private-dining";
 import { getWorkshopSlotById } from "@/lib/config/workshops";
 import { isUniqueViolation } from "@/lib/db/errors";
 import { events, waitlistEntries } from "@/lib/db/schema";
+import { sendWaitlistConfirmation } from "@/lib/email/waitlist-emails";
 import { generateId } from "@/lib/utils/construct-id";
 import { type Event } from "@/lib/validations/event";
 import { createWaitlistEntrySchema } from "@/lib/validations/waitlist";
@@ -72,6 +73,23 @@ export const waitlistRouter = createTRPCRouter({
           });
         }
         throw err;
+      }
+
+      try {
+        await sendWaitlistConfirmation({
+          email: input.email,
+          fullName: input.fullName,
+          waitlistId: id,
+          type: input.type,
+          partySize: input.partySize,
+          slotId: input.slotId,
+        });
+      } catch (err) {
+        console.error("Failed to send waitlist confirmation email:", {
+          waitlistId: id,
+          email: input.email,
+          err,
+        });
       }
 
       return { id };
