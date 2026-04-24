@@ -1,13 +1,20 @@
 "use client";
 
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import type { WorkshopConfig } from "@/lib/config/workshops";
 import { api } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils";
-import { IconMapPin, IconTools } from "@tabler/icons-react";
+import {
+  IconLoader2,
+  IconMailFilled,
+  IconMapPin,
+  IconTools,
+} from "@tabler/icons-react";
 import { format } from "date-fns";
 import Link from "next/link";
 import { useState } from "react";
+
+const WAITLIST_MAILTO = "mailto:info@chefskiss.com.cy?subject=Waitlist%20request";
 
 export function WorkshopSlots({ workshop }: { workshop: WorkshopConfig }) {
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
@@ -79,7 +86,8 @@ function SlotRow({
   });
 
   const remaining = availability.data?.remaining;
-  const isFullyBooked = remaining !== undefined && remaining <= 0;
+  const isLoading = remaining === undefined;
+  const isFullyBooked = !isLoading && remaining <= 0;
 
   return (
     <div className="flex flex-col gap-3 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between">
@@ -98,7 +106,7 @@ function SlotRow({
         {shortDescription && (
           <p className="text-muted-foreground text-sm">{shortDescription}</p>
         )}
-        {remaining !== undefined && (
+        {!isLoading && (
           <p className="text-muted-foreground text-xs">
             {isFullyBooked
               ? "Fully booked"
@@ -106,8 +114,19 @@ function SlotRow({
           </p>
         )}
       </div>
-      {isFullyBooked ? (
-        <span className="text-muted-foreground text-sm">Unavailable</span>
+      {isLoading ? (
+        <Button size="cta" disabled>
+          <IconLoader2 className="animate-spin" />
+          Checking availability…
+        </Button>
+      ) : isFullyBooked ? (
+        <Link
+          href={WAITLIST_MAILTO}
+          className={cn(buttonVariants({ size: "cta", variant: "outline" }))}
+        >
+          <IconMailFilled />
+          Join the Waitlist
+        </Link>
       ) : (
         <Link
           href={`/workshops/${workshopSlug}/book?slot=${slotId}`}
