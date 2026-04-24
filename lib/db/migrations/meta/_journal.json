@@ -57,6 +57,13 @@
       "when": 1776962539742,
       "tag": "0007_add_payabl_fields_to_bookings",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1777029001626,
+      "tag": "0008_create_waitlist_entries",
+      "breakpoints": true
     }
   ]
 }
