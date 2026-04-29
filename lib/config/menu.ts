@@ -479,7 +479,7 @@ export const MENU_VENDORS = [
     menu: [],
   }),
   defineVendor({
-    id: "big-bad-woolf",
+    id: "big-bad-wolf",
     name: "Big Bad Woolf",
     cuisine: "Burgers",
     accent: "amber",
@@ -551,7 +551,7 @@ export const MENU_VENDORS = [
     menu: [],
   }),
   defineVendor({
-    id: "meraki-taste",
+    id: "meraki-tastes",
     name: "Meraki Taste",
     cuisine: "Greek",
     accent: "amber",
