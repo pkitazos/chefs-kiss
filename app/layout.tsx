@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { Providers } from "@/components/providers";
-import { SiteFooter } from "@/components/site-footer";
+import { SiteFooterSlot } from "@/components/site-footer-slot";
 import { CURRENT_EVENT, eventDateFormat } from "@/lib/config/event";
 import { manrope, ppNeueMachina } from "@/lib/fonts";
 import "./globals.css";
@@ -22,7 +22,7 @@ export default function RootLayout({
       <body className="antialiased">
         <Providers>
           {children}
-          <SiteFooter />
+          <SiteFooterSlot />
         </Providers>
       </body>
     </html>

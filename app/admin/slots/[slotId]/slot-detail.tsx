@@ -23,19 +23,13 @@ import { IconArrowLeft, IconLoader2, IconMapPin } from "@tabler/icons-react";
 
 import { PaymentBadge } from "../../bookings/payment-badge";
 import { BookingRowActions } from "../booking-row-actions";
-import { WaitlistRowActions } from "../waitlist-row-actions";
+import { WaitlistTable } from "../waitlist-table";
 
 const statusVariants = {
   pending: "secondary",
   confirmed: "default",
   failed: "destructive",
   expired: "outline",
-} as const;
-
-const waitlistStatusVariants = {
-  waiting: "secondary",
-  promoted: "default",
-  cancelled: "outline",
 } as const;
 
 function formatDate(date: Date) {
@@ -45,29 +39,18 @@ function formatDate(date: Date) {
   }).format(new Date(date));
 }
 
-interface SlotDetailProps {
+type SlotDetailProps = {
   slotId: string;
-  type: "private-dining" | "workshop";
   title: string;
-  workshopSlug?: string;
   date: string;
   time: string;
   location: string;
   capacity: number;
   price: number;
-}
+} & ({ type: "private-dining" } | { type: "workshop"; workshopSlug: string });
 
-export function SlotDetail({
-  slotId,
-  type,
-  title,
-  workshopSlug,
-  date,
-  time,
-  location,
-  capacity,
-  price,
-}: SlotDetailProps) {
+export function SlotDetail(props: SlotDetailProps) {
+  const { slotId, type, title, date, time, location, capacity, price } = props;
   const { data, isLoading, error } = api.slots.bySlot.useQuery({ slotId });
 
   const parsedDate = new Date(date);
@@ -82,11 +65,11 @@ export function SlotDetail({
           <IconArrowLeft className="size-4" />
           All slots
         </Link>
-        {workshopSlug && (
+        {props.type === "workshop" && (
           <>
             <span className="text-muted-foreground">·</span>
             <Link
-              href={`/admin/workshops/${workshopSlug}`}
+              href={`/admin/workshops/${props.workshopSlug}`}
               className="text-sm text-muted-foreground hover:text-foreground"
             >
               Workshop rollup
@@ -138,8 +121,8 @@ export function SlotDetail({
             <div className="flex items-baseline justify-between">
               <h2 className="text-lg font-semibold">Bookings</h2>
               <p className="text-xs text-muted-foreground">
-                {data.bookings.length} total · {data.bookedSeats} seats in
-                confirmed/pending
+                {data.bookings.length} total · {data.bookedSeats} seats held
+                against capacity
               </p>
             </div>
             {data.bookings.length > 0 ? (
@@ -213,69 +196,14 @@ export function SlotDetail({
             <div className="flex items-baseline justify-between">
               <h2 className="text-lg font-semibold">Waitlist queue</h2>
               <p className="text-xs text-muted-foreground">
-                {data.waitlistCount} waiting · FIFO ordered (oldest first)
+                {data.waitlistCount} waiting
               </p>
             </div>
-            {data.waitlist.length > 0 ? (
-              <div className="rounded-lg border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-16">Position</TableHead>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Phone</TableHead>
-                      <TableHead>Party size</TableHead>
-                      <TableHead>Submitted</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead className="w-12" />
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {data.waitlist.map((entry, idx) => (
-                      <TableRow key={entry.id}>
-                        <TableCell className="font-mono text-xs">
-                          #{idx + 1}
-                        </TableCell>
-                        <TableCell>{entry.fullName}</TableCell>
-                        <TableCell className="text-muted-foreground">
-                          {entry.email}
-                        </TableCell>
-                        <TableCell className="text-muted-foreground">
-                          {entry.phone}
-                        </TableCell>
-                        <TableCell>{entry.partySize}</TableCell>
-                        <TableCell className="text-muted-foreground text-xs">
-                          {formatDate(entry.createdAt)}
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant={waitlistStatusVariants[entry.status]}>
-                            {entry.status}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <WaitlistRowActions
-                            entryId={entry.id}
-                            email={entry.email}
-                            fullName={entry.fullName}
-                            partySize={entry.partySize}
-                            capacity={capacity}
-                            bookedSeats={data.bookedSeats}
-                            status={entry.status}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            ) : (
-              <div className="rounded-lg border bg-muted/30 p-6 text-center">
-                <p className="text-sm text-muted-foreground">
-                  No waitlist entries for this slot.
-                </p>
-              </div>
-            )}
+            <WaitlistTable
+              entries={data.waitlist}
+              capacity={capacity}
+              bookedSeats={data.bookedSeats}
+            />
           </section>
         </>
       ) : null}
