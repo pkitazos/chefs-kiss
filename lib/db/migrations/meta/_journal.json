@@ -71,6 +71,13 @@
       "when": 1777038865461,
       "tag": "0009_add_payment_method",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1777477090240,
+      "tag": "0010_add_check_constraint_to_slot_ids",
+      "breakpoints": true
     }
   ]
 }

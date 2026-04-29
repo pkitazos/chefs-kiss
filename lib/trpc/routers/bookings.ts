@@ -12,9 +12,12 @@ import {
   buildReturnUrl,
   initPayablTransaction,
 } from "@/lib/payments/payabl";
-import { generateId } from "@/lib/utils/construct-id";
+import {
+  buildBookingOrWaitlistRef,
+  categoryFromSlotId,
+  refLikePatternForCategory,
+} from "@/lib/ids";
 import { createBookingSchema } from "@/lib/validations/booking";
-import { type Event } from "@/lib/validations/event";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../init";
 
 export const bookingsRouter = createTRPCRouter({
@@ -74,19 +77,34 @@ export const bookingsRouter = createTRPCRouter({
         });
       }
 
-      // Generate booking ID
-      const eventForId: Event = {
-        date: { start: activeEvent.startDate, end: activeEvent.endDate },
-        location: activeEvent.location,
-        locationCode: activeEvent.locationCode,
-      };
+      const category = categoryFromSlotId(input.slotId);
+      if (!category) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Could not derive category from slot ID.",
+        });
+      }
+
+      const year = activeEvent.startDate.getFullYear();
+      const refPattern = refLikePatternForCategory(year, "BK", category);
 
       const [countResult] = await ctx.db
         .select({ count: count() })
         .from(bookings)
-        .where(eq(bookings.eventId, activeEvent.id));
-      const bookingNumber = (countResult?.count ?? 0) + 1;
-      const bookingId = generateId(eventForId, bookingNumber, "BK");
+        .where(
+          and(
+            eq(bookings.eventId, activeEvent.id),
+            sql`${bookings.id} LIKE ${refPattern}`,
+          ),
+        );
+      const sequence = (countResult?.count ?? 0) + 1;
+      const bookingId = buildBookingOrWaitlistRef({
+        year,
+        type: "BK",
+        category,
+        sequence,
+        locationCode: activeEvent.locationCode,
+      });
 
       const totalAmount = slotConfig.price * input.seats * 100; // cents
 

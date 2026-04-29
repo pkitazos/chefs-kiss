@@ -2,6 +2,7 @@ import { CURRENT_EVENT } from "./event";
 
 export type WorkshopSlot = {
   id: string;
+  variantId?: string;
   time: string;
   location: string;
   capacity: number;
@@ -16,6 +17,7 @@ export type WorkshopDay = {
 
 export type WorkshopConfig = {
   slug: string;
+  shortId: string;
   title: string;
   hostedBy: string;
   tagline: string;
@@ -29,8 +31,14 @@ const DEFAULT_WORKSHOP_LOCATION = "TBC";
 const DEFAULT_MAX_SEATS_PER_BOOKING = 6;
 const DEFAULT_WORKSHOP_PRICE = " TBC";
 
-function defineWorkshop<const Slug extends string>(
-  w: { slug: Slug } & Omit<WorkshopConfig, "slug">,
+function defineWorkshop<
+  const Slug extends string,
+  const ShortId extends string,
+>(
+  w: { slug: Slug; shortId: ShortId } & Omit<
+    WorkshopConfig,
+    "slug" | "shortId"
+  >,
 ) {
   return w;
 }
@@ -38,6 +46,7 @@ function defineWorkshop<const Slug extends string>(
 export const WORKSHOPS = [
   defineWorkshop({
     slug: "boards-and-bordeaux",
+    shortId: "BB",
     title: "Boards & Bordeaux",
     hostedBy: "C(h)rystal art",
     tagline:
@@ -51,42 +60,42 @@ export const WORKSHOPS = [
         date: CURRENT_EVENT.startDate,
         slots: [
           {
-            id: "ws-boards-day1-1200",
+            id: "WS-BB-D1-1200",
             time: "12:00 – 13:00",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
           {
-            id: "ws-boards-day1-1315",
+            id: "WS-BB-D1-1315",
             time: "13:15 – 14:15",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
           {
-            id: "ws-boards-day1-1445",
+            id: "WS-BB-D1-1445",
             time: "14:45 – 15:45",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
           {
-            id: "ws-boards-day1-1600",
+            id: "WS-BB-D1-1600",
             time: "16:00 – 17:00",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
           {
-            id: "ws-boards-day1-1730",
+            id: "WS-BB-D1-1730",
             time: "17:30 – 18:30",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
           {
-            id: "ws-boards-day1-1900",
+            id: "WS-BB-D1-1900",
             time: "19:00 – 20:00",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
@@ -98,42 +107,42 @@ export const WORKSHOPS = [
         date: CURRENT_EVENT.endDate,
         slots: [
           {
-            id: "ws-boards-day2-1200",
+            id: "WS-BB-D2-1200",
             time: "12:00 – 13:00",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
           {
-            id: "ws-boards-day2-1315",
+            id: "WS-BB-D2-1315",
             time: "13:15 – 14:15",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
           {
-            id: "ws-boards-day2-1445",
+            id: "WS-BB-D2-1445",
             time: "14:45 – 15:45",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
           {
-            id: "ws-boards-day2-1600",
+            id: "WS-BB-D2-1600",
             time: "16:00 – 17:00",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
           {
-            id: "ws-boards-day2-1730",
+            id: "WS-BB-D2-1730",
             time: "17:30 – 18:30",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
           {
-            id: "ws-boards-day2-1900",
+            id: "WS-BB-D2-1900",
             time: "19:00 – 20:00",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
@@ -145,6 +154,7 @@ export const WORKSHOPS = [
   }),
   defineWorkshop({
     slug: "tote-dalin",
+    shortId: "TD",
     title: "Tote Dalin",
     hostedBy: "Alina",
     tagline: "Learn textile painting and create a hand-painted tote bag.",
@@ -157,14 +167,14 @@ export const WORKSHOPS = [
         date: CURRENT_EVENT.startDate,
         slots: [
           {
-            id: "ws-tote-day1-1400",
+            id: "WS-TD-D1-1400",
             time: "14:00 – 16:00",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: DEFAULT_WORKSHOP_PRICE as unknown as number,
           },
           {
-            id: "ws-tote-day1-1700",
+            id: "WS-TD-D1-1700",
             time: "17:00 – 19:00",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
@@ -176,14 +186,14 @@ export const WORKSHOPS = [
         date: CURRENT_EVENT.endDate,
         slots: [
           {
-            id: "ws-tote-day2-1400",
+            id: "WS-TD-D2-1400",
             time: "14:00 – 16:00",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: DEFAULT_WORKSHOP_PRICE as unknown as number,
           },
           {
-            id: "ws-tote-day2-1700",
+            id: "WS-TD-D2-1700",
             time: "17:00 – 19:00",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
@@ -195,6 +205,7 @@ export const WORKSHOPS = [
   }),
   defineWorkshop({
     slug: "bead-and-sip",
+    shortId: "BS",
     title: "Bead & Sip",
     hostedBy: "Lolsies",
     tagline:
@@ -208,14 +219,14 @@ export const WORKSHOPS = [
         date: CURRENT_EVENT.startDate,
         slots: [
           {
-            id: "ws-bead-day1-1400",
+            id: "WS-BS-D1-1400",
             time: "14:00 – 15:30",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 10,
             price: DEFAULT_WORKSHOP_PRICE as unknown as number,
           },
           {
-            id: "ws-bead-day1-1600",
+            id: "WS-BS-D1-1600",
             time: "16:00 – 17:30",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 10,
@@ -227,14 +238,14 @@ export const WORKSHOPS = [
         date: CURRENT_EVENT.endDate,
         slots: [
           {
-            id: "ws-bead-day2-1400",
+            id: "WS-BS-D2-1400",
             time: "14:00 – 15:30",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 10,
             price: DEFAULT_WORKSHOP_PRICE as unknown as number,
           },
           {
-            id: "ws-bead-day2-1600",
+            id: "WS-BS-D2-1600",
             time: "16:00 – 17:30",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 10,
@@ -246,6 +257,7 @@ export const WORKSHOPS = [
   }),
   defineWorkshop({
     slug: "pottery-and-wine",
+    shortId: "PW",
     title: "Pottery & Wine",
     hostedBy: "Olga Askoti",
     tagline:
@@ -259,14 +271,15 @@ export const WORKSHOPS = [
         date: CURRENT_EVENT.startDate,
         slots: [
           {
-            id: "ws-paint-day1-18:30",
+            id: "WS-PW-D1-1830",
             time: "18:30 - 20:30",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 15,
             price: 35,
           },
           {
-            id: "ws-paint-mug-day1-1730",
+            id: "WS-PW-MG-D1-1730",
+            variantId: "MG",
             time: "17:30 – 19:00",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 15,
@@ -274,7 +287,8 @@ export const WORKSHOPS = [
             shortDescription: "Paint Your Own — Mug Edition",
           },
           {
-            id: "ws-paint-bowl-day1-1730",
+            id: "WS-PW-BL-D1-1730",
+            variantId: "BL",
             time: "17:30 – 19:00",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 10,
@@ -287,14 +301,15 @@ export const WORKSHOPS = [
         date: CURRENT_EVENT.endDate,
         slots: [
           {
-            id: "ws-paint-day2-18:30",
+            id: "WS-PW-D2-1830",
             time: "18:30 - 20:30",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 15,
             price: 35,
           },
           {
-            id: "ws-paint-mug-day2-1730",
+            id: "WS-PW-MG-D2-1730",
+            variantId: "MG",
             time: "17:30 – 19:00",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 15,
@@ -302,7 +317,8 @@ export const WORKSHOPS = [
             shortDescription: "Paint Your Own — Mug Edition",
           },
           {
-            id: "ws-paint-bowl-day2-1730",
+            id: "WS-PW-BL-D2-1730",
+            variantId: "BL",
             time: "17:30 – 19:00",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 10,
@@ -315,6 +331,7 @@ export const WORKSHOPS = [
   }),
   defineWorkshop({
     slug: "whiskey-and-cigar-experience",
+    shortId: "WC",
     title: "Whiskey & Cigar Experience",
     hostedBy: "Cavaway",
     tagline: "An elegant waterfront experience with whiskey and cigars.",
@@ -335,6 +352,7 @@ export const WORKSHOPS = [
   }),
   defineWorkshop({
     slug: "cocktail-making",
+    shortId: "CM",
     title: "Cocktail Making",
     hostedBy: "Payabl.",
     tagline: "An interactive cocktail-making experience by the sea.",
@@ -355,6 +373,7 @@ export const WORKSHOPS = [
   }),
   defineWorkshop({
     slug: "koupepia-by-cocones",
+    shortId: "KC",
     title: "Koupepia",
     hostedBy: "Cocones",
     tagline:
@@ -368,7 +387,8 @@ export const WORKSHOPS = [
         date: CURRENT_EVENT.startDate,
         slots: [
           {
-            id: "ws-koupepia-pork-day1-1200",
+            id: "WS-KC-PK-D1-1200",
+            variantId: "PK",
             time: "12:00 – 12:45",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 6,
@@ -376,7 +396,8 @@ export const WORKSHOPS = [
             shortDescription: "Pork mince",
           },
           {
-            id: "ws-koupepia-vegan-day1-1300",
+            id: "WS-KC-VG-D1-1300",
+            variantId: "VG",
             time: "13:00 – 13:45",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 6,
@@ -384,7 +405,8 @@ export const WORKSHOPS = [
             shortDescription: "Vegetarian / Vegan",
           },
           {
-            id: "ws-koupepia-pork-day1-1400",
+            id: "WS-KC-PK-D1-1400",
+            variantId: "PK",
             time: "14:00 – 14:45",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 6,
@@ -392,7 +414,8 @@ export const WORKSHOPS = [
             shortDescription: "Pork mince",
           },
           {
-            id: "ws-koupepia-vegan-day1-1615",
+            id: "WS-KC-VG-D1-1615",
+            variantId: "VG",
             time: "16:15 – 17:00",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 6,
@@ -400,7 +423,8 @@ export const WORKSHOPS = [
             shortDescription: "Vegetarian / Vegan",
           },
           {
-            id: "ws-koupepia-pork-day1-1715",
+            id: "WS-KC-PK-D1-1715",
+            variantId: "PK",
             time: "17:15 – 18:00",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 6,
@@ -409,7 +433,7 @@ export const WORKSHOPS = [
           },
           // {
           //   // Extra slot based on demand
-          //   id: "ws-koupepia-vegan-day1-1815",
+          //   id: "WS-KC-VG-D1-1815",
           //   time: "18:15 – 19:00",
           //   location: DEFAULT_WORKSHOP_LOCATION,
           //   capacity: 6,
@@ -421,6 +445,7 @@ export const WORKSHOPS = [
   }),
   defineWorkshop({
     slug: "plates-and-paints",
+    shortId: "PP",
     title: "Plates & Paints",
     hostedBy: "Creative Sips",
     tagline: "Paint your own plate while enjoying a glass of wine.",
@@ -433,21 +458,21 @@ export const WORKSHOPS = [
         date: CURRENT_EVENT.startDate,
         slots: [
           {
-            id: "ws-plates-day1-1430",
+            id: "WS-PP-D1-1430",
             time: "14:30 – 15:30",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 10,
             price: 40,
           },
           {
-            id: "ws-plates-day1-1600",
+            id: "WS-PP-D1-1600",
             time: "16:00 – 17:00",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 10,
             price: 40,
           },
           {
-            id: "ws-plates-day1-1730",
+            id: "WS-PP-D1-1730",
             time: "17:30 – 18:30",
             location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 10,
@@ -460,9 +485,14 @@ export const WORKSHOPS = [
 ];
 
 export type WorkshopSlug = (typeof WORKSHOPS)[number]["slug"];
+export type WorkshopShortId = (typeof WORKSHOPS)[number]["shortId"];
 
 export function getWorkshopBySlug(slug: string) {
   return WORKSHOPS.find((w) => w.slug === slug) ?? null;
+}
+
+export function getWorkshopByShortId(shortId: string) {
+  return WORKSHOPS.find((w) => w.shortId === shortId) ?? null;
 }
 
 export function getWorkshopSlotById(slotId: string) {
