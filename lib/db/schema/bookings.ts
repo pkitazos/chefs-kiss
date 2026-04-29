@@ -1,4 +1,6 @@
+import { sql } from "drizzle-orm";
 import {
+  check,
   index,
   integer,
   pgEnum,
@@ -66,5 +68,9 @@ export const bookings = pgTable(
     index("bookings_type_idx").on(table.type),
     index("bookings_created_at_idx").on(table.createdAt),
     index("bookings_browser_session_id_idx").on(table.browserSessionId),
+    check(
+      "bookings_slot_id_format",
+      sql`${table.slotId} LIKE 'WS-%' OR ${table.slotId} LIKE 'PD-%'`,
+    ),
   ],
 );

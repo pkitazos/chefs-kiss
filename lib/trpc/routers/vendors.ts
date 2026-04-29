@@ -16,8 +16,7 @@ import {
   sendVendorConfirmation,
   sendVendorRejection,
 } from "@/lib/email/vendor-emails";
-import { generateId } from "@/lib/utils/construct-id";
-import { type Event } from "@/lib/validations/event";
+import { buildApplicationRef } from "@/lib/ids";
 import { vendorFormSchema } from "@/lib/validations/vendor-form";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../init";
 
@@ -178,23 +177,17 @@ export const vendorsRouter = createTRPCRouter({
         });
       }
 
-      // Build Event object for ID generation
-      const eventForId: Event = {
-        date: {
-          start: activeEvent.startDate,
-          end: activeEvent.endDate,
-        },
-        location: activeEvent.location,
-        locationCode: activeEvent.locationCode,
-      };
-
-      // Generate custom application ID (count only applications for this event)
       const [countResult] = await ctx.db
         .select({ count: count() })
         .from(vendorApplications)
         .where(eq(vendorApplications.eventId, activeEvent.id));
       const applicationNumber = (countResult?.count ?? 0) + 1;
-      const applicationId = generateId(eventForId, applicationNumber, "VE");
+      const applicationId = buildApplicationRef({
+        year: activeEvent.startDate.getFullYear(),
+        type: "VE",
+        sequence: applicationNumber,
+        locationCode: activeEvent.locationCode,
+      });
 
       await ctx.db.transaction(async (tx) => {
         let truckInfoId: string | null = null;

@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
 import {
+  check,
   index,
   integer,
   pgEnum,
@@ -48,5 +49,9 @@ export const waitlistEntries = pgTable(
     uniqueIndex("waitlist_entries_email_slot_active_unique")
       .on(table.email, table.slotId)
       .where(sql`${table.status} = 'waiting'`),
+    check(
+      "waitlist_entries_slot_id_format",
+      sql`${table.slotId} LIKE 'WS-%' OR ${table.slotId} LIKE 'PD-%'`,
+    ),
   ],
 );

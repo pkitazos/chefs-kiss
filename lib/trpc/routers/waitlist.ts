@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server";
-import { asc, count, eq } from "drizzle-orm";
+import { and, asc, count, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 
 import { getDiningSessionById } from "@/lib/config/private-dining";
@@ -10,8 +10,11 @@ import {
   sendWaitlistConfirmation,
   sendWaitlistPromotion,
 } from "@/lib/email/waitlist-emails";
-import { generateId } from "@/lib/utils/construct-id";
-import { type Event } from "@/lib/validations/event";
+import {
+  buildBookingOrWaitlistRef,
+  categoryFromSlotId,
+  refLikePatternForCategory,
+} from "@/lib/ids";
 import { createWaitlistEntrySchema } from "@/lib/validations/waitlist";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../init";
 
@@ -44,18 +47,34 @@ export const waitlistRouter = createTRPCRouter({
         });
       }
 
-      const eventForId: Event = {
-        date: { start: activeEvent.startDate, end: activeEvent.endDate },
-        location: activeEvent.location,
-        locationCode: activeEvent.locationCode,
-      };
+      const category = categoryFromSlotId(input.slotId);
+      if (!category) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Could not derive category from slot ID.",
+        });
+      }
+
+      const year = activeEvent.startDate.getFullYear();
+      const refPattern = refLikePatternForCategory(year, "WL", category);
 
       const [countResult] = await ctx.db
         .select({ count: count() })
         .from(waitlistEntries)
-        .where(eq(waitlistEntries.eventId, activeEvent.id));
-      const entryNumber = (countResult?.count ?? 0) + 1;
-      const id = generateId(eventForId, entryNumber, "WL");
+        .where(
+          and(
+            eq(waitlistEntries.eventId, activeEvent.id),
+            sql`${waitlistEntries.id} LIKE ${refPattern}`,
+          ),
+        );
+      const sequence = (countResult?.count ?? 0) + 1;
+      const id = buildBookingOrWaitlistRef({
+        year,
+        type: "WL",
+        category,
+        sequence,
+        locationCode: activeEvent.locationCode,
+      });
 
       try {
         await ctx.db.insert(waitlistEntries).values({
@@ -158,18 +177,34 @@ export const waitlistRouter = createTRPCRouter({
           });
         }
 
-        const eventForId: Event = {
-          date: { start: activeEvent.startDate, end: activeEvent.endDate },
-          location: activeEvent.location,
-          locationCode: activeEvent.locationCode,
-        };
+        const category = categoryFromSlotId(entry.slotId);
+        if (!category) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Could not derive category from slot ID.",
+          });
+        }
+
+        const year = activeEvent.startDate.getFullYear();
+        const refPattern = refLikePatternForCategory(year, "BK", category);
 
         const [countResult] = await tx
           .select({ count: count() })
           .from(bookings)
-          .where(eq(bookings.eventId, activeEvent.id));
-        const bookingNumber = (countResult?.count ?? 0) + 1;
-        const bookingId = generateId(eventForId, bookingNumber, "BK");
+          .where(
+            and(
+              eq(bookings.eventId, activeEvent.id),
+              sql`${bookings.id} LIKE ${refPattern}`,
+            ),
+          );
+        const sequence = (countResult?.count ?? 0) + 1;
+        const bookingId = buildBookingOrWaitlistRef({
+          year,
+          type: "BK",
+          category,
+          sequence,
+          locationCode: activeEvent.locationCode,
+        });
 
         const totalAmount = price * entry.partySize * 100;
 
