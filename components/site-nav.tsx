@@ -5,9 +5,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { COMING_SOON } from "@/lib/config/mode";
 
 const LINKS = [
-  { href: "/menu", label: "Menu" },
+  { href: "/menu", label: COMING_SOON ? "Vendors" : "Menu" },
   { href: "/workshops", label: "Workshops" },
   { href: "/private-dining", label: "Private Dining" },
 ] as const;
@@ -33,7 +34,7 @@ export function SiteNav({
   return (
     <header
       className={cn(
-        "pointer-events-none fixed left-1/2 top-3 z-40 -translate-x-1/2 sm:top-4",
+        "pointer-events-none fixed w-max left-1/2 top-3 z-40 -translate-x-1/2 sm:top-4",
         revealOnScroll &&
           "transition-[opacity,transform] duration-300 ease-out motion-reduce:transition-none",
         revealOnScroll && !revealed && "-translate-y-6 opacity-0",

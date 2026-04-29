@@ -8,6 +8,7 @@ import { ImagePlaceholder } from "@/components/image-placeholder";
 import { PageLayout } from "@/components/page-layout";
 import { buttonVariants } from "@/components/ui/button";
 import { SectionLabel } from "@/components/ui/section-label";
+import { COMING_SOON } from "@/lib/config/mode";
 import {
   getWorkshopPriceSummary,
   type WorkshopConfig,
@@ -81,12 +82,17 @@ export default function WorkshopsPage() {
                       {workshop.tagline}
                     </p>
                     <div className="mt-auto flex items-center justify-between pt-2">
-                      <div className="text-sm">
-                        <WorkshopPriceSummary workshop={workshop} />
-                      </div>
+                      {!COMING_SOON && (
+                        <div className="text-sm">
+                          <WorkshopPriceSummary workshop={workshop} />
+                        </div>
+                      )}
                       <Link
                         href={`/workshops/${workshop.slug}`}
-                        className={cn(buttonVariants({ size: "cta-md" }))}
+                        className={cn(
+                          buttonVariants({ size: "cta-md" }),
+                          "ml-auto",
+                        )}
                       >
                         View Details
                       </Link>
