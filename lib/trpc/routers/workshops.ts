@@ -8,8 +8,7 @@ import {
   events,
   workshopApplications,
 } from "@/lib/db/schema";
-import { type Event } from "@/lib/validations/event";
-import { generateId } from "@/lib/utils/construct-id";
+import { buildApplicationRef } from "@/lib/ids";
 import {
   sendWorkshopAcceptance,
   sendWorkshopConfirmation,
@@ -110,23 +109,17 @@ export const workshopsRouter = createTRPCRouter({
         });
       }
 
-      // Build Event object for ID generation
-      const eventForId: Event = {
-        date: {
-          start: activeEvent.startDate,
-          end: activeEvent.endDate,
-        },
-        location: activeEvent.location,
-        locationCode: activeEvent.locationCode,
-      };
-
-      // Generate custom application ID (count only applications for this event)
       const [countResult] = await ctx.db
         .select({ count: count() })
         .from(workshopApplications)
         .where(eq(workshopApplications.eventId, activeEvent.id));
       const applicationNumber = (countResult?.count ?? 0) + 1;
-      const applicationId = generateId(eventForId, applicationNumber, "WS");
+      const applicationId = buildApplicationRef({
+        year: activeEvent.startDate.getFullYear(),
+        type: "WS",
+        sequence: applicationNumber,
+        locationCode: activeEvent.locationCode,
+      });
 
       await ctx.db.insert(workshopApplications).values({
         id: applicationId,

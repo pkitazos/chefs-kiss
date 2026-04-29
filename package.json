@@ -12,7 +12,7 @@
     "images:optimize": "tsx scripts/optimize-images.ts",
     "db:generate": "dotenv -e .env.local -- drizzle-kit generate",
     "db:migrate": "dotenv -e .env.local -- drizzle-kit migrate",
-    "db:push": "echo 'This is not what you think it is. Do not run this command. What you want is migrate.'",
+    "db:push": "echo 'This is not what you think it is. Do not run this command. What you want is db:migrate.'",
     "db:studio": "dotenv -e .env.local -- drizzle-kit studio",
     "test": "vitest",
     "test:run": "vitest run",

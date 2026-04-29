@@ -1,0 +1,2 @@
+ALTER TABLE "bookings" ADD CONSTRAINT "bookings_slot_id_format" CHECK ("bookings"."slot_id" LIKE 'WS-%' OR "bookings"."slot_id" LIKE 'PD-%');--> statement-breakpoint
+ALTER TABLE "waitlist_entries" ADD CONSTRAINT "waitlist_entries_slot_id_format" CHECK ("waitlist_entries"."slot_id" LIKE 'WS-%' OR "waitlist_entries"."slot_id" LIKE 'PD-%');
