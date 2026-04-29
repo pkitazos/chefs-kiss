@@ -534,10 +534,12 @@ function WorkshopsSection() {
                         by {workshop.hostedBy}
                       </span>
                     </p>
-                    <span className="inline-flex items-center gap-1.5 shrink-0 pt-1 text-sm font-medium text-primary">
-                      <IconClock size={16} />
-                      {workshop.duration}
-                    </span>
+                    {!COMING_SOON && (
+                      <span className="inline-flex items-center gap-1.5 shrink-0 pt-1 text-sm font-medium text-primary">
+                        <IconClock size={16} />
+                        {workshop.duration}
+                      </span>
+                    )}
                   </div>
 
                   <p className="text-sm text-muted-foreground">
