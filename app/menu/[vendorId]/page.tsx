@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { IconArrowLeft } from "@tabler/icons-react";
 import { MENU_VENDORS } from "@/lib/config/menu";
 import { AnimateIn } from "@/components/animate-in";
 import { WavyPattern } from "@/components/brand-pattern";
 import { SectionLabel } from "@/components/ui/section-label";
 import { PageLayout } from "@/components/page-layout";
+import { COMING_SOON } from "@/lib/config/mode";
 import { euro } from "@/lib/utils/format-currency";
 
 interface Props {
@@ -12,6 +14,9 @@ interface Props {
 }
 
 export default async function VendorPage({ params }: Props) {
+  if (COMING_SOON) {
+    redirect("/menu");
+  }
   const { vendorId } = await params;
   return <VendorMenu vendorId={vendorId} />;
 }

@@ -6,6 +6,7 @@ import { ImagePlaceholder } from "@/components/image-placeholder";
 import { PageLayout } from "@/components/page-layout";
 import { buttonVariants } from "@/components/ui/button";
 import { SectionLabel } from "@/components/ui/section-label";
+import { COMING_SOON } from "@/lib/config/mode";
 import {
   MENU_VENDORS,
   type VendorAccent,
@@ -93,30 +94,57 @@ export default function MenuPage() {
             {MENU_VENDORS.map((vendor) => {
               const a = ACCENT_CLASSES[vendor.accent];
               const Icon = ICON_MAP[vendor.icon];
+              const img = getVendorImage(vendor.id);
+              const inner = (
+                <>
+                  <div
+                    className={cn(
+                      "flex size-20 shrink-0 items-center justify-center overflow-hidden rounded-xl",
+                      img ? a.card : a.bg,
+                    )}
+                  >
+                    {img ? (
+                      <Image
+                        className="size-full object-cover"
+                        src={img}
+                        alt=""
+                        placeholder="blur"
+                      />
+                    ) : (
+                      <Icon size={36} className={a.text} />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                      {vendor.name}
+                    </p>
+                    <p className={cn("text-sm", a.text)}>{vendor.cuisine}</p>
+                  </div>
+                  {!COMING_SOON && (
+                    <IconChevronRight
+                      size={18}
+                      className="text-muted-foreground shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:text-primary"
+                    />
+                  )}
+                </>
+              );
+              if (COMING_SOON) {
+                return (
+                  <div
+                    key={vendor.id}
+                    className="flex items-center gap-4 py-5"
+                  >
+                    {inner}
+                  </div>
+                );
+              }
               return (
                 <Link
                   key={vendor.id}
                   href={`/menu/${vendor.id}`}
                   className="group flex items-center gap-4 py-5 transition-colors hover:bg-muted/50"
                 >
-                  <div
-                    className={cn(
-                      "flex size-14 shrink-0 items-center justify-center rounded-xl",
-                      a.bg,
-                    )}
-                  >
-                    <Icon size={28} className={a.text} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-lg font-semibold text-foreground truncate group-hover:text-primary transition-colors">
-                      {vendor.name}
-                    </p>
-                    <p className={cn("text-sm", a.text)}>{vendor.cuisine}</p>
-                  </div>
-                  <IconChevronRight
-                    size={18}
-                    className="text-muted-foreground shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:text-primary"
-                  />
+                  {inner}
                 </Link>
               );
             })}
@@ -129,12 +157,8 @@ export default function MenuPage() {
             const a = ACCENT_CLASSES[vendor.accent];
             const Icon = ICON_MAP[vendor.icon];
             const img = getVendorImage(vendor.id);
-            return (
-              <Link
-                key={vendor.id}
-                href={`/menu/${vendor.id}`}
-                className="group flex h-full flex-col overflow-hidden rounded-lg border transition-colors hover:border-primary/30 hover:bg-muted/50"
-              >
+            const inner = (
+              <>
                 <ImagePlaceholder className={cn("aspect-video", a.card)}>
                   {img ? (
                     <Image
@@ -159,17 +183,38 @@ export default function MenuPage() {
                   <p className="font-display text-xl tracking-tight">
                     {vendor.name}
                   </p>
-                  <div className="mt-auto pt-3">
-                    <span
-                      className={cn(
-                        buttonVariants({ size: "cta-md" }),
-                        "pointer-events-none w-full",
-                      )}
-                    >
-                      View Menu
-                    </span>
-                  </div>
+                  {!COMING_SOON && (
+                    <div className="mt-auto pt-3">
+                      <span
+                        className={cn(
+                          buttonVariants({ size: "cta-md" }),
+                          "pointer-events-none w-full",
+                        )}
+                      >
+                        View Menu
+                      </span>
+                    </div>
+                  )}
                 </div>
+              </>
+            );
+            if (COMING_SOON) {
+              return (
+                <div
+                  key={vendor.id}
+                  className="flex h-full flex-col overflow-hidden rounded-lg border"
+                >
+                  {inner}
+                </div>
+              );
+            }
+            return (
+              <Link
+                key={vendor.id}
+                href={`/menu/${vendor.id}`}
+                className="group flex h-full flex-col overflow-hidden rounded-lg border transition-colors hover:border-primary/30 hover:bg-muted/50"
+              >
+                {inner}
               </Link>
             );
           })}
