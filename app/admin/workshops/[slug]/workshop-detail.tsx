@@ -11,14 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { eventDateFormat } from "@/lib/config/event";
 import { api } from "@/lib/trpc/client";
 import {
@@ -28,20 +20,7 @@ import {
   IconMapPin,
 } from "@tabler/icons-react";
 
-import { WaitlistRowActions } from "../../slots/waitlist-row-actions";
-
-const waitlistStatusVariants = {
-  waiting: "secondary",
-  promoted: "default",
-  cancelled: "outline",
-} as const;
-
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat("en-GB", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(date));
-}
+import { WaitlistTable } from "../../slots/waitlist-table";
 
 interface SlotInfo {
   slotId: string;
@@ -143,7 +122,8 @@ function SlotSection({ slot }: { slot: SlotInfo }) {
           </Button>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-3">
+        <h3 className="text-sm font-semibold">Waitlist queue</h3>
         {isLoading ? (
           <div className="flex items-center justify-center py-6">
             <IconLoader2 className="size-5 animate-spin text-muted-foreground" />
@@ -152,60 +132,13 @@ function SlotSection({ slot }: { slot: SlotInfo }) {
           <p className="text-sm text-destructive">
             Failed to load: {error.message}
           </p>
-        ) : data && data.waitlist.length > 0 ? (
-          <div className="rounded-lg border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-12">#</TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Party size</TableHead>
-                  <TableHead>Submitted</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="w-12" />
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {data.waitlist.map((entry, idx) => (
-                  <TableRow key={entry.id}>
-                    <TableCell className="font-mono text-xs">
-                      #{idx + 1}
-                    </TableCell>
-                    <TableCell>{entry.fullName}</TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {entry.email}
-                    </TableCell>
-                    <TableCell>{entry.partySize}</TableCell>
-                    <TableCell className="text-muted-foreground text-xs">
-                      {formatDate(entry.createdAt)}
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={waitlistStatusVariants[entry.status]}>
-                        {entry.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <WaitlistRowActions
-                        entryId={entry.id}
-                        email={entry.email}
-                        fullName={entry.fullName}
-                        partySize={entry.partySize}
-                        capacity={slot.capacity}
-                        bookedSeats={data.bookedSeats}
-                        status={entry.status}
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        ) : (
-          <p className="text-sm text-muted-foreground">
-            No waitlist entries for this slot.
-          </p>
-        )}
+        ) : data ? (
+          <WaitlistTable
+            entries={data.waitlist}
+            capacity={slot.capacity}
+            bookedSeats={data.bookedSeats}
+          />
+        ) : null}
       </CardContent>
     </Card>
   );
