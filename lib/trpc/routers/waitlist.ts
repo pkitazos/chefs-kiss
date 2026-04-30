@@ -128,7 +128,12 @@ export const waitlistRouter = createTRPCRouter({
     ),
 
   promote: protectedProcedure
-    .input(z.object({ id: z.string().min(1) }))
+    .input(
+      z.object({
+        id: z.string().min(1),
+        sendEmail: z.boolean().default(false),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.transaction(async (tx) => {
         const [entry] = await tx
@@ -236,21 +241,23 @@ export const waitlistRouter = createTRPCRouter({
         return { waitlistEntry, booking };
       });
 
-      try {
-        await sendWaitlistPromotion({
-          email: result.booking.email,
-          fullName: result.booking.fullName,
-          bookingId: result.booking.id,
-          type: result.booking.type,
-          partySize: result.booking.seats,
-          slotId: result.booking.slotId,
-        });
-      } catch (err) {
-        console.error("Failed to send waitlist promotion email:", {
-          bookingId: result.booking.id,
-          email: result.booking.email,
-          err,
-        });
+      if (input.sendEmail) {
+        try {
+          await sendWaitlistPromotion({
+            email: result.booking.email,
+            fullName: result.booking.fullName,
+            bookingId: result.booking.id,
+            type: result.booking.type,
+            partySize: result.booking.seats,
+            slotId: result.booking.slotId,
+          });
+        } catch (err) {
+          console.error("Failed to send waitlist promotion email:", {
+            bookingId: result.booking.id,
+            email: result.booking.email,
+            err,
+          });
+        }
       }
 
       return result;

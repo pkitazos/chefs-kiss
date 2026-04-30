@@ -133,7 +133,7 @@ export function WorkshopWaitlistForm({
           <CardContent>
             <div className="space-y-3 text-sm">
               <p>
-                Thanks — we&apos;ll email you at the address you provided if a
+                Thanks! We&apos;ll email you at the address you provided if a
                 spot opens up for {workshopTitle} on{" "}
                 {eventDateFormat.dayName(date)}.
               </p>
