@@ -11,7 +11,8 @@ import {
   insertPendingBooking,
 } from "@/lib/db/insert-pending-booking";
 import { getSlotSeatBreakdown } from "@/lib/db/seat-counting";
-import { bookings, events } from "@/lib/db/schema";
+import { lockSlotForWrite } from "@/lib/db/seat-locks";
+import { bookings, events, seatHolds } from "@/lib/db/schema";
 import {
   buildNotificationUrl,
   buildReturnUrl,
@@ -22,6 +23,7 @@ import {
   categoryFromSlotId,
   refLikePatternForCategory,
 } from "@/lib/ids";
+import { sendBookingCancellation } from "@/lib/email/booking-emails";
 import { createBookingSchema } from "@/lib/validations/booking";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../init";
 
@@ -345,13 +347,96 @@ export const bookingsRouter = createTRPCRouter({
       return updated;
     }),
 
+  cancel: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+        note: z
+          .string()
+          .trim()
+          .max(500)
+          .optional()
+          .transform((v) => (v && v.length > 0 ? v : undefined)),
+        sendEmail: z.boolean(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const adminUserId = ctx.session.user.id;
+
+      const result = await ctx.db.transaction(async (tx) => {
+        const [booking] = await tx
+          .select()
+          .from(bookings)
+          .where(eq(bookings.id, input.id))
+          .limit(1);
+
+        if (!booking) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Booking not found.",
+          });
+        }
+
+        if (booking.status !== "pending" && booking.status !== "confirmed") {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: `Only pending or confirmed bookings can be cancelled (current status: ${booking.status}).`,
+          });
+        }
+
+        await lockSlotForWrite(tx, booking.slotId);
+
+        const [updated] = await tx
+          .update(bookings)
+          .set({ status: "cancelled", updatedAt: new Date() })
+          .where(eq(bookings.id, input.id))
+          .returning();
+
+        const noteValue =
+          input.note ?? `From cancelled booking ${booking.id}`;
+
+        await tx.insert(seatHolds).values({
+          id: crypto.randomUUID(),
+          slotId: booking.slotId,
+          seatCount: booking.seats,
+          status: "active",
+          note: noteValue,
+          createdBy: adminUserId,
+          eventId: booking.eventId,
+        });
+
+        return { booking: updated, previousStatus: booking.status };
+      });
+
+      if (input.sendEmail) {
+        try {
+          await sendBookingCancellation({
+            email: result.booking.email,
+            fullName: result.booking.fullName,
+            bookingId: result.booking.id,
+            type: result.booking.type,
+            seats: result.booking.seats,
+            slotId: result.booking.slotId,
+          });
+        } catch (err) {
+          console.error("Failed to send booking cancellation email:", {
+            bookingId: result.booking.id,
+            email: result.booking.email,
+            err,
+          });
+        }
+      }
+
+      return result.booking;
+    }),
+
   adminList: protectedProcedure
     .input(
       z
         .object({
           type: z.enum(["private-dining", "workshop"]).optional(),
           status: z
-            .enum(["pending", "confirmed", "failed", "expired"])
+            .enum(["pending", "confirmed", "failed", "expired", "cancelled"])
             .optional(),
         })
         .optional(),

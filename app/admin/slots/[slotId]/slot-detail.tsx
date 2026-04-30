@@ -174,6 +174,8 @@ export function SlotDetail(props: SlotDetailProps) {
                             bookingId={booking.id}
                             email={booking.email}
                             fullName={booking.fullName}
+                            seats={booking.seats}
+                            status={booking.status}
                             paymentMethod={booking.paymentMethod}
                             paidAt={booking.paidAt}
                           />
