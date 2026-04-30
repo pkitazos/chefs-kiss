@@ -1,10 +1,11 @@
 import { TRPCError } from "@trpc/server";
-import { and, asc, count, eq, sql } from "drizzle-orm";
+import { and, asc, count, eq, inArray, sql } from "drizzle-orm";
 import { z } from "zod";
 
 import { getDiningSessionById } from "@/lib/config/private-dining";
 import { getWorkshopSlotById } from "@/lib/config/workshops";
 import { isUniqueViolation } from "@/lib/db/errors";
+import { lockSlotForWrite } from "@/lib/db/seat-locks";
 import { bookings, events, waitlistEntries } from "@/lib/db/schema";
 import {
   sendWaitlistConfirmation,
@@ -157,16 +158,37 @@ export const waitlistRouter = createTRPCRouter({
           });
         }
 
-        const price =
-          entry.type === "private-dining"
-            ? (getDiningSessionById(entry.slotId)?.session.price ?? null)
-            : (getWorkshopSlotById(entry.slotId)?.slot.price ?? null);
+        await lockSlotForWrite(tx, entry.slotId);
 
-        if (price === null) {
+        const slotConfig =
+          entry.type === "private-dining"
+            ? (getDiningSessionById(entry.slotId)?.session ?? null)
+            : (getWorkshopSlotById(entry.slotId)?.slot ?? null);
+
+        if (!slotConfig) {
           throw new TRPCError({
             code: "BAD_REQUEST",
             message: "Slot configuration not found for this waitlist entry.",
           });
+        }
+
+        const { price, capacity } = slotConfig;
+
+        const [booked] = await tx
+          .select({ total: sql<number>`coalesce(sum(${bookings.seats}), 0)` })
+          .from(bookings)
+          .where(
+            and(
+              eq(bookings.slotId, entry.slotId),
+              inArray(bookings.status, ["confirmed", "pending"]),
+            ),
+          );
+
+        const bookedSeats = Number(booked?.total ?? 0);
+        if (bookedSeats + entry.partySize > capacity) {
+          console.warn(
+            `[waitlist.promote] Promoting ${entry.id} would exceed capacity for ${entry.slotId}: capacity=${capacity}, currently booked=${bookedSeats}, adding=${entry.partySize}. Proceeding (warn-and-allow).`,
+          );
         }
 
         const [activeEvent] = await tx

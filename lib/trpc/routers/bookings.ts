@@ -6,6 +6,10 @@ import { COMING_SOON } from "@/lib/config/mode";
 import { getDiningSessionById } from "@/lib/config/private-dining";
 import { getWorkshopSlotById } from "@/lib/config/workshops";
 import { expireStalePendingBookings } from "@/lib/db/expire-stale-bookings";
+import {
+  CapacityExceededError,
+  insertPendingBooking,
+} from "@/lib/db/insert-pending-booking";
 import { bookings, events } from "@/lib/db/schema";
 import {
   buildNotificationUrl,
@@ -54,29 +58,6 @@ export const bookingsRouter = createTRPCRouter({
 
       await expireStalePendingBookings(ctx.db);
 
-      const [booked] = await ctx.db
-        .select({ total: sql<number>`coalesce(sum(${bookings.seats}), 0)` })
-        .from(bookings)
-        .where(
-          and(
-            eq(bookings.slotId, input.slotId),
-            inArray(bookings.status, ["confirmed", "pending"]),
-          ),
-        );
-
-      const bookedSeats = Number(booked?.total ?? 0);
-      const remaining = slotConfig.capacity - bookedSeats;
-
-      if (input.seats > remaining) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message:
-            remaining === 0
-              ? "This slot is fully booked."
-              : `Only ${remaining} seat(s) remaining.`,
-        });
-      }
-
       const category = categoryFromSlotId(input.slotId);
       if (!category) {
         throw new TRPCError({
@@ -108,20 +89,30 @@ export const bookingsRouter = createTRPCRouter({
 
       const totalAmount = slotConfig.price * input.seats * 100; // cents
 
-      // Insert the pending row first so every attempt produces an audit trail.
-      await ctx.db.insert(bookings).values({
-        id: bookingId,
-        type: input.type,
-        slotId: input.slotId,
-        fullName: input.fullName,
-        email: input.email,
-        phone: input.phone,
-        seats: input.seats,
-        totalAmount,
-        browserSessionId: input.browserSessionId ?? null,
-        eventId: activeEvent.id,
-        expiresAt: new Date(Date.now() + 15 * 60 * 1000),
-      });
+      try {
+        await insertPendingBooking(ctx.db, {
+          id: bookingId,
+          slotId: input.slotId,
+          capacity: slotConfig.capacity,
+          seats: input.seats,
+          type: input.type,
+          fullName: input.fullName,
+          email: input.email,
+          phone: input.phone,
+          browserSessionId: input.browserSessionId ?? null,
+          totalAmount,
+          expiresAt: new Date(Date.now() + 15 * 60 * 1000),
+          eventId: activeEvent.id,
+        });
+      } catch (err) {
+        if (err instanceof CapacityExceededError) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: err.message,
+          });
+        }
+        throw err;
+      }
 
       // Kick off the payabl init. Two failure modes handled separately:
       //   - Network/exceptional failure (fetch throws): mark the booking

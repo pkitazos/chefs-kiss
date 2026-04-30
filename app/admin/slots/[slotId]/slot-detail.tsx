@@ -30,6 +30,7 @@ const statusVariants = {
   confirmed: "default",
   failed: "destructive",
   expired: "outline",
+  cancelled: "outline",
 } as const;
 
 function formatDate(date: Date) {
