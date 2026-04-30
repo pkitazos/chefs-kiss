@@ -6,6 +6,7 @@ import { getDiningSessionById } from "@/lib/config/private-dining";
 import { getWorkshopSlotById } from "@/lib/config/workshops";
 import { getTotalBookedSeats } from "@/lib/db/booked-seats";
 import { isUniqueViolation } from "@/lib/db/errors";
+import { getSlotSeatBreakdown } from "@/lib/db/seat-counting";
 import { lockSlotForWrite } from "@/lib/db/seat-locks";
 import { bookings, events, waitlistEntries } from "@/lib/db/schema";
 import {
@@ -178,7 +179,7 @@ export const waitlistRouter = createTRPCRouter({
         const bookedSeats = await getTotalBookedSeats(tx, entry.slotId);
         if (bookedSeats + entry.partySize > capacity) {
           console.warn(
-            `[waitlist.promote] Promoting ${entry.id} would exceed capacity for ${entry.slotId}: capacity=${capacity}, currently booked=${bookedSeats}, adding=${entry.partySize}. Proceeding (warn-and-allow).`,
+            `[waitlist.promote] Promoting ${entry.id} would exceed capacity for ${entry.slotId}: capacity=${capacity}, booked=${breakdown.booked}, reserved=${breakdown.reserved}, held=${breakdown.held}, adding=${entry.partySize}. Proceeding (warn-and-allow).`,
           );
         }
 

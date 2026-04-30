@@ -1,6 +1,7 @@
 import type { db } from "./index";
 import { getTotalBookedSeats } from "./booked-seats";
 import { bookings } from "./schema";
+import { getSlotSeatBreakdown } from "./seat-counting";
 import { lockSlotForWrite } from "./seat-locks";
 
 export class CapacityExceededError extends Error {

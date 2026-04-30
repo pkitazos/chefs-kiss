@@ -24,8 +24,7 @@ interface WaitlistActionDialogProps {
   email: string;
   fullName: string;
   partySize: number;
-  capacity: number;
-  bookedSeats: number;
+  available: number;
   onOpenChange: (open: boolean) => void;
 }
 
@@ -36,8 +35,7 @@ export function WaitlistActionDialog({
   email,
   fullName,
   partySize,
-  capacity,
-  bookedSeats,
+  available,
   onOpenChange,
 }: WaitlistActionDialogProps) {
   const utils = api.useUtils();
@@ -78,8 +76,7 @@ export function WaitlistActionDialog({
   });
 
   const pending = promote.isPending || cancel.isPending;
-  const remaining = capacity - bookedSeats;
-  const overBy = partySize - remaining;
+  const overBy = partySize - available;
   const willOverfill = action === "promote" && overBy > 0;
 
   const handleConfirm = () => {

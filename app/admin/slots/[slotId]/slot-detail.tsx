@@ -18,11 +18,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { eventDateFormat } from "@/lib/config/event";
+import { buildSeatBreakdown, type SeatBreakdown } from "@/lib/db/seat-counting";
 import { api } from "@/lib/trpc/client";
-import { IconArrowLeft, IconLoader2, IconMapPin } from "@tabler/icons-react";
+import { IconArrowLeft, IconLoader2 } from "@tabler/icons-react";
 
 import { PaymentBadge } from "../../bookings/payment-badge";
 import { BookingRowActions } from "../booking-row-actions";
+import { CapacityInfoIcon } from "../capacity-info";
 import { WaitlistTable } from "../waitlist-table";
 
 const statusVariants = {
@@ -52,6 +54,11 @@ type SlotDetailProps = {
 export function SlotDetail(props: SlotDetailProps) {
   const { slotId, type, title, date, time, capacity, price } = props;
   const { data, isLoading, error } = api.slots.bySlot.useQuery({ slotId });
+
+  const breakdown: SeatBreakdown = buildSeatBreakdown(
+    capacity,
+    data?.counts ?? { booked: 0, reserved: 0, held: 0 },
+  );
 
   const parsedDate = new Date(date);
 
@@ -93,11 +100,7 @@ export function SlotDetail(props: SlotDetailProps) {
                 <span className="font-mono text-xs">{slotId}</span>
               </CardDescription>
             </div>
-            <CapacityMeter
-              capacity={capacity}
-              booked={data?.bookedSeats ?? 0}
-              price={price}
-            />
+            <CapacityMeter breakdown={breakdown} price={price} />
           </div>
         </CardHeader>
       </Card>
@@ -118,8 +121,8 @@ export function SlotDetail(props: SlotDetailProps) {
             <div className="flex items-baseline justify-between">
               <h2 className="text-lg font-semibold">Bookings</h2>
               <p className="text-xs text-muted-foreground">
-                {data.bookings.length} total · {data.bookedSeats} seats held
-                against capacity
+                {data.bookings.length} total · {breakdown.booked} confirmed +{" "}
+                {breakdown.reserved} pending against {capacity} capacity
               </p>
             </div>
             {data.bookings.length > 0 ? (
@@ -198,8 +201,7 @@ export function SlotDetail(props: SlotDetailProps) {
             </div>
             <WaitlistTable
               entries={data.waitlist}
-              capacity={capacity}
-              bookedSeats={data.bookedSeats}
+              available={breakdown.available}
             />
           </section>
         </>
@@ -209,23 +211,30 @@ export function SlotDetail(props: SlotDetailProps) {
 }
 
 function CapacityMeter({
-  capacity,
-  booked,
+  breakdown,
   price,
 }: {
-  capacity: number;
-  booked: number;
+  breakdown: SeatBreakdown;
   price: number;
 }) {
-  const over = booked > capacity;
+  const filled = breakdown.booked + breakdown.reserved + breakdown.held;
+  const over = filled > breakdown.capacity;
   return (
     <div className="text-right">
       <div
         className={`text-2xl font-bold ${over ? "text-amber-700" : "text-foreground"}`}
       >
-        {booked} <span className="text-muted-foreground">/ {capacity}</span>
+        <span className="inline-flex items-baseline gap-1">
+          {filled}{" "}
+          <span className="text-muted-foreground">/ {breakdown.capacity}</span>
+          <CapacityInfoIcon />
+        </span>
       </div>
-      <div className="text-xs text-muted-foreground">seats · €{price}/seat</div>
+      <div className="text-xs text-muted-foreground">
+        {breakdown.booked} booked · {breakdown.reserved} reserved ·{" "}
+        {breakdown.held} held
+      </div>
+      <div className="text-xs text-muted-foreground">€{price}/seat</div>
     </div>
   );
 }
