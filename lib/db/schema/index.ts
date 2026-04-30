@@ -5,3 +5,4 @@ export * from "./workshops";
 export * from "./applications";
 export * from "./bookings";
 export * from "./waitlist";
+export * from "./seat-holds";

@@ -16,6 +16,7 @@ export const bookingStatusEnum = pgEnum("booking_status", [
   "confirmed",
   "failed",
   "expired",
+  "cancelled",
 ]);
 
 export const bookingTypeEnum = pgEnum("booking_type", [
