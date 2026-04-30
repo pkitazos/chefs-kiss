@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 import {
@@ -42,9 +42,10 @@ export function WaitlistActionDialog({
 
   const [sendEmail, setSendEmail] = useState(false);
 
-  useEffect(() => {
-    if (!open) setSendEmail(false);
-  }, [open]);
+  const handleOpenChange = (next: boolean) => {
+    if (!next) setSendEmail(false);
+    onOpenChange(next);
+  };
 
   const promote = api.waitlist.promote.useMutation({
     onSuccess: (_data, variables) => {
@@ -54,8 +55,8 @@ export function WaitlistActionDialog({
       onOpenChange(false);
       toast.success(
         variables.sendEmail
-          ? "Promoted — confirmation email sent to " + email
-          : "Promoted — no email sent",
+          ? "Promoted - confirmation email sent to " + email
+          : "Promoted - no email sent",
       );
     },
     onError: (err) => {
@@ -85,7 +86,7 @@ export function WaitlistActionDialog({
   };
 
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
+    <AlertDialog open={open} onOpenChange={handleOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>

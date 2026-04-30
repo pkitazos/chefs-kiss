@@ -1,4 +1,4 @@
-import { asc, count, desc, eq } from "drizzle-orm";
+import { and, asc, count, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { expireStalePendingBookings } from "@/lib/db/expire-stale-bookings";
@@ -6,7 +6,7 @@ import {
   getAllSlotsSeatCounts,
   getSlotSeatCounts,
 } from "@/lib/db/seat-counting";
-import { bookings, waitlistEntries } from "@/lib/db/schema";
+import { bookings, seatHolds, user, waitlistEntries } from "@/lib/db/schema";
 import { createTRPCRouter, protectedProcedure } from "../init";
 
 export const slotsRouter = createTRPCRouter({
@@ -79,6 +79,27 @@ export const slotsRouter = createTRPCRouter({
         .where(eq(waitlistEntries.slotId, input.slotId))
         .orderBy(asc(waitlistEntries.createdAt));
 
+      const activeHoldRows = await ctx.db
+        .select({
+          id: seatHolds.id,
+          slotId: seatHolds.slotId,
+          seatCount: seatHolds.seatCount,
+          note: seatHolds.note,
+          createdAt: seatHolds.createdAt,
+          createdBy: seatHolds.createdBy,
+          creatorName: user.name,
+          creatorEmail: user.email,
+        })
+        .from(seatHolds)
+        .leftJoin(user, eq(user.id, seatHolds.createdBy))
+        .where(
+          and(
+            eq(seatHolds.slotId, input.slotId),
+            eq(seatHolds.status, "active"),
+          ),
+        )
+        .orderBy(desc(seatHolds.createdAt));
+
       const counts = await getSlotSeatCounts(ctx.db, input.slotId);
 
       const waitlistCount = slotWaitlist.filter(
@@ -88,6 +109,7 @@ export const slotsRouter = createTRPCRouter({
       return {
         bookings: slotBookings,
         waitlist: slotWaitlist,
+        holds: activeHoldRows,
         counts,
         waitlistCount,
       };
