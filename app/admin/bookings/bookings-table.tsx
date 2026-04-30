@@ -23,6 +23,7 @@ import { format } from "date-fns";
 import { api } from "@/lib/trpc/client";
 import { getDiningSessionById } from "@/lib/config/private-dining";
 import { getWorkshopSlotById } from "@/lib/config/workshops";
+import { BookingRowActions } from "../slots/booking-row-actions";
 import { PaymentBadge } from "./payment-badge";
 
 function getSlotLabel(
@@ -82,8 +83,12 @@ export function BookingsTable() {
     status:
       statusFilter === "all"
         ? undefined
-        : // TODO: include "cancelled" once it's added to the SelectItem list below.
-          (statusFilter as "pending" | "confirmed" | "failed" | "expired"),
+        : (statusFilter as
+            | "pending"
+            | "confirmed"
+            | "failed"
+            | "expired"
+            | "cancelled"),
   });
 
   if (isLoading) {
@@ -128,7 +133,7 @@ export function BookingsTable() {
             <SelectItem value="confirmed">Confirmed</SelectItem>
             <SelectItem value="failed">Failed</SelectItem>
             <SelectItem value="expired">Expired</SelectItem>
-            {/* TODO: add a "cancelled" option once admin cancellation lands. */}
+            <SelectItem value="cancelled">Cancelled</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -148,6 +153,7 @@ export function BookingsTable() {
                 <TableHead>Payment</TableHead>
                 <TableHead>Amount</TableHead>
                 <TableHead>Created</TableHead>
+                <TableHead className="w-12" />
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -190,6 +196,10 @@ export function BookingsTable() {
                       </Link>
                     </TableCell>
                     <TableCell>
+                      {/* TODO: when the held-seats admin view lands, surface
+                          the cancellation note (seat_holds.note) here or in
+                          a dedicated held-seats list. Right now the note is
+                          captured but never rendered anywhere in the UI. */}
                       <Badge variant={statusVariants[booking.status]}>
                         {booking.status}
                       </Badge>
@@ -205,6 +215,17 @@ export function BookingsTable() {
                     </TableCell>
                     <TableCell className="text-muted-foreground text-xs">
                       {formatDate(booking.createdAt)}
+                    </TableCell>
+                    <TableCell>
+                      <BookingRowActions
+                        bookingId={booking.id}
+                        email={booking.email}
+                        fullName={booking.fullName}
+                        seats={booking.seats}
+                        status={booking.status}
+                        paymentMethod={booking.paymentMethod}
+                        paidAt={booking.paidAt}
+                      />
                     </TableCell>
                   </TableRow>
                 );
