@@ -78,15 +78,10 @@ export default function WaitlistPromotionEmail({
               </Section>
 
               <Text className="mb-3.75 text-base">
-                You don&apos;t need to do anything else online. Show your
-                booking ID at the entrance. If you can no longer attend, reply
-                to this email so we can offer the seat to the next person on
-                the list.
-              </Text>
-
-              <Text className="mb-3.75 text-base">
-                If you have any questions, please reach out to us at{" "}
-                <span className="text-[#98244c]">info@chefskiss.com.cy</span>.
+                To confirm your seat, please reply to{" "}
+                <span className="text-[#98244c]">info@chefskiss.com.cy</span>{" "}
+                with your booking ID. If you can no longer attend, let us know
+                so we can offer the seat to the next person on the list.
               </Text>
 
               <Signature />

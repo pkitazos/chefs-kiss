@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import {
@@ -12,6 +13,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { api } from "@/lib/trpc/client";
 
 interface WaitlistActionDialogProps {
@@ -39,13 +42,23 @@ export function WaitlistActionDialog({
 }: WaitlistActionDialogProps) {
   const utils = api.useUtils();
 
+  const [sendEmail, setSendEmail] = useState(false);
+
+  useEffect(() => {
+    if (!open) setSendEmail(false);
+  }, [open]);
+
   const promote = api.waitlist.promote.useMutation({
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
       utils.slots.bySlot.invalidate();
       utils.slots.summary.invalidate();
       utils.bookings.adminList.invalidate();
       onOpenChange(false);
-      toast.success("Promoted — confirmation email sent to " + email);
+      toast.success(
+        variables.sendEmail
+          ? "Promoted — confirmation email sent to " + email
+          : "Promoted — no email sent",
+      );
     },
     onError: (err) => {
       toast.error("Failed to promote", { description: err.message });
@@ -70,7 +83,7 @@ export function WaitlistActionDialog({
   const willOverfill = action === "promote" && overBy > 0;
 
   const handleConfirm = () => {
-    if (action === "promote") promote.mutate({ id: entryId });
+    if (action === "promote") promote.mutate({ id: entryId, sendEmail });
     else if (action === "remove") cancel.mutate({ id: entryId });
   };
 
@@ -85,7 +98,7 @@ export function WaitlistActionDialog({
           </AlertDialogTitle>
           <AlertDialogDescription>
             {action === "promote"
-              ? `This will create a confirmed booking for ${fullName} (party of ${partySize}), flagged as pay-on-the-day. A confirmation email will be sent to ${email}.`
+              ? `This will create a confirmed booking for ${fullName} (party of ${partySize}), flagged as pay-on-the-day. No email will be sent unless you opt in below.`
               : `This will cancel the waitlist entry for ${fullName}. No email will be sent.`}
           </AlertDialogDescription>
         </AlertDialogHeader>
@@ -95,6 +108,23 @@ export function WaitlistActionDialog({
             This will put the slot <strong>{overBy} over capacity.</strong>{" "}
             Proceed only if you&apos;ve confirmed the extra seats can be
             accommodated.
+          </div>
+        )}
+
+        {action === "promote" && (
+          <div className="flex items-start gap-2">
+            <Checkbox
+              id="send-promotion-email"
+              checked={sendEmail}
+              onCheckedChange={(c) => setSendEmail(c === true)}
+              disabled={pending}
+            />
+            <Label
+              htmlFor="send-promotion-email"
+              className="text-sm font-normal leading-snug"
+            >
+              Send confirmation email to {email}
+            </Label>
           </div>
         )}
 
