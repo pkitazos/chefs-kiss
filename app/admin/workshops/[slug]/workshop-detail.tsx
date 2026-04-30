@@ -12,7 +12,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { eventDateFormat } from "@/lib/config/event";
+import { buildSeatBreakdown } from "@/lib/db/seat-counting";
 import { api } from "@/lib/trpc/client";
+
+import { CapacityInfoIcon } from "../../slots/capacity-info";
 import {
   IconArrowLeft,
   IconChevronRight,
@@ -92,6 +95,12 @@ function SlotSection({ slot }: { slot: SlotInfo }) {
     slotId: slot.slotId,
   });
 
+  const breakdown = buildSeatBreakdown(
+    slot.capacity,
+    data?.counts ?? { booked: 0, reserved: 0, held: 0 },
+  );
+  const filled = breakdown.booked + breakdown.reserved + breakdown.held;
+
   const parsedDate = new Date(slot.date);
 
   return (
@@ -103,8 +112,10 @@ function SlotSection({ slot }: { slot: SlotInfo }) {
               {eventDateFormat.dayName(parsedDate)} at {slot.time}
             </CardTitle>
             <CardDescription className="flex flex-wrap items-center gap-3">
-              <span>
-                {data?.bookedSeats ?? 0} / {slot.capacity} booked
+              <span className="inline-flex items-center gap-1">
+                {filled} / {slot.capacity} ({breakdown.booked}b ·{" "}
+                {breakdown.reserved}r · {breakdown.held}h)
+                <CapacityInfoIcon />
               </span>
               <span className="font-mono text-xs">{slot.slotId}</span>
             </CardDescription>
@@ -130,8 +141,7 @@ function SlotSection({ slot }: { slot: SlotInfo }) {
         ) : data ? (
           <WaitlistTable
             entries={data.waitlist}
-            capacity={slot.capacity}
-            bookedSeats={data.bookedSeats}
+            available={breakdown.available}
           />
         ) : null}
       </CardContent>

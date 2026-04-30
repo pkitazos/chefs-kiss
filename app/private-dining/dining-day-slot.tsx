@@ -72,9 +72,9 @@ function SessionActionButton({ sessionId }: { sessionId: string }) {
     slotId: sessionId,
   });
 
-  const remaining = availability.data?.remaining;
-  const isLoading = remaining === undefined;
-  const isFullyBooked = !isLoading && remaining <= 0;
+  const available = availability.data?.available;
+  const isLoading = available === undefined;
+  const isFullyBooked = !isLoading && available <= 0;
 
   if (isLoading) {
     return (
