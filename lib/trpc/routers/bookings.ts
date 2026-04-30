@@ -10,6 +10,7 @@ import {
   CapacityExceededError,
   insertPendingBooking,
 } from "@/lib/db/insert-pending-booking";
+import { getSlotSeatBreakdown } from "@/lib/db/seat-counting";
 import { bookings, events } from "@/lib/db/schema";
 import {
   buildNotificationUrl,
@@ -293,19 +294,16 @@ export const bookingsRouter = createTRPCRouter({
 
       await expireStalePendingBookings(ctx.db);
 
-      const [result] = await ctx.db
-        .select({ total: sql<number>`coalesce(sum(${bookings.seats}), 0)` })
-        .from(bookings)
-        .where(
-          and(
-            eq(bookings.slotId, input.slotId),
-            inArray(bookings.status, ["confirmed", "pending"]),
-          ),
-        );
-
-      const booked = Number(result?.total ?? 0);
-
-      return { capacity, booked, remaining: capacity - booked };
+      // ! This is a public endpoint and the response includes the full
+      // bucket breakdown (booked, reserved, held). The customer UI only
+      // renders `available`, but anyone with the slot id can read all
+      // four numbers off the wire. Acceptable for our low-stakes data,
+      // but if this endpoint ever surfaces sensitive operational counts
+      // it needs trimming server-side.
+      return getSlotSeatBreakdown(ctx.db, {
+        slotId: input.slotId,
+        capacity,
+      });
     }),
 
   markPaid: protectedProcedure

@@ -75,9 +75,9 @@ function SlotRow({
     slotId,
   });
 
-  const remaining = availability.data?.remaining;
-  const isLoading = remaining === undefined;
-  const isFullyBooked = !isLoading && remaining <= 0;
+  const available = availability.data?.available;
+  const isLoading = available === undefined;
+  const isFullyBooked = !isLoading && available <= 0;
 
   return (
     <div className="flex flex-col gap-3 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between">
@@ -96,7 +96,7 @@ function SlotRow({
           <p className="text-muted-foreground text-xs">
             {isFullyBooked
               ? "Fully booked"
-              : `${remaining} seat${remaining === 1 ? "" : "s"} remaining`}
+              : `${available} seat${available === 1 ? "" : "s"} remaining`}
           </p>
         )}
       </div>
