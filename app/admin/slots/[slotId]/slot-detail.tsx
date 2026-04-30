@@ -25,6 +25,7 @@ import { IconArrowLeft, IconLoader2 } from "@tabler/icons-react";
 import { PaymentBadge } from "../../bookings/payment-badge";
 import { BookingRowActions } from "../booking-row-actions";
 import { CapacityInfoIcon } from "../capacity-info";
+import { HoldsSection } from "../holds-section";
 import { WaitlistTable } from "../waitlist-table";
 
 const statusVariants = {
@@ -193,6 +194,12 @@ export function SlotDetail(props: SlotDetailProps) {
               </div>
             )}
           </section>
+
+          <HoldsSection
+            slotId={slotId}
+            holds={data.holds}
+            available={breakdown.available}
+          />
 
           <section className="space-y-3">
             <div className="flex items-baseline justify-between">

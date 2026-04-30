@@ -5,6 +5,7 @@ import { eventsRouter } from "./events";
 import { workshopsRouter } from "./workshops";
 import { waitlistRouter } from "./waitlist";
 import { slotsRouter } from "./slots";
+import { seatHoldsRouter } from "./seat-holds";
 
 export const appRouter = createTRPCRouter({
   bookings: bookingsRouter,
@@ -13,6 +14,7 @@ export const appRouter = createTRPCRouter({
   workshops: workshopsRouter,
   waitlist: waitlistRouter,
   slots: slotsRouter,
+  seatHolds: seatHoldsRouter,
 });
 
 export type AppRouter = typeof appRouter;
