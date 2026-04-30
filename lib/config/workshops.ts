@@ -4,7 +4,6 @@ export type WorkshopSlot = {
   id: string;
   variantId?: string;
   time: string;
-  location: string;
   capacity: number;
   price: number;
   shortDescription?: string;
@@ -27,9 +26,7 @@ export type WorkshopConfig = {
   days: WorkshopDay[];
 };
 
-const DEFAULT_WORKSHOP_LOCATION = "TBC";
 const DEFAULT_MAX_SEATS_PER_BOOKING = 6;
-const DEFAULT_WORKSHOP_PRICE = " TBC";
 
 function defineWorkshop<
   const Slug extends string,
@@ -62,42 +59,36 @@ export const WORKSHOPS = [
           {
             id: "WS-BB-D1-1200",
             time: "12:00 – 13:00",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
           {
             id: "WS-BB-D1-1315",
             time: "13:15 – 14:15",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
           {
             id: "WS-BB-D1-1445",
             time: "14:45 – 15:45",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
           {
             id: "WS-BB-D1-1600",
             time: "16:00 – 17:00",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
           {
             id: "WS-BB-D1-1730",
             time: "17:30 – 18:30",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
           {
             id: "WS-BB-D1-1900",
             time: "19:00 – 20:00",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
@@ -109,42 +100,36 @@ export const WORKSHOPS = [
           {
             id: "WS-BB-D2-1200",
             time: "12:00 – 13:00",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
           {
             id: "WS-BB-D2-1315",
             time: "13:15 – 14:15",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
           {
             id: "WS-BB-D2-1445",
             time: "14:45 – 15:45",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
           {
             id: "WS-BB-D2-1600",
             time: "16:00 – 17:00",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
           {
             id: "WS-BB-D2-1730",
             time: "17:30 – 18:30",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
           {
             id: "WS-BB-D2-1900",
             time: "19:00 – 20:00",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
             price: 25,
           },
@@ -155,8 +140,8 @@ export const WORKSHOPS = [
   defineWorkshop({
     slug: "tote-dalin",
     shortId: "TD",
-    title: "Tote Dalin",
-    hostedBy: "Alina",
+    title: "Tote Bag Workshop",
+    hostedBy: "Tote_Dalin",
     tagline: "Learn textile painting and create a hand-painted tote bag.",
     longDescription:
       "The workshop introduces participants to basic textile painting techniques before guiding them through creating their own custom tote bag design. Beyond learning practical skills, they’ll enjoy a relaxed, creative experience, build confidence in their artistic expression, and leave with a unique, hand-painted tote bag they can proudly use.",
@@ -169,16 +154,14 @@ export const WORKSHOPS = [
           {
             id: "WS-TD-D1-1400",
             time: "14:00 – 16:00",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
-            price: DEFAULT_WORKSHOP_PRICE as unknown as number,
+            price: 25,
           },
           {
             id: "WS-TD-D1-1700",
             time: "17:00 – 19:00",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
-            price: DEFAULT_WORKSHOP_PRICE as unknown as number,
+            price: 25,
           },
         ],
       },
@@ -188,16 +171,14 @@ export const WORKSHOPS = [
           {
             id: "WS-TD-D2-1400",
             time: "14:00 – 16:00",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
-            price: DEFAULT_WORKSHOP_PRICE as unknown as number,
+            price: 25,
           },
           {
             id: "WS-TD-D2-1700",
             time: "17:00 – 19:00",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 20,
-            price: DEFAULT_WORKSHOP_PRICE as unknown as number,
+            price: 25,
           },
         ],
       },
@@ -221,16 +202,14 @@ export const WORKSHOPS = [
           {
             id: "WS-BS-D1-1400",
             time: "14:00 – 15:30",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 10,
-            price: DEFAULT_WORKSHOP_PRICE as unknown as number,
+            price: 25,
           },
           {
             id: "WS-BS-D1-1600",
             time: "16:00 – 17:30",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 10,
-            price: DEFAULT_WORKSHOP_PRICE as unknown as number,
+            price: 25,
           },
         ],
       },
@@ -240,16 +219,14 @@ export const WORKSHOPS = [
           {
             id: "WS-BS-D2-1400",
             time: "14:00 – 15:30",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 10,
-            price: DEFAULT_WORKSHOP_PRICE as unknown as number,
+            price: 25,
           },
           {
             id: "WS-BS-D2-1600",
             time: "16:00 – 17:30",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 10,
-            price: DEFAULT_WORKSHOP_PRICE as unknown as number,
+            price: 25,
           },
         ],
       },
@@ -273,7 +250,6 @@ export const WORKSHOPS = [
           {
             id: "WS-PW-D1-1830",
             time: "18:30 - 20:30",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 15,
             price: 35,
           },
@@ -281,7 +257,6 @@ export const WORKSHOPS = [
             id: "WS-PW-MG-D1-1730",
             variantId: "MG",
             time: "17:30 – 19:00",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 15,
             price: 30,
             shortDescription: "Paint Your Own — Mug Edition",
@@ -290,7 +265,6 @@ export const WORKSHOPS = [
             id: "WS-PW-BL-D1-1730",
             variantId: "BL",
             time: "17:30 – 19:00",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 10,
             price: 35,
             shortDescription: "Paint Your Own — Bowl Edition",
@@ -303,7 +277,6 @@ export const WORKSHOPS = [
           {
             id: "WS-PW-D2-1830",
             time: "18:30 - 20:30",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 15,
             price: 35,
           },
@@ -311,7 +284,6 @@ export const WORKSHOPS = [
             id: "WS-PW-MG-D2-1730",
             variantId: "MG",
             time: "17:30 – 19:00",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 15,
             price: 30,
             shortDescription: "Paint Your Own — Mug Edition",
@@ -320,7 +292,6 @@ export const WORKSHOPS = [
             id: "WS-PW-BL-D2-1730",
             variantId: "BL",
             time: "17:30 – 19:00",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 10,
             price: 35,
             shortDescription: "Paint Your Own — Bowl Edition",
@@ -354,7 +325,7 @@ export const WORKSHOPS = [
     slug: "cocktail-making",
     shortId: "CM",
     title: "Cocktail Making",
-    hostedBy: "Payabl.",
+    hostedBy: "Signia x Payabl.",
     tagline: "An interactive cocktail-making experience by the sea.",
     longDescription:
       "Cocktail Making Workshop is an interactive experience at the Sundeck of Ayia Napa Marina, where participants learn how to craft refreshing cocktails, discover mixing techniques, and enjoy a fun, lively atmosphere by the water.",
@@ -374,8 +345,8 @@ export const WORKSHOPS = [
   defineWorkshop({
     slug: "koupepia-by-cocones",
     shortId: "KC",
-    title: "Koupepia",
-    hostedBy: "Cocones",
+    title: "Koupepia Making",
+    hostedBy: "cocones.cyprus",
     tagline:
       "Roll traditional Koupepia and discover authentic Cypriot flavours.",
     longDescription:
@@ -390,7 +361,6 @@ export const WORKSHOPS = [
             id: "WS-KC-PK-D1-1200",
             variantId: "PK",
             time: "12:00 – 12:45",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 6,
             price: 25,
             shortDescription: "Pork mince",
@@ -399,7 +369,6 @@ export const WORKSHOPS = [
             id: "WS-KC-VG-D1-1300",
             variantId: "VG",
             time: "13:00 – 13:45",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 6,
             price: 25,
             shortDescription: "Vegetarian / Vegan",
@@ -408,7 +377,6 @@ export const WORKSHOPS = [
             id: "WS-KC-PK-D1-1400",
             variantId: "PK",
             time: "14:00 – 14:45",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 6,
             price: 25,
             shortDescription: "Pork mince",
@@ -417,7 +385,6 @@ export const WORKSHOPS = [
             id: "WS-KC-VG-D1-1615",
             variantId: "VG",
             time: "16:15 – 17:00",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 6,
             price: 25,
             shortDescription: "Vegetarian / Vegan",
@@ -426,7 +393,6 @@ export const WORKSHOPS = [
             id: "WS-KC-PK-D1-1715",
             variantId: "PK",
             time: "17:15 – 18:00",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 6,
             price: 25,
             shortDescription: "Pork mince",
@@ -435,7 +401,6 @@ export const WORKSHOPS = [
           //   // Extra slot based on demand
           //   id: "WS-KC-VG-D1-1815",
           //   time: "18:15 – 19:00",
-          //   location: DEFAULT_WORKSHOP_LOCATION,
           //   capacity: 6,
           //   price: 25,
           // },
@@ -455,26 +420,23 @@ export const WORKSHOPS = [
     maxSeatsPerBooking: 4,
     days: [
       {
-        date: CURRENT_EVENT.startDate,
+        date: CURRENT_EVENT.endDate,
         slots: [
           {
             id: "WS-PP-D1-1430",
             time: "14:30 – 15:30",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 10,
             price: 40,
           },
           {
             id: "WS-PP-D1-1600",
             time: "16:00 – 17:00",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 10,
             price: 40,
           },
           {
             id: "WS-PP-D1-1730",
             time: "17:30 – 18:30",
-            location: DEFAULT_WORKSHOP_LOCATION,
             capacity: 10,
             price: 40,
           },

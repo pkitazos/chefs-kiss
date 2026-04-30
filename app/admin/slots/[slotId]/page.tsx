@@ -20,7 +20,6 @@ export default async function SlotDetailPage({
         title={dining.session.title}
         date={dining.day.date.toISOString()}
         time={dining.session.time}
-        location={dining.session.location}
         capacity={dining.session.capacity}
         price={dining.session.price}
       />
@@ -37,7 +36,6 @@ export default async function SlotDetailPage({
         workshopSlug={workshop.workshop.slug}
         date={workshop.day.date.toISOString()}
         time={workshop.slot.time}
-        location={workshop.slot.location}
         capacity={workshop.slot.capacity}
         price={workshop.slot.price}
       />

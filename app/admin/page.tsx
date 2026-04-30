@@ -1,14 +1,7 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { api } from "@/lib/trpc/client";
 import Link from "next/link";
 import {
@@ -18,6 +11,7 @@ import {
   IconUsers,
   IconTicket,
   IconClockPause,
+  IconArrowRight,
 } from "@tabler/icons-react";
 
 function formatDate(date: Date) {
@@ -33,15 +27,12 @@ function formatDateRange(start: Date, end: Date) {
 export default function AdminPage() {
   const { data: activeEventData, isLoading: eventLoading } =
     api.events.getActiveEventStats.useQuery();
-  const { data: allEvents, isLoading: eventsLoading } =
-    api.events.getAllEvents.useQuery();
   const { data: allBookings, isLoading: bookingsLoading } =
     api.bookings.adminList.useQuery({});
   const { data: slotSummary, isLoading: slotsLoading } =
     api.slots.summary.useQuery();
 
-  const isLoading =
-    eventLoading || eventsLoading || bookingsLoading || slotsLoading;
+  const isLoading = eventLoading || bookingsLoading || slotsLoading;
 
   const totalWaiting = (slotSummary ?? []).reduce(
     (sum, s) => sum + s.waitlist,
@@ -65,196 +56,12 @@ export default function AdminPage() {
     workshopStats,
   } = activeEventData ?? {};
 
-  return (
-    <div className="space-y-6 py-8">
-      <div>
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-        <p className="text-sm text-muted-foreground">
-          Welcome to the Chef&apos;s Kiss event management system
-        </p>
-      </div>
-
-      {/* Active Event Section */}
-      {activeEvent ? (
-        <Card className="border-primary/20 bg-primary/5">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <Badge variant="default" className="mb-2">
-                  Active Event
-                </Badge>
-                <CardTitle className="mt-3 text-2xl">
-                  {activeEvent.name}
-                </CardTitle>
-                <CardDescription className="mt-2 flex items-center gap-4">
-                  <span className="flex items-center gap-1">
-                    <IconCalendar className="size-4" />
-                    {formatDateRange(
-                      activeEvent.startDate,
-                      activeEvent.endDate,
-                    )}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <IconMapPin className="size-4" />
-                    {activeEvent.location}
-                  </span>
-                </CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-col">
-              <div className="flex justify-start items-center gap-2">
-                <h3 className="font-medium my-4">Vendors</h3>
-                <Link
-                  href={`/admin/vendor-applications?eventId=${activeEvent.id}`}
-                >
-                  <Button variant="link">
-                    <IconUsers className="mr-2 size-4" />
-                    View all Vendor Applications
-                  </Button>
-                </Link>
-              </div>
-              {vendorStats && (
-                <div className="mb-4 grid grid-cols-4 gap-4">
-                  <div className="rounded-lg bg-background p-3 text-center">
-                    <p className="text-2xl font-bold">{vendorStats.total}</p>
-                    <p className="text-xs text-muted-foreground">
-                      Total Applications
-                    </p>
-                  </div>
-                  <div className="rounded-lg bg-background p-3 text-center">
-                    <p className="text-2xl font-bold text-yellow-600">
-                      {vendorStats.pending}
-                    </p>
-                    <p className="text-xs text-muted-foreground">Pending</p>
-                  </div>
-                  <div className="rounded-lg bg-background p-3 text-center">
-                    <p className="text-2xl font-bold text-green-600">
-                      {vendorStats.approved}
-                    </p>
-                    <p className="text-xs text-muted-foreground">Approved</p>
-                  </div>
-                  <div className="rounded-lg bg-background p-3 text-center">
-                    <p className="text-2xl font-bold text-red-600">
-                      {vendorStats.rejected}
-                    </p>
-                    <p className="text-xs text-muted-foreground">Rejected</p>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col">
-              <div className="flex justify-start items-center gap-2">
-                <h3 className="font-medium my-4">Workshops</h3>
-
-                <Link
-                  href={`/admin/workshop-applications?eventId=${activeEvent.id}`}
-                >
-                  <Button variant="link">
-                    <IconUsers className="mr-2 size-4" />
-                    View all Workshop Applications
-                  </Button>
-                </Link>
-              </div>
-              {workshopStats && (
-                <div className="mb-4 grid grid-cols-4 gap-4">
-                  <div className="rounded-lg bg-background p-3 text-center">
-                    <p className="text-2xl font-bold">{workshopStats.total}</p>
-                    <p className="text-xs text-muted-foreground">
-                      Total Applications
-                    </p>
-                  </div>
-                  <div className="rounded-lg bg-background p-3 text-center">
-                    <p className="text-2xl font-bold text-yellow-600">
-                      {workshopStats.pending}
-                    </p>
-                    <p className="text-xs text-muted-foreground">Pending</p>
-                  </div>
-                  <div className="rounded-lg bg-background p-3 text-center">
-                    <p className="text-2xl font-bold text-green-600">
-                      {workshopStats.approved}
-                    </p>
-                    <p className="text-xs text-muted-foreground">Approved</p>
-                  </div>
-                  <div className="rounded-lg bg-background p-3 text-center">
-                    <p className="text-2xl font-bold text-red-600">
-                      {workshopStats.rejected}
-                    </p>
-                    <p className="text-xs text-muted-foreground">Rejected</p>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col">
-              <div className="flex justify-start items-center gap-2">
-                <h3 className="font-medium my-4">Slots & Waitlist</h3>
-                <Link href="/admin/slots">
-                  <Button variant="link">
-                    <IconClockPause className="mr-2 size-4" />
-                    Manage Slots
-                  </Button>
-                </Link>
-              </div>
-              <div className="mb-4 grid grid-cols-4 gap-4">
-                <div className="rounded-lg bg-background p-3 text-center">
-                  <p className="text-2xl font-bold">{totalWaiting}</p>
-                  <p className="text-xs text-muted-foreground">
-                    Total Waiting
-                  </p>
-                </div>
-                <div className="rounded-lg bg-background p-3 text-center">
-                  <p className="text-2xl font-bold text-amber-600">
-                    {slotsWithWaitlist}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Slots with Waitlist
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <div className="flex justify-start items-center gap-2">
-                <h3 className="font-medium my-4">Bookings</h3>
-                <Link href="/admin/bookings">
-                  <Button variant="link">
-                    <IconTicket className="mr-2 size-4" />
-                    View all Bookings
-                  </Button>
-                </Link>
-              </div>
-              {allBookings && (
-                <div className="mb-4 grid grid-cols-4 gap-4">
-                  <div className="rounded-lg bg-background p-3 text-center">
-                    <p className="text-2xl font-bold">{allBookings.length}</p>
-                    <p className="text-xs text-muted-foreground">
-                      Total Bookings
-                    </p>
-                  </div>
-                  <div className="rounded-lg bg-background p-3 text-center">
-                    <p className="text-2xl font-bold text-yellow-600">
-                      {allBookings.filter((b) => b.status === "pending").length}
-                    </p>
-                    <p className="text-xs text-muted-foreground">Pending</p>
-                  </div>
-                  <div className="rounded-lg bg-background p-3 text-center">
-                    <p className="text-2xl font-bold text-green-600">
-                      {allBookings.filter((b) => b.status === "confirmed").length}
-                    </p>
-                    <p className="text-xs text-muted-foreground">Confirmed</p>
-                  </div>
-                  <div className="rounded-lg bg-background p-3 text-center">
-                    <p className="text-2xl font-bold text-red-600">
-                      {allBookings.filter((b) => b.status === "expired").length}
-                    </p>
-                    <p className="text-xs text-muted-foreground">Expired</p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      ) : (
+  if (!activeEvent) {
+    return (
+      <div className="space-y-6 py-8">
+        <div>
+          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+        </div>
         <Card>
           <CardContent className="py-8 text-center">
             <p className="text-muted-foreground">
@@ -262,43 +69,140 @@ export default function AdminPage() {
             </p>
           </CardContent>
         </Card>
-      )}
+      </div>
+    );
+  }
 
-      {/* All Events Section */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Your Events</CardTitle>
-          <CardDescription>
-            All past, present, and future events
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {allEvents && allEvents.length > 0 ? (
-            <div className="space-y-3">
-              {allEvents.map((event) => (
-                <div
-                  key={event.id}
-                  className="flex items-center justify-between rounded-lg border p-3"
-                >
-                  <div>
-                    <p className="text-sm font-medium">{event.name}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {formatDateRange(event.startDate, event.endDate)} -{" "}
-                      {event.location}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {event.isActive && <Badge variant="default">Active</Badge>}
-                    <Badge variant="secondary">{event.locationCode}</Badge>
-                  </div>
-                </div>
-              ))}
+  const totalBookings = allBookings?.length ?? 0;
+  const pendingBookings =
+    allBookings?.filter((b) => b.status === "pending").length ?? 0;
+
+  return (
+    <div className="space-y-6 py-8">
+      <div>
+        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+        <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
+          <span className="font-medium text-foreground">
+            {activeEvent.name}
+          </span>
+          <span className="flex items-center gap-1">
+            <IconCalendar className="size-4" />
+            {formatDateRange(activeEvent.startDate, activeEvent.endDate)}
+          </span>
+          <span className="flex items-center gap-1">
+            <IconMapPin className="size-4" />
+            {activeEvent.location}
+          </span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <IconTicket className="size-4" />
+              All Bookings
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex items-center justify-between gap-4">
+            <div>
+              <div className="flex items-baseline gap-2">
+                <p className="text-4xl font-bold">{totalBookings}</p>
+                <p className="text-sm text-muted-foreground">total</p>
+              </div>
+              <p className="mt-1 text-sm text-muted-foreground">
+                <span className="font-medium text-foreground">
+                  {pendingBookings}
+                </span>{" "}
+                pending
+              </p>
             </div>
-          ) : (
-            <p className="text-muted-foreground">No events yet.</p>
-          )}
-        </CardContent>
-      </Card>
+            <Link href="/admin/bookings">
+              <Button size="lg" className="py-5 px-6 text-base">
+                View all bookings
+                <IconArrowRight className="ml-2 size-4" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <IconClockPause className="size-4" />
+              Slots & Waitlist
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex items-center justify-between gap-4">
+            <div>
+              <div className="flex items-baseline gap-2">
+                <p className="text-4xl font-bold">{totalWaiting}</p>
+                <p className="text-sm text-muted-foreground">waiting</p>
+              </div>
+              <p className="mt-1 text-sm text-muted-foreground">
+                <span className="font-medium text-foreground">
+                  {slotsWithWaitlist}
+                </span>{" "}
+                slots with waitlist
+              </p>
+            </div>
+            <Link href="/admin/slots">
+              <Button size="lg" className="py-5 px-6 text-base">
+                Manage slots
+                <IconArrowRight className="ml-2 size-4" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <Card>
+          <CardContent className="flex items-center justify-between py-2">
+            <div>
+              <p className="flex items-center gap-2 text-sm font-medium">
+                <IconUsers className="size-4" />
+                Vendor applications
+              </p>
+              {vendorStats && (
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {vendorStats.total} total · {vendorStats.pending} pending
+                </p>
+              )}
+            </div>
+            <Link href={`/admin/vendor-applications?eventId=${activeEvent.id}`}>
+              <Button variant="link" size="sm">
+                View
+                <IconArrowRight className="ml-1 size-4" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="flex items-center justify-between py-2">
+            <div>
+              <p className="flex items-center gap-2 text-sm font-medium">
+                <IconUsers className="size-4" />
+                Workshop applications
+              </p>
+              {workshopStats && (
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {workshopStats.total} total · {workshopStats.pending} pending
+                </p>
+              )}
+            </div>
+            <Link
+              href={`/admin/workshop-applications?eventId=${activeEvent.id}`}
+            >
+              <Button variant="link" size="sm">
+                View
+                <IconArrowRight className="ml-1 size-4" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
