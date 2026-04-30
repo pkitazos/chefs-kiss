@@ -4,9 +4,10 @@ export default function BookingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Bookings</h1>
+        <h1 className="text-2xl font-bold">All Bookings</h1>
         <p className="text-sm text-muted-foreground">
-          View and manage private dining and workshop bookings
+          Every private dining and workshop booking. Click a slot to view the
+          full session.
         </p>
       </div>
       <BookingsTable />

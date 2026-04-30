@@ -18,8 +18,32 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { IconLoader2 } from "@tabler/icons-react";
+import Link from "next/link";
+import { format } from "date-fns";
 import { api } from "@/lib/trpc/client";
+import { getDiningSessionById } from "@/lib/config/private-dining";
+import { getWorkshopSlotById } from "@/lib/config/workshops";
 import { PaymentBadge } from "./payment-badge";
+
+function getSlotLabel(
+  type: "private-dining" | "workshop",
+  slotId: string,
+): { title: string; subtitle: string } | null {
+  if (type === "private-dining") {
+    const found = getDiningSessionById(slotId);
+    if (!found) return null;
+    return {
+      title: found.session.title,
+      subtitle: `${format(found.day.date, "EEE d MMM")} · ${found.session.time}`,
+    };
+  }
+  const found = getWorkshopSlotById(slotId);
+  if (!found) return null;
+  return {
+    title: found.workshop.title,
+    subtitle: `${format(found.day.date, "EEE d MMM")} · ${found.slot.time}`,
+  };
+}
 
 const statusVariants = {
   pending: "secondary",
@@ -113,7 +137,9 @@ export function BookingsTable() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {bookings.map((booking) => (
+              {bookings.map((booking) => {
+                const slotLabel = getSlotLabel(booking.type, booking.slotId);
+                return (
                 <TableRow key={booking.id}>
                   <TableCell className="font-mono text-xs">
                     {booking.id}
@@ -128,8 +154,26 @@ export function BookingsTable() {
                     {booking.email}
                   </TableCell>
                   <TableCell>{booking.seats}</TableCell>
-                  <TableCell className="font-mono text-xs">
-                    {booking.slotId}
+                  <TableCell>
+                    <Link
+                      href={`/admin/slots/${booking.slotId}`}
+                      className="hover:underline"
+                    >
+                      {slotLabel ? (
+                        <div>
+                          <div className="text-sm font-medium">
+                            {slotLabel.title}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            {slotLabel.subtitle}
+                          </div>
+                        </div>
+                      ) : (
+                        <span className="font-mono text-xs">
+                          {booking.slotId}
+                        </span>
+                      )}
+                    </Link>
                   </TableCell>
                   <TableCell>
                     <Badge variant={statusVariants[booking.status]}>
@@ -149,7 +193,8 @@ export function BookingsTable() {
                     {formatDate(booking.createdAt)}
                   </TableCell>
                 </TableRow>
-              ))}
+                );
+              })}
             </TableBody>
           </Table>
         </div>

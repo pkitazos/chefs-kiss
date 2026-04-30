@@ -19,7 +19,6 @@ export default async function WorkshopDetailPage({
         slotId: slot.id,
         date: day.date.toISOString(),
         time: slot.time,
-        location: slot.location,
         capacity: slot.capacity,
       })),
     )

@@ -44,13 +44,12 @@ type SlotDetailProps = {
   title: string;
   date: string;
   time: string;
-  location: string;
   capacity: number;
   price: number;
 } & ({ type: "private-dining" } | { type: "workshop"; workshopSlug: string });
 
 export function SlotDetail(props: SlotDetailProps) {
-  const { slotId, type, title, date, time, location, capacity, price } = props;
+  const { slotId, type, title, date, time, capacity, price } = props;
   const { data, isLoading, error } = api.slots.bySlot.useQuery({ slotId });
 
   const parsedDate = new Date(date);
@@ -89,9 +88,6 @@ export function SlotDetail(props: SlotDetailProps) {
               <CardDescription className="mt-2 flex flex-wrap items-center gap-3 text-sm">
                 <span>
                   {eventDateFormat.dayName(parsedDate)} at {time}
-                </span>
-                <span className="inline-flex items-center gap-1">
-                  <IconMapPin className="size-3.5" /> {location}
                 </span>
                 <span className="font-mono text-xs">{slotId}</span>
               </CardDescription>
