@@ -1,6 +1,7 @@
 import { render } from "@react-email/render";
 import { sendEmail } from "./index";
 import BookingConfirmationEmail from "@/emails/booking-confirmation";
+import BookingCancellationEmail from "@/emails/booking-cancellation";
 import { CURRENT_EVENT, eventDateFormat } from "@/lib/config/event";
 import { getDiningSessionById } from "../config/private-dining";
 import { getWorkshopSlotById } from "@/lib/config/workshops";
@@ -83,6 +84,54 @@ export async function sendBookingConfirmation({
   if (!result.success) {
     console.error(
       "Failed to send booking confirmation email:",
+      { bookingId, email },
+      result.error,
+    );
+  }
+
+  return result;
+}
+
+type SendBookingCancellationParams = {
+  email: string;
+  fullName: string;
+  bookingId: string;
+  type: "private-dining" | "workshop";
+  seats: number;
+  slotId: string;
+};
+
+export async function sendBookingCancellation({
+  email,
+  fullName,
+  bookingId,
+  type,
+  seats,
+  slotId,
+}: SendBookingCancellationParams) {
+  const slotLabel = resolveSlotLabel(slotId, type);
+
+  const html = await render(
+    BookingCancellationEmail({
+      fullName,
+      bookingId,
+      type,
+      slotLabel,
+      seats,
+    }),
+  );
+
+  const typeLabel = type === "private-dining" ? "Private Dining" : "Workshop";
+
+  const result = await sendEmail({
+    to: email,
+    subject: `${typeLabel} Booking Cancelled - ${CURRENT_EVENT.name}`,
+    html,
+  });
+
+  if (!result.success) {
+    console.error(
+      "Failed to send booking cancellation email:",
       { bookingId, email },
       result.error,
     );
