@@ -26,57 +26,71 @@ import { WORKSHOPS } from "@/lib/config/workshops";
 import { api } from "@/lib/trpc/client";
 import { IconChevronRight, IconLoader2 } from "@tabler/icons-react";
 
+import { CapacityInfoIcon } from "./capacity-info";
+
 type SummaryRow = {
   slotId: string;
-  type: "private-dining" | "workshop";
   booked: number;
+  reserved: number;
+  held: number;
   waitlist: number;
 };
 
 type SummaryMap = Map<string, SummaryRow>;
 
-type DiningRow = {
+type SlotRowData = {
   slotId: string;
-  title: string;
   date: Date;
   time: string;
   capacity: number;
   booked: number;
+  reserved: number;
+  held: number;
   waitlist: number;
 };
 
-type WorkshopRow = {
-  slotId: string;
-  date: Date;
-  time: string;
-  capacity: number;
-  booked: number;
-  waitlist: number;
-};
+type DiningRow = SlotRowData & { title: string };
+type WorkshopRow = SlotRowData;
 
 type WorkshopBlock = {
   slug: string;
   title: string;
   hostedBy: string;
   rows: WorkshopRow[];
-  totalBooked: number;
+  totalFilled: number;
   totalCapacity: number;
   totalWaitlist: number;
 };
+
+function rowFromSummary(s: SummaryRow | undefined): {
+  booked: number;
+  reserved: number;
+  held: number;
+  waitlist: number;
+} {
+  return {
+    booked: s?.booked ?? 0,
+    reserved: s?.reserved ?? 0,
+    held: s?.held ?? 0,
+    waitlist: s?.waitlist ?? 0,
+  };
+}
+
+function filledOf(row: SlotRowData) {
+  return row.booked + row.reserved + row.held;
+}
 
 function buildRows(summary: SummaryMap) {
   const diningRows: DiningRow[] = [];
   for (const day of DINING_DAYS) {
     for (const session of day.sessions) {
-      const s = summary.get(session.id);
       diningRows.push({
         slotId: session.id,
         title: session.title,
         date: day.date,
         time: session.time,
         capacity: session.capacity,
-        booked: s?.booked ?? 0,
-        waitlist: s?.waitlist ?? 0,
+        ...rowFromSummary(summary.get(session.id)),
       });
     }
   }
@@ -85,14 +99,12 @@ function buildRows(summary: SummaryMap) {
     const rows: WorkshopRow[] = [];
     for (const day of workshop.days) {
       for (const slot of day.slots) {
-        const s = summary.get(slot.id);
         rows.push({
           slotId: slot.id,
           date: day.date,
           time: slot.time,
           capacity: slot.capacity,
-          booked: s?.booked ?? 0,
-          waitlist: s?.waitlist ?? 0,
+          ...rowFromSummary(summary.get(slot.id)),
         });
       }
     }
@@ -106,7 +118,7 @@ function buildRows(summary: SummaryMap) {
       title: workshop.title,
       hostedBy: workshop.hostedBy,
       rows,
-      totalBooked: rows.reduce((sum, r) => sum + r.booked, 0),
+      totalFilled: rows.reduce((sum, r) => sum + filledOf(r), 0),
       totalCapacity: rows.reduce((sum, r) => sum + r.capacity, 0),
       totalWaitlist: rows.reduce((sum, r) => sum + r.waitlist, 0),
     };
@@ -210,7 +222,9 @@ export function SlotsIndexTable() {
                   <TableHead>Session</TableHead>
                   <TableHead>Date</TableHead>
                   <TableHead>Time</TableHead>
-                  <TableHead>Booked / Capacity</TableHead>
+                  <TableHead>
+                    <CapacityColumnHeader />
+                  </TableHead>
                   <TableHead>Waitlist</TableHead>
                   <TableHead className="w-24" />
                 </TableRow>
@@ -225,7 +239,7 @@ export function SlotsIndexTable() {
                     <TableCell>{eventDateFormat.dayName(row.date)}</TableCell>
                     <TableCell>{row.time}</TableCell>
                     <TableCell>
-                      {row.booked} / {row.capacity}
+                      <CapacityCell row={row} />
                     </TableCell>
                     <TableCell>
                       {row.waitlist > 0 ? (
@@ -263,6 +277,29 @@ export function SlotsIndexTable() {
   );
 }
 
+function CapacityCell({ row }: { row: SlotRowData }) {
+  const filled = filledOf(row);
+  return (
+    <div className="leading-tight">
+      <div>
+        {filled} / {row.capacity}
+      </div>
+      <div className="text-xs text-muted-foreground">
+        {row.booked}b · {row.reserved}r · {row.held}h
+      </div>
+    </div>
+  );
+}
+
+function CapacityColumnHeader() {
+  return (
+    <span className="inline-flex items-center gap-1">
+      Filled / Capacity
+      <CapacityInfoIcon />
+    </span>
+  );
+}
+
 function WorkshopBlockView({ block }: { block: WorkshopBlock }) {
   return (
     <div className="rounded-lg border">
@@ -277,8 +314,8 @@ function WorkshopBlockView({ block }: { block: WorkshopBlock }) {
             )}
           </div>
           <p className="text-xs text-muted-foreground">
-            Hosted by {block.hostedBy} · {block.totalBooked} /{" "}
-            {block.totalCapacity} booked
+            Hosted by {block.hostedBy} · {block.totalFilled} /{" "}
+            {block.totalCapacity} filled
           </p>
         </div>
         <Button asChild variant="outline" size="sm">
@@ -304,7 +341,7 @@ function WorkshopBlockView({ block }: { block: WorkshopBlock }) {
               <TableCell>{eventDateFormat.dayName(row.date)}</TableCell>
               <TableCell>{row.time}</TableCell>
               <TableCell>
-                {row.booked} / {row.capacity}
+                <CapacityCell row={row} />
               </TableCell>
               <TableCell>
                 {row.waitlist > 0 ? (

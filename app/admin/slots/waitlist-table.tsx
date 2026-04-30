@@ -30,15 +30,10 @@ type WaitlistEntry = typeof waitlistEntries.$inferSelect;
 
 interface WaitlistTableProps {
   entries: WaitlistEntry[];
-  capacity: number;
-  bookedSeats: number;
+  available: number;
 }
 
-export function WaitlistTable({
-  entries,
-  capacity,
-  bookedSeats,
-}: WaitlistTableProps) {
+export function WaitlistTable({ entries, available }: WaitlistTableProps) {
   if (entries.length === 0) {
     return (
       <div className="rounded-lg border bg-muted/30 p-6 text-center">
@@ -94,8 +89,7 @@ export function WaitlistTable({
                   email={entry.email}
                   fullName={entry.fullName}
                   partySize={entry.partySize}
-                  capacity={capacity}
-                  bookedSeats={bookedSeats}
+                  available={available}
                   status={entry.status}
                 />
               </TableCell>

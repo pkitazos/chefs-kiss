@@ -1,10 +1,11 @@
 import { TRPCError } from "@trpc/server";
-import { and, asc, count, eq, inArray, sql } from "drizzle-orm";
+import { and, asc, count, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 
 import { getDiningSessionById } from "@/lib/config/private-dining";
 import { getWorkshopSlotById } from "@/lib/config/workshops";
 import { isUniqueViolation } from "@/lib/db/errors";
+import { getSlotSeatBreakdown } from "@/lib/db/seat-counting";
 import { lockSlotForWrite } from "@/lib/db/seat-locks";
 import { bookings, events, waitlistEntries } from "@/lib/db/schema";
 import {
@@ -174,20 +175,14 @@ export const waitlistRouter = createTRPCRouter({
 
         const { price, capacity } = slotConfig;
 
-        const [booked] = await tx
-          .select({ total: sql<number>`coalesce(sum(${bookings.seats}), 0)` })
-          .from(bookings)
-          .where(
-            and(
-              eq(bookings.slotId, entry.slotId),
-              inArray(bookings.status, ["confirmed", "pending"]),
-            ),
-          );
+        const breakdown = await getSlotSeatBreakdown(tx, {
+          slotId: entry.slotId,
+          capacity,
+        });
 
-        const bookedSeats = Number(booked?.total ?? 0);
-        if (bookedSeats + entry.partySize > capacity) {
+        if (entry.partySize > breakdown.available) {
           console.warn(
-            `[waitlist.promote] Promoting ${entry.id} would exceed capacity for ${entry.slotId}: capacity=${capacity}, currently booked=${bookedSeats}, adding=${entry.partySize}. Proceeding (warn-and-allow).`,
+            `[waitlist.promote] Promoting ${entry.id} would exceed capacity for ${entry.slotId}: capacity=${capacity}, booked=${breakdown.booked}, reserved=${breakdown.reserved}, held=${breakdown.held}, adding=${entry.partySize}. Proceeding (warn-and-allow).`,
           );
         }
 

@@ -26,8 +26,7 @@ interface WaitlistRowActionsProps {
   email: string;
   fullName: string;
   partySize: number;
-  capacity: number;
-  bookedSeats: number;
+  available: number;
   status: "waiting" | "promoted" | "cancelled";
 }
 
@@ -36,8 +35,7 @@ export function WaitlistRowActions({
   email,
   fullName,
   partySize,
-  capacity,
-  bookedSeats,
+  available,
   status,
 }: WaitlistRowActionsProps) {
   const [dialog, setDialog] = useState<{
@@ -93,8 +91,7 @@ export function WaitlistRowActions({
         email={email}
         fullName={fullName}
         partySize={partySize}
-        capacity={capacity}
-        bookedSeats={bookedSeats}
+        available={available}
         onOpenChange={(open) => setDialog({ ...dialog, open })}
       />
     </>

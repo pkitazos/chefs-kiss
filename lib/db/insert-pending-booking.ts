@@ -1,7 +1,6 @@
-import { and, eq, inArray, sql } from "drizzle-orm";
-
 import type { db } from "./index";
 import { bookings } from "./schema";
+import { getSlotSeatBreakdown } from "./seat-counting";
 import { lockSlotForWrite } from "./seat-locks";
 
 export class CapacityExceededError extends Error {
@@ -47,21 +46,13 @@ export async function insertPendingBooking(
   await database.transaction(async (tx) => {
     await lockSlotForWrite(tx, args.slotId);
 
-    const [booked] = await tx
-      .select({ total: sql<number>`coalesce(sum(${bookings.seats}), 0)` })
-      .from(bookings)
-      .where(
-        and(
-          eq(bookings.slotId, args.slotId),
-          inArray(bookings.status, ["confirmed", "pending"]),
-        ),
-      );
+    const breakdown = await getSlotSeatBreakdown(tx, {
+      slotId: args.slotId,
+      capacity: args.capacity,
+    });
 
-    const bookedSeats = Number(booked?.total ?? 0);
-    const remaining = args.capacity - bookedSeats;
-
-    if (args.seats > remaining) {
-      throw new CapacityExceededError(remaining);
+    if (args.seats > breakdown.available) {
+      throw new CapacityExceededError(breakdown.available);
     }
 
     await tx.insert(bookings).values({

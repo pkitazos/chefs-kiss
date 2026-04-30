@@ -104,8 +104,8 @@ export function WorkshopBookingForm({
     slotId,
   });
 
-  const remaining = availability.data?.remaining ?? capacity;
-  const maxBookable = Math.min(maxSeatsPerBooking, remaining);
+  const available = availability.data?.available ?? capacity;
+  const maxBookable = Math.min(maxSeatsPerBooking, available);
 
   const browserSessionId =
     typeof window !== "undefined" ? getBrowserSessionId() : undefined;
@@ -174,8 +174,8 @@ export function WorkshopBookingForm({
             </p>
             {availability.data && (
               <p>
-                {remaining > 0
-                  ? `${remaining} seat${remaining === 1 ? "" : "s"} remaining`
+                {available > 0
+                  ? `${available} seat${available === 1 ? "" : "s"} remaining`
                   : "Fully booked"}
               </p>
             )}
@@ -202,7 +202,7 @@ export function WorkshopBookingForm({
         </div>
       )}
 
-      {remaining > 0 ? (
+      {available > 0 ? (
         <form onSubmit={handleSubmit(onSubmit)}>
           <Card>
             <CardHeader>
@@ -357,7 +357,7 @@ export function WorkshopBookingForm({
               <Button
                 type="submit"
                 size="cta"
-                disabled={isSubmitting || remaining === 0 || !agreeToTerms}
+                disabled={isSubmitting || available === 0 || !agreeToTerms}
               >
                 {isSubmitting ? (
                   <>
