@@ -78,6 +78,13 @@
       "when": 1777477090240,
       "tag": "0010_add_check_constraint_to_slot_ids",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1777573842038,
+      "tag": "0011_add_cancelled_status_and_seat_holds",
+      "breakpoints": true
     }
   ]
 }
