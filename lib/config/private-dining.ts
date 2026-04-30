@@ -22,22 +22,7 @@ export const DINING_DAYS: DiningDay[] = [
       {
         id: "PD-2026-05-16",
         title: "Private Dining Experience",
-        time: "19:00",
-        location: "Atelier",
-        description:
-          "A curated four-course tasting menu with wine pairings, set against the marina backdrop.",
-        price: 120,
-        capacity: 50,
-      },
-    ],
-  },
-  {
-    date: CURRENT_EVENT.endDate,
-    sessions: [
-      {
-        id: "PD-2026-05-17",
-        title: "Private Dining Experience",
-        time: "19:00",
+        time: "19:00 - 21:00",
         location: "Atelier",
         description:
           "A curated four-course tasting menu with wine pairings, set against the marina backdrop.",

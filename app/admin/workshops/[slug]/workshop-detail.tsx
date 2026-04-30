@@ -26,7 +26,6 @@ interface SlotInfo {
   slotId: string;
   date: string;
   time: string;
-  location: string;
   capacity: number;
 }
 
@@ -104,10 +103,6 @@ function SlotSection({ slot }: { slot: SlotInfo }) {
               {eventDateFormat.dayName(parsedDate)} at {slot.time}
             </CardTitle>
             <CardDescription className="flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center gap-1">
-                <IconMapPin className="size-3.5" />
-                {slot.location}
-              </span>
               <span>
                 {data?.bookedSeats ?? 0} / {slot.capacity} booked
               </span>

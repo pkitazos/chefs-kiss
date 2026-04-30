@@ -4,12 +4,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import type { WorkshopConfig } from "@/lib/config/workshops";
 import { api } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils";
-import {
-  IconHourglass,
-  IconLoader2,
-  IconMapPin,
-  IconTools,
-} from "@tabler/icons-react";
+import { IconHourglass, IconLoader2, IconTools } from "@tabler/icons-react";
 import { format } from "date-fns";
 import Link from "next/link";
 import { useState } from "react";
@@ -53,7 +48,6 @@ export function WorkshopSlots({ workshop }: { workshop: WorkshopConfig }) {
             key={slot.id}
             slotId={slot.id}
             time={slot.time}
-            location={slot.location}
             price={slot.price}
             shortDescription={slot.shortDescription}
             workshopSlug={workshop.slug}
@@ -67,14 +61,12 @@ export function WorkshopSlots({ workshop }: { workshop: WorkshopConfig }) {
 function SlotRow({
   slotId,
   time,
-  location,
   price,
   shortDescription,
   workshopSlug,
 }: {
   slotId: string;
   time: string;
-  location: string;
   price: number;
   shortDescription?: string;
   workshopSlug: string;
@@ -96,10 +88,6 @@ function SlotRow({
             {" "}
             &middot; &euro;{price}
           </span>
-        </p>
-        <p className="text-muted-foreground text-sm inline-flex items-center">
-          <IconMapPin className="size-3 mr-2 text-primary" />
-          {location}
         </p>
         {shortDescription && (
           <p className="text-muted-foreground text-sm">{shortDescription}</p>

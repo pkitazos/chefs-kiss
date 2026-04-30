@@ -46,7 +46,6 @@ export default async function WorkshopBookPage({
         workshopTitle={workshop.title}
         slotId={slotResult.slot.id}
         slotTime={slotResult.slot.time}
-        slotLocation={slotResult.slot.location}
         slotShortDescription={slotResult.slot.shortDescription}
         slotDate={slotResult.day.date.toISOString()}
         price={slotResult.slot.price}

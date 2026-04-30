@@ -56,7 +56,6 @@ interface WorkshopBookingFormProps {
   workshopTitle: string;
   slotId: string;
   slotTime: string;
-  slotLocation: string;
   slotShortDescription?: string;
   slotDate: string;
   price: number;
@@ -69,7 +68,6 @@ export function WorkshopBookingForm({
   workshopTitle,
   slotId,
   slotTime,
-  slotLocation,
   slotShortDescription,
   slotDate,
   price,
@@ -168,9 +166,7 @@ export function WorkshopBookingForm({
         <CardContent>
           <div className="text-muted-foreground space-y-1 text-sm">
             <p>{eventDateFormat.dayName(date)}</p>
-            <p>
-              {slotTime} &middot; {slotLocation}
-            </p>
+            <p>{slotTime}</p>
             {slotShortDescription && <p>{slotShortDescription}</p>}
             <p className="font-medium text-foreground">
               &euro;{price}
