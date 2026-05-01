@@ -6,9 +6,11 @@ import { getDiningSessionById } from "@/lib/config/private-dining";
 import { getWorkshopSlotById } from "@/lib/config/workshops";
 import { getTotalBookedSeats } from "@/lib/db/booked-seats";
 import { isUniqueViolation } from "@/lib/db/errors";
+import { expireStalePendingBookings } from "@/lib/db/expire-stale-bookings";
 import { getSlotSeatBreakdown } from "@/lib/db/seat-counting";
 import { lockSlotForWrite } from "@/lib/db/seat-locks";
 import { bookings, events, seatHolds, waitlistEntries } from "@/lib/db/schema";
+import { resolveSlotLabel } from "@/lib/email/booking-emails";
 import {
   sendWaitlistConfirmation,
   sendWaitlistPromotion,
@@ -19,6 +21,7 @@ import {
   categoryFromSlotId,
   refLikePatternForCategory,
 } from "@/lib/ids";
+import { initBookingPayment } from "@/lib/payments/init-booking-payment";
 import { createWaitlistEntrySchema } from "@/lib/validations/waitlist";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../init";
 
@@ -283,6 +286,187 @@ export const waitlistRouter = createTRPCRouter({
       }
 
       return result;
+    }),
+
+  getClaimEntry: publicProcedure
+    .input(z.object({ id: z.string().min(1) }))
+    .query(async ({ ctx, input }) => {
+      await expireStalePendingBookings(ctx.db);
+
+      const [entry] = await ctx.db
+        .select()
+        .from(waitlistEntries)
+        .where(eq(waitlistEntries.id, input.id))
+        .limit(1);
+
+      if (!entry) {
+        return { state: "not-found" as const };
+      }
+
+      if (entry.status !== "promoted") {
+        return { state: "no-longer-available" as const };
+      }
+
+      const [booking] = await ctx.db
+        .select()
+        .from(bookings)
+        .where(eq(bookings.waitlistEntryId, entry.id))
+        .limit(1);
+
+      if (!booking) {
+        // promote always inserts a booking; if missing, treat as dead link
+        // rather than leaking an internal error to a public claim page.
+        return { state: "no-longer-available" as const };
+      }
+
+      const slot = {
+        label: resolveSlotLabel(booking.slotId, booking.type),
+        seats: booking.seats,
+        totalFormatted: `€${(booking.totalAmount / 100).toFixed(2)}`,
+        type: booking.type,
+      };
+
+      if (booking.status === "confirmed") {
+        return {
+          state: "already-paid" as const,
+          entry,
+          booking,
+          slot,
+        };
+      }
+
+      if (booking.status === "pending" || booking.status === "expired") {
+        return {
+          state: "ready-to-pay" as const,
+          entry,
+          booking,
+          slot,
+        };
+      }
+
+      // cancelled / failed — link is invalid
+      return { state: "no-longer-available" as const };
+    }),
+
+  initPayment: publicProcedure
+    .input(z.object({ waitlistEntryId: z.string().min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      await expireStalePendingBookings(ctx.db);
+
+      const [entry] = await ctx.db
+        .select()
+        .from(waitlistEntries)
+        .where(eq(waitlistEntries.id, input.waitlistEntryId))
+        .limit(1);
+
+      if (!entry) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "This offer could not be found.",
+        });
+      }
+
+      if (entry.status !== "promoted") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "This offer is no longer available.",
+        });
+      }
+
+      const [booking] = await ctx.db
+        .select()
+        .from(bookings)
+        .where(eq(bookings.waitlistEntryId, entry.id))
+        .limit(1);
+
+      if (!booking) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message:
+            "We could not find a booking for this offer. Please contact support.",
+        });
+      }
+
+      if (booking.status === "confirmed") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "This booking is already paid.",
+        });
+      }
+
+      if (booking.status === "cancelled" || booking.status === "failed") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "This offer is no longer available.",
+        });
+      }
+
+      const slotConfig =
+        booking.type === "private-dining"
+          ? (getDiningSessionById(booking.slotId)?.session ?? null)
+          : (getWorkshopSlotById(booking.slotId)?.slot ?? null);
+
+      if (!slotConfig) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Slot configuration not found for this booking.",
+        });
+      }
+
+      const newExpiresAt = new Date(Date.now() + 15 * 60 * 1000);
+
+      if (booking.status === "expired") {
+        // Reviving the booking adds its seats back into the reserved
+        // bucket, so re-check capacity under the slot lock with the same
+        // warn-and-allow pattern as `promote`.
+        await ctx.db.transaction(async (tx) => {
+          await lockSlotForWrite(tx, booking.slotId);
+
+          const breakdown = await getSlotSeatBreakdown(tx, {
+            slotId: booking.slotId,
+            capacity: slotConfig.capacity,
+          });
+
+          if (booking.seats > breakdown.available) {
+            console.warn(
+              `[waitlist.initPayment] Reviving ${booking.id} would exceed capacity for ${booking.slotId}: capacity=${slotConfig.capacity}, booked=${breakdown.booked}, reserved=${breakdown.reserved}, held=${breakdown.held}, adding=${booking.seats}. Proceeding (warn-and-allow).`,
+            );
+          }
+
+          await tx
+            .update(bookings)
+            .set({
+              status: "pending",
+              expiresAt: newExpiresAt,
+              paidAt: null,
+              payablErrorCode: null,
+              payablErrorMessage: null,
+              updatedAt: new Date(),
+            })
+            .where(eq(bookings.id, booking.id));
+        });
+      } else {
+        // pending — customer is actively paying; just refresh the window.
+        await ctx.db
+          .update(bookings)
+          .set({ expiresAt: newExpiresAt, updatedAt: new Date() })
+          .where(eq(bookings.id, booking.id));
+      }
+
+      const urlReturn = `${clientEnv.NEXT_PUBLIC_APP_URL}/waitlist/claim?id=${entry.id}`;
+
+      return initBookingPayment({
+        database: ctx.db,
+        booking: {
+          id: booking.id,
+          fullName: booking.fullName,
+          email: booking.email,
+          totalAmount: booking.totalAmount,
+        },
+        urlReturn,
+        markFailedOnError: false,
+        logTag: "waitlist.initPayment",
+      });
     }),
 
   cancel: protectedProcedure
