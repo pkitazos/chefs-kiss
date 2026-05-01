@@ -38,7 +38,7 @@ export function resolveSlotLabel(
   return `${result.workshop.title} - ${eventDateFormat.dayName(result.day.date)} at ${result.slot.time}`;
 }
 
-function resolveSlotDetails(
+export function resolveSlotDetails(
   slotId: string,
   type: "private-dining" | "workshop",
 ): { label: string; price: number } {
