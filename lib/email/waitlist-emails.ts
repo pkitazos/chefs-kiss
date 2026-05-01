@@ -1,9 +1,11 @@
 import { render } from "@react-email/render";
 import { sendEmail } from "./index";
-import { resolveSlotLabel } from "./booking-emails";
+import { resolveSlotDetails, resolveSlotLabel } from "./booking-emails";
 import WaitlistConfirmationEmail from "@/emails/waitlist-confirmation";
+import WaitlistPaymentConfirmationEmail from "@/emails/waitlist-payment-confirmation";
 import WaitlistPromotionEmail from "@/emails/waitlist-promotion";
 import { CURRENT_EVENT } from "@/lib/config/event";
+import { clientEnv } from "@/lib/env";
 
 type SendWaitlistConfirmationParams = {
   email: string;
@@ -59,31 +61,32 @@ export async function sendWaitlistConfirmation({
 type SendWaitlistPromotionParams = {
   email: string;
   fullName: string;
-  bookingId: string;
+  waitlistEntryId: string;
   type: "private-dining" | "workshop";
   partySize: number;
   slotId: string;
-  claimUrl: string;
 };
 
 export async function sendWaitlistPromotion({
   email,
   fullName,
-  bookingId,
+  waitlistEntryId,
   type,
   partySize,
   slotId,
-  claimUrl,
 }: SendWaitlistPromotionParams) {
-  const slotLabel = resolveSlotLabel(slotId, type);
+  const { label: slotLabel, price } = resolveSlotDetails(slotId, type);
+  const total = price * partySize;
+  const totalFormatted = `€${total.toFixed(2)}`;
+  const claimUrl = `${clientEnv.NEXT_PUBLIC_APP_URL}/waitlist/claim?id=${waitlistEntryId}`;
 
   const html = await render(
     WaitlistPromotionEmail({
       fullName,
-      bookingId,
+      claimUrl,
       slotLabel,
       partySize,
-      claimUrl,
+      totalFormatted,
     }),
   );
 
@@ -96,6 +99,55 @@ export async function sendWaitlistPromotion({
   if (!result.success) {
     console.error(
       "Failed to send waitlist promotion email:",
+      { waitlistEntryId, email },
+      result.error,
+    );
+  }
+
+  return result;
+}
+
+type SendWaitlistPaymentConfirmationParams = {
+  email: string;
+  fullName: string;
+  bookingId: string;
+  type: "private-dining" | "workshop";
+  seats: number;
+  slotId: string;
+};
+
+export async function sendWaitlistPaymentConfirmation({
+  email,
+  fullName,
+  bookingId,
+  type,
+  seats,
+  slotId,
+}: SendWaitlistPaymentConfirmationParams) {
+  const { label: slotLabel, price } = resolveSlotDetails(slotId, type);
+  const total = price * seats;
+  const totalFormatted = `€${total.toFixed(2)}`;
+
+  const html = await render(
+    WaitlistPaymentConfirmationEmail({
+      fullName,
+      bookingId,
+      type,
+      slotLabel,
+      seats,
+      totalFormatted,
+    }),
+  );
+
+  const result = await sendEmail({
+    to: email,
+    subject: `Spot Confirmed - ${CURRENT_EVENT.name}`,
+    html,
+  });
+
+  if (!result.success) {
+    console.error(
+      "Failed to send waitlist payment confirmation email:",
       { bookingId, email },
       result.error,
     );

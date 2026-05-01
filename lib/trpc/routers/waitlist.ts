@@ -277,15 +277,14 @@ export const waitlistRouter = createTRPCRouter({
         await sendWaitlistPromotion({
           email: result.booking.email,
           fullName: result.booking.fullName,
-          bookingId: result.booking.id,
+          waitlistEntryId: result.waitlistEntry.id,
           type: result.booking.type,
           partySize: result.booking.seats,
           slotId: result.booking.slotId,
-          claimUrl: `${clientEnv.NEXT_PUBLIC_APP_URL}/waitlist/claim?id=${result.waitlistEntry.id}`,
         });
       } catch (err) {
         console.error("Failed to send waitlist promotion email:", {
-          bookingId: result.booking.id,
+          waitlistEntryId: result.waitlistEntry.id,
           email: result.booking.email,
           err,
         });

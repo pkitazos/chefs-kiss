@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { bookings } from "@/lib/db/schema";
 import { env } from "@/lib/env/server";
 import { sendBookingConfirmation } from "@/lib/email/booking-emails";
+import { sendWaitlistPaymentConfirmation } from "@/lib/email/waitlist-emails";
 import { verifyNotification } from "@/lib/payments/payabl";
 
 interface NotificationFields {
@@ -159,8 +160,13 @@ export async function POST(
   );
 
   if (isSuccess) {
+    const sendConfirmation =
+      updated.waitlistEntryId === null
+        ? sendBookingConfirmation
+        : sendWaitlistPaymentConfirmation;
+
     waitUntil(
-      sendBookingConfirmation({
+      sendConfirmation({
         email: updated.email,
         fullName: updated.fullName,
         bookingId: updated.id,
