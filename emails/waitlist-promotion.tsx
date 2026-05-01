@@ -15,6 +15,7 @@ interface WaitlistPromotionEmailProps {
   bookingId: string;
   slotLabel: string;
   partySize: number;
+  claimUrl: string;
 }
 
 export default function WaitlistPromotionEmail({
@@ -22,6 +23,7 @@ export default function WaitlistPromotionEmail({
   bookingId,
   slotLabel,
   partySize,
+  claimUrl,
 }: WaitlistPromotionEmailProps) {
   return (
     <Html lang="en">
@@ -84,6 +86,10 @@ export default function WaitlistPromotionEmail({
                 so we can offer the seat to the next person on the list.
               </Text>
 
+              <Text className="mb-3.75 text-base">
+                Claim your seat: {claimUrl}
+              </Text>
+
               <Signature />
             </div>
           </Container>
@@ -98,4 +104,5 @@ WaitlistPromotionEmail.PreviewProps = {
   bookingId: "26BK02AYN",
   slotLabel: "Private Dining Experience - Saturday, May 16 at 19:00",
   partySize: 2,
+  claimUrl: "http://localhost:3000/waitlist/claim?id=26WL02AYN",
 } as WaitlistPromotionEmailProps;

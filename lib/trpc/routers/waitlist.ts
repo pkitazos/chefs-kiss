@@ -7,11 +7,12 @@ import { getWorkshopSlotById } from "@/lib/config/workshops";
 import { isUniqueViolation } from "@/lib/db/errors";
 import { getSlotSeatBreakdown } from "@/lib/db/seat-counting";
 import { lockSlotForWrite } from "@/lib/db/seat-locks";
-import { bookings, events, waitlistEntries } from "@/lib/db/schema";
+import { bookings, events, seatHolds, waitlistEntries } from "@/lib/db/schema";
 import {
   sendWaitlistConfirmation,
   sendWaitlistPromotion,
 } from "@/lib/email/waitlist-emails";
+import { clientEnv } from "@/lib/env";
 import {
   buildBookingOrWaitlistRef,
   categoryFromSlotId,
@@ -130,12 +131,7 @@ export const waitlistRouter = createTRPCRouter({
     ),
 
   promote: protectedProcedure
-    .input(
-      z.object({
-        id: z.string().min(1),
-        sendEmail: z.boolean().default(false),
-      }),
-    )
+    .input(z.object({ id: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.transaction(async (tx) => {
         const [entry] = await tx
@@ -180,9 +176,12 @@ export const waitlistRouter = createTRPCRouter({
           capacity,
         });
 
-        if (entry.partySize > breakdown.available) {
+        const seatsFromHeld = Math.min(entry.partySize, breakdown.held);
+        const seatsFromAvailable = entry.partySize - seatsFromHeld;
+
+        if (seatsFromAvailable > breakdown.available) {
           console.warn(
-            `[waitlist.promote] Promoting ${entry.id} would exceed capacity for ${entry.slotId}: capacity=${capacity}, booked=${breakdown.booked}, reserved=${breakdown.reserved}, held=${breakdown.held}, adding=${entry.partySize}. Proceeding (warn-and-allow).`,
+            `[waitlist.promote] Promoting ${entry.id} would exceed capacity for ${entry.slotId}: capacity=${capacity}, booked=${breakdown.booked}, reserved=${breakdown.reserved}, held=${breakdown.held}, adding=${seatsFromAvailable}. Proceeding (warn-and-allow).`,
           );
         }
 
@@ -196,6 +195,18 @@ export const waitlistRouter = createTRPCRouter({
           throw new TRPCError({
             code: "BAD_REQUEST",
             message: "No active event found.",
+          });
+        }
+
+        if (seatsFromHeld > 0) {
+          await tx.insert(seatHolds).values({
+            id: crypto.randomUUID(),
+            slotId: entry.slotId,
+            seatCount: seatsFromHeld,
+            status: "consumed",
+            note: `Consumed by promotion of waitlist entry ${entry.id}`,
+            createdBy: ctx.session.user.id,
+            eventId: activeEvent.id,
           });
         }
 
@@ -235,8 +246,8 @@ export const waitlistRouter = createTRPCRouter({
           .values({
             id: bookingId,
             type: entry.type,
-            status: "confirmed",
-            paymentMethod: "in-person",
+            status: "pending",
+            paymentMethod: "online",
             slotId: entry.slotId,
             fullName: entry.fullName,
             email: entry.email,
@@ -246,6 +257,7 @@ export const waitlistRouter = createTRPCRouter({
             paidAt: null,
             expiresAt: null,
             eventId: activeEvent.id,
+            waitlistEntryId: entry.id,
           })
           .returning();
 
@@ -258,23 +270,22 @@ export const waitlistRouter = createTRPCRouter({
         return { waitlistEntry, booking };
       });
 
-      if (input.sendEmail) {
-        try {
-          await sendWaitlistPromotion({
-            email: result.booking.email,
-            fullName: result.booking.fullName,
-            bookingId: result.booking.id,
-            type: result.booking.type,
-            partySize: result.booking.seats,
-            slotId: result.booking.slotId,
-          });
-        } catch (err) {
-          console.error("Failed to send waitlist promotion email:", {
-            bookingId: result.booking.id,
-            email: result.booking.email,
-            err,
-          });
-        }
+      try {
+        await sendWaitlistPromotion({
+          email: result.booking.email,
+          fullName: result.booking.fullName,
+          bookingId: result.booking.id,
+          type: result.booking.type,
+          partySize: result.booking.seats,
+          slotId: result.booking.slotId,
+          claimUrl: `${clientEnv.NEXT_PUBLIC_APP_URL}/waitlist/claim?id=${result.waitlistEntry.id}`,
+        });
+      } catch (err) {
+        console.error("Failed to send waitlist promotion email:", {
+          bookingId: result.booking.id,
+          email: result.booking.email,
+          err,
+        });
       }
 
       return result;
