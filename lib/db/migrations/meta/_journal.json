@@ -85,6 +85,13 @@
       "when": 1777573842038,
       "tag": "0011_add_cancelled_status_and_seat_holds",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1777634460316,
+      "tag": "0012_waitlist_promotion_schema",
+      "breakpoints": true
     }
   ]
 }

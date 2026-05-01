@@ -10,13 +10,14 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
-import { bookingTypeEnum } from "./bookings";
+import { bookingTypeEnum } from "./enums";
 import { events } from "./events";
 
 export const waitlistStatusEnum = pgEnum("waitlist_status", [
   "waiting",
   "promoted",
   "cancelled",
+  "revoked",
 ]);
 
 export const waitlistEntries = pgTable(
