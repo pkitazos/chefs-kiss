@@ -15,6 +15,7 @@ import { user } from "./users";
 export const seatHoldStatusEnum = pgEnum("seat_hold_status", [
   "active",
   "released",
+  "consumed",
 ]);
 
 export const seatHolds = pgTable(

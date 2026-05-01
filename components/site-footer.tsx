@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import { CURRENT_EVENT } from "@/lib/config/event";
 import {
   FESTIVAL_NAME,
   INSTAGRAM_HANDLE,
