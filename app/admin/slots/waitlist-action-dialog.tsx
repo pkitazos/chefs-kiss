@@ -48,16 +48,12 @@ export function WaitlistActionDialog({
   };
 
   const promote = api.waitlist.promote.useMutation({
-    onSuccess: (_data, variables) => {
+    onSuccess: () => {
       utils.slots.bySlot.invalidate();
       utils.slots.summary.invalidate();
       utils.bookings.adminList.invalidate();
       onOpenChange(false);
-      toast.success(
-        variables.sendEmail
-          ? "Promoted - confirmation email sent to " + email
-          : "Promoted - no email sent",
-      );
+      toast.success("Promoted - confirmation email sent to " + email);
     },
     onError: (err) => {
       toast.error("Failed to promote", { description: err.message });
@@ -81,7 +77,7 @@ export function WaitlistActionDialog({
   const willOverfill = action === "promote" && overBy > 0;
 
   const handleConfirm = () => {
-    if (action === "promote") promote.mutate({ id: entryId, sendEmail });
+    if (action === "promote") promote.mutate({ id: entryId });
     else if (action === "remove") cancel.mutate({ id: entryId });
   };
 
