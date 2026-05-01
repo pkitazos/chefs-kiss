@@ -39,10 +39,10 @@ export async function getSlotSeatCounts(
   executor: DbOrTx,
   slotId: string,
 ): Promise<SeatCounts> {
-  const bookingsRows = await executor
+  const [bookingsRow] = await executor
     .select({
-      status: bookings.status,
-      total: sql<number>`coalesce(sum(${bookings.seats}), 0)`,
+      booked: sql<number>`coalesce(sum(${bookings.seats}) filter (where ${bookings.status} = 'confirmed'), 0)`,
+      reserved: sql<number>`coalesce(sum(${bookings.seats}) filter (where ${bookings.status} = 'pending'), 0)`,
     })
     .from(bookings)
     .where(
@@ -50,26 +50,28 @@ export async function getSlotSeatCounts(
         eq(bookings.slotId, slotId),
         inArray(bookings.status, ["confirmed", "pending"]),
       ),
-    )
-    .groupBy(bookings.status);
+    );
 
   const [holdsRow] = await executor
     .select({
-      total: sql<number>`coalesce(sum(${seatHolds.seatCount}), 0)`,
+      held: sql<number>`greatest(0,
+        coalesce(sum(${seatHolds.seatCount}) filter (where ${seatHolds.status} = 'active'), 0)
+        - coalesce(sum(${seatHolds.seatCount}) filter (where ${seatHolds.status} = 'consumed'), 0)
+      )`,
     })
     .from(seatHolds)
-    .where(and(eq(seatHolds.slotId, slotId), eq(seatHolds.status, "active")));
+    .where(
+      and(
+        eq(seatHolds.slotId, slotId),
+        inArray(seatHolds.status, ["active", "consumed"]),
+      ),
+    );
 
-  let booked = 0;
-  let reserved = 0;
-  for (const row of bookingsRows) {
-    const total = Number(row.total);
-    if (row.status === "confirmed") booked = total;
-    else if (row.status === "pending") reserved = total;
-  }
-  const held = Number(holdsRow?.total ?? 0);
-
-  return { booked, reserved, held };
+  return {
+    booked: Number(bookingsRow?.booked ?? 0),
+    reserved: Number(bookingsRow?.reserved ?? 0),
+    held: Number(holdsRow?.held ?? 0),
+  };
 }
 
 export async function getSlotSeatBreakdown(
@@ -88,22 +90,28 @@ export async function getAllSlotsSeatCounts(
   const bookingsRows = await database
     .select({
       slotId: bookings.slotId,
-      status: bookings.status,
-      total: sql<number>`coalesce(sum(${bookings.seats}), 0)`,
+      booked: sql<number>`coalesce(sum(${bookings.seats}) filter (where ${bookings.status} = 'confirmed'), 0)`,
+      reserved: sql<number>`coalesce(sum(${bookings.seats}) filter (where ${bookings.status} = 'pending'), 0)`,
     })
     .from(bookings)
     .where(inArray(bookings.status, ["confirmed", "pending"]))
-    .groupBy(bookings.slotId, bookings.status);
+    .groupBy(bookings.slotId);
 
   const holdsRows = await database
     .select({
       slotId: seatHolds.slotId,
-      total: sql<number>`coalesce(sum(${seatHolds.seatCount}), 0)`,
+      held: sql<number>`greatest(0,
+        coalesce(sum(${seatHolds.seatCount}) filter (where ${seatHolds.status} = 'active'), 0)
+        - coalesce(sum(${seatHolds.seatCount}) filter (where ${seatHolds.status} = 'consumed'), 0)
+      )`,
     })
     .from(seatHolds)
-    .where(eq(seatHolds.status, "active"))
+    .where(inArray(seatHolds.status, ["active", "consumed"]))
     .groupBy(seatHolds.slotId);
 
+  // Merge the two per-slot result sets into one map keyed by slotId. A slot
+  // may appear in only one query (e.g. bookings with no holds), so each row
+  // get-or-creates an entry seeded with zeros and fills in its own fields.
   const map: SlotsSeatCountsMap = new Map();
   const ensure = (slotId: string): SeatCounts => {
     let entry = map.get(slotId);
@@ -116,12 +124,11 @@ export async function getAllSlotsSeatCounts(
 
   for (const row of bookingsRows) {
     const entry = ensure(row.slotId);
-    const total = Number(row.total);
-    if (row.status === "confirmed") entry.booked = total;
-    else if (row.status === "pending") entry.reserved = total;
+    entry.booked = Number(row.booked);
+    entry.reserved = Number(row.reserved);
   }
   for (const row of holdsRows) {
-    ensure(row.slotId).held = Number(row.total);
+    ensure(row.slotId).held = Number(row.held);
   }
 
   return map;
