@@ -9,7 +9,9 @@ import {
   timestamp,
   uuid,
 } from "drizzle-orm/pg-core";
+import { bookingTypeEnum } from "./enums";
 import { events } from "./events";
+import { waitlistEntries } from "./waitlist";
 
 export const bookingStatusEnum = pgEnum("booking_status", [
   "pending",
@@ -17,11 +19,6 @@ export const bookingStatusEnum = pgEnum("booking_status", [
   "failed",
   "expired",
   "cancelled",
-]);
-
-export const bookingTypeEnum = pgEnum("booking_type", [
-  "private-dining",
-  "workshop",
 ]);
 
 export const paymentMethodEnum = pgEnum("payment_method", [
@@ -56,6 +53,11 @@ export const bookings = pgTable(
     eventId: uuid("event_id")
       .notNull()
       .references(() => events.id, { onDelete: "restrict" }),
+
+    waitlistEntryId: text("waitlist_entry_id").references(
+      () => waitlistEntries.id,
+      { onDelete: "set null" },
+    ),
 
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
