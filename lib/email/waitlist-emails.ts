@@ -63,6 +63,7 @@ type SendWaitlistPromotionParams = {
   type: "private-dining" | "workshop";
   partySize: number;
   slotId: string;
+  claimUrl: string;
 };
 
 export async function sendWaitlistPromotion({
@@ -72,6 +73,7 @@ export async function sendWaitlistPromotion({
   type,
   partySize,
   slotId,
+  claimUrl,
 }: SendWaitlistPromotionParams) {
   const slotLabel = resolveSlotLabel(slotId, type);
 
@@ -81,6 +83,7 @@ export async function sendWaitlistPromotion({
       bookingId,
       slotLabel,
       partySize,
+      claimUrl,
     }),
   );
 
