@@ -3,16 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { ConfirmActionDialog } from "@/components/confirm-action-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -116,41 +107,29 @@ function EditNoteDialog({
   });
 
   return (
-    <AlertDialog open={open} onOpenChange={handleOpenChange}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Edit hold note</AlertDialogTitle>
-          <AlertDialogDescription>
-            Admin-only — never sent to anyone.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-
-        <div className="space-y-1.5">
-          <Label htmlFor="edit-hold-note" className="text-sm">
-            Note
-          </Label>
-          <Textarea
-            id="edit-hold-note"
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            disabled={update.isPending}
-            maxLength={500}
-          />
-        </div>
-
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={update.isPending}>
-            Cancel
-          </AlertDialogCancel>
-          <AlertDialogAction
-            onClick={() => update.mutate({ holdId, note: note.trim() })}
-            disabled={update.isPending}
-          >
-            {update.isPending ? "Saving..." : "Save"}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <ConfirmActionDialog
+      open={open}
+      onOpenChange={handleOpenChange}
+      title="Edit hold note"
+      description="Admin-only — never sent to anyone."
+      confirmLabel="Save"
+      pendingLabel="Saving..."
+      isPending={update.isPending}
+      onConfirm={() => update.mutate({ holdId, note: note.trim() })}
+    >
+      <div className="space-y-1.5">
+        <Label htmlFor="edit-hold-note" className="text-sm">
+          Note
+        </Label>
+        <Textarea
+          id="edit-hold-note"
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          disabled={update.isPending}
+          maxLength={500}
+        />
+      </div>
+    </ConfirmActionDialog>
   );
 }
 
@@ -182,29 +161,17 @@ function ReleaseHoldDialog({
   });
 
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Release hold</AlertDialogTitle>
-          <AlertDialogDescription>
-            Release {seatCount} seat{seatCount === 1 ? "" : "s"} back to the
-            public available pool.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={release.isPending}>
-            Back
-          </AlertDialogCancel>
-          <AlertDialogAction
-            variant="destructive"
-            onClick={() => release.mutate({ holdId })}
-            disabled={release.isPending}
-          >
-            {release.isPending ? "Releasing..." : "Release"}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <ConfirmActionDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      title="Release hold"
+      description={`Release ${seatCount} seat${seatCount === 1 ? "" : "s"} back to the public available pool.`}
+      confirmLabel="Release"
+      pendingLabel="Releasing..."
+      cancelLabel="Back"
+      variant="destructive"
+      isPending={release.isPending}
+      onConfirm={() => release.mutate({ holdId })}
+    />
   );
 }

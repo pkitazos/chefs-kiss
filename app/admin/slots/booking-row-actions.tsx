@@ -3,16 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { ConfirmActionDialog } from "@/components/confirm-action-dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -146,106 +137,75 @@ export function BookingRowActions({
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <AlertDialog open={confirmPaidOpen} onOpenChange={setConfirmPaidOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Mark booking as paid</AlertDialogTitle>
-            <AlertDialogDescription>
-              Record that {fullName} paid for booking {bookingId} in person.
-              This cannot be undone here.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={markPaid.isPending}>
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => markPaid.mutate({ id: bookingId })}
-              disabled={markPaid.isPending}
-            >
-              {markPaid.isPending ? "Processing..." : "Confirm"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ConfirmActionDialog
+        open={confirmPaidOpen}
+        onOpenChange={setConfirmPaidOpen}
+        title="Mark booking as paid"
+        description={`Record that ${fullName} paid for booking ${bookingId} in person. This cannot be undone here.`}
+        confirmLabel="Confirm"
+        isPending={markPaid.isPending}
+        onConfirm={() => markPaid.mutate({ id: bookingId })}
+      />
 
-      <AlertDialog open={confirmCancelOpen} onOpenChange={handleCancelOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Cancel booking</AlertDialogTitle>
-            <AlertDialogDescription>
-              Cancel booking <strong>{bookingId}</strong> for{" "}
-              <strong>
-                {fullName} ({seats} seat
-                {seats === 1 ? "" : "s"})
-              </strong>
-              . Seats will be moved to admin-held — you can allocate them to a
-              waitlist customer or release them to the public from the slot
-              view.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
+      <ConfirmActionDialog
+        open={confirmCancelOpen}
+        onOpenChange={handleCancelOpen}
+        title="Cancel booking"
+        description={`Cancel booking ${bookingId} for ${fullName} (${seats} seat${seats === 1 ? "" : "s"}). Seats will be moved to admin-held — you can allocate them to a waitlist customer or release them to the public from the slot view.`}
+        confirmLabel="Cancel booking"
+        pendingLabel="Cancelling..."
+        cancelLabel="Back"
+        variant="destructive"
+        isPending={cancel.isPending}
+        onConfirm={() =>
+          cancel.mutate({
+            id: bookingId,
+            note: cancelNote.trim() || undefined,
+            sendEmail: sendCancelEmail,
+          })
+        }
+      >
+        <div className="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">
+          <strong className="text-destructive">
+            No refund will be issued automatically.
+          </strong>{" "}
+          If a refund is owed, process it manually in Payabl dashboard.
+        </div>
 
-          <div className="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">
-            <strong className="text-destructive">
-              No refund will be issued automatically.
-            </strong>{" "}
-            If a refund is owed, process it manually in Payabl dashboard.
-          </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="cancel-note" className="text-sm">
+            Internal note (optional)
+          </Label>
+          <Textarea
+            id="cancel-note"
+            placeholder={`From cancelled booking ${bookingId}`}
+            value={cancelNote}
+            onChange={(e) => setCancelNote(e.target.value)}
+            disabled={cancel.isPending}
+            maxLength={500}
+          />
+          <p className="text-xs text-muted-foreground">
+            For internal use only - not sent to the user. Leave blank to use
+            default or make a note of why this booking is being cancelled.
+          </p>
+        </div>
 
-          <div className="space-y-1.5">
-            <Label htmlFor="cancel-note" className="text-sm">
-              Internal note (optional)
-            </Label>
-            <Textarea
-              id="cancel-note"
-              placeholder={`From cancelled booking ${bookingId}`}
-              value={cancelNote}
-              onChange={(e) => setCancelNote(e.target.value)}
-              disabled={cancel.isPending}
-              maxLength={500}
-            />
-            <p className="text-xs text-muted-foreground">
-              For internal use only - not sent to the user. Leave blank to use
-              default or make a note of why this booking is being cancelled.
-            </p>
-          </div>
-
-          <div className="flex items-start gap-2">
-            <Checkbox
-              id="send-cancellation-email"
-              checked={sendCancelEmail}
-              onCheckedChange={(c) => setSendCancelEmail(c === true)}
-              disabled={cancel.isPending}
-            />
-            <Label
-              htmlFor="send-cancellation-email"
-              className="text-sm font-normal leading-snug"
-            >
-              Send cancellation email to{" "}
-              <span className="text-secondary">{email}</span>
-            </Label>
-          </div>
-
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={cancel.isPending}>
-              Back
-            </AlertDialogCancel>
-            <AlertDialogAction
-              variant="destructive"
-              onClick={() =>
-                cancel.mutate({
-                  id: bookingId,
-                  note: cancelNote.trim() || undefined,
-                  sendEmail: sendCancelEmail,
-                })
-              }
-              disabled={cancel.isPending}
-            >
-              {cancel.isPending ? "Cancelling..." : "Cancel booking"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        <div className="flex items-start gap-2">
+          <Checkbox
+            id="send-cancellation-email"
+            checked={sendCancelEmail}
+            onCheckedChange={(c) => setSendCancelEmail(c === true)}
+            disabled={cancel.isPending}
+          />
+          <Label
+            htmlFor="send-cancellation-email"
+            className="text-sm font-normal leading-snug"
+          >
+            Send cancellation email to{" "}
+            <span className="text-secondary">{email}</span>
+          </Label>
+        </div>
+      </ConfirmActionDialog>
     </>
   );
 }
