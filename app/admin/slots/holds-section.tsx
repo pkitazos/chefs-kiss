@@ -3,16 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { ConfirmActionDialog } from "@/components/confirm-action-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -189,83 +180,67 @@ function CreateHoldDialog({
   const overBy = validCount ? Math.max(0, parsedCount - available) : 0;
   const willOverfill = overBy > 0;
 
-  const handleConfirm = () => {
-    if (!validCount) return;
-    create.mutate({
-      slotId,
-      seatCount: parsedCount,
-      note: note.trim() || undefined,
-    });
-  };
-
   return (
-    <AlertDialog open={open} onOpenChange={handleOpenChange}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Hold seats</AlertDialogTitle>
-          <AlertDialogDescription>
-            Reserve seats against this slot for an admin allocation (VIP, press,
-            walk-up, etc.). Held seats are removed from the public available
-            pool until you release them.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
+    <ConfirmActionDialog
+      open={open}
+      onOpenChange={handleOpenChange}
+      title="Hold seats"
+      description="Reserve seats against this slot for an admin allocation (VIP, press, walk-up, etc.). Held seats are removed from the public available pool until you release them."
+      confirmLabel="Hold seats"
+      pendingLabel="Holding..."
+      isPending={create.isPending}
+      confirmDisabled={!validCount}
+      onConfirm={() =>
+        create.mutate({
+          slotId,
+          seatCount: parsedCount,
+          note: note.trim() || undefined,
+        })
+      }
+    >
+      <div className="space-y-1.5">
+        <Label htmlFor="hold-seat-count" className="text-sm">
+          Seats
+        </Label>
+        <Input
+          id="hold-seat-count"
+          type="number"
+          inputMode="numeric"
+          min={MIN_SEAT_HOLD_COUNT}
+          max={MAX_SEAT_HOLD_COUNT}
+          value={seatCount}
+          onChange={(e) => setSeatCount(e.target.value)}
+          disabled={create.isPending}
+        />
+        <p className="text-xs text-muted-foreground">
+          {available} currently available.
+        </p>
+      </div>
 
-        <div className="space-y-1.5">
-          <Label htmlFor="hold-seat-count" className="text-sm">
-            Seats
-          </Label>
-          <Input
-            id="hold-seat-count"
-            type="number"
-            inputMode="numeric"
-            min={MIN_SEAT_HOLD_COUNT}
-            max={MAX_SEAT_HOLD_COUNT}
-            value={seatCount}
-            onChange={(e) => setSeatCount(e.target.value)}
-            disabled={create.isPending}
-          />
-          <p className="text-xs text-muted-foreground">
-            {available} currently available.
-          </p>
+      <div className="space-y-1.5">
+        <Label htmlFor="hold-note" className="text-sm">
+          Internal note (optional)
+        </Label>
+        <Textarea
+          id="hold-note"
+          placeholder="e.g. Press allocation — Cyprus Mail"
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+          disabled={create.isPending}
+          maxLength={500}
+        />
+        <p className="text-xs text-muted-foreground">
+          Admin-only — never sent to anyone.
+        </p>
+      </div>
+
+      {willOverfill && (
+        <div className="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">
+          This will put the slot <strong>{overBy} over capacity.</strong>{" "}
+          Proceed only if you&apos;ve confirmed the extra seats can be
+          accommodated.
         </div>
-
-        <div className="space-y-1.5">
-          <Label htmlFor="hold-note" className="text-sm">
-            Internal note (optional)
-          </Label>
-          <Textarea
-            id="hold-note"
-            placeholder="e.g. Press allocation — Cyprus Mail"
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            disabled={create.isPending}
-            maxLength={500}
-          />
-          <p className="text-xs text-muted-foreground">
-            Admin-only — never sent to anyone.
-          </p>
-        </div>
-
-        {willOverfill && (
-          <div className="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">
-            This will put the slot <strong>{overBy} over capacity.</strong>{" "}
-            Proceed only if you&apos;ve confirmed the extra seats can be
-            accommodated.
-          </div>
-        )}
-
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={create.isPending}>
-            Cancel
-          </AlertDialogCancel>
-          <AlertDialogAction
-            onClick={handleConfirm}
-            disabled={create.isPending || !validCount}
-          >
-            {create.isPending ? "Holding..." : "Hold seats"}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+      )}
+    </ConfirmActionDialog>
   );
 }

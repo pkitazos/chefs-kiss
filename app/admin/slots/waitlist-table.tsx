@@ -17,6 +17,7 @@ const waitlistStatusVariants = {
   waiting: "secondary",
   promoted: "default",
   cancelled: "outline",
+  revoked: "outline",
 } as const;
 
 function formatDate(date: Date) {

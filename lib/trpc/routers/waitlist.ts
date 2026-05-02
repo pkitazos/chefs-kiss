@@ -505,4 +505,86 @@ export const waitlistRouter = createTRPCRouter({
 
       return row;
     }),
+
+  revoke: protectedProcedure
+    .input(z.object({ id: z.string().min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      const adminUserId = ctx.session.user.id;
+
+      return ctx.db.transaction(async (tx) => {
+        const [entry] = await tx
+          .select()
+          .from(waitlistEntries)
+          .where(eq(waitlistEntries.id, input.id))
+          .limit(1)
+          .for("update");
+
+        if (!entry) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Waitlist entry not found.",
+          });
+        }
+
+        if (entry.status !== "promoted") {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Only promoted entries can be revoked.",
+          });
+        }
+
+        const [booking] = await tx
+          .select()
+          .from(bookings)
+          .where(eq(bookings.waitlistEntryId, entry.id))
+          .limit(1);
+
+        if (!booking) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Booking not found for this waitlist entry.",
+          });
+        }
+
+        if (booking.status === "confirmed") {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message:
+              "Cannot revoke — the customer has already paid. Cancel the booking instead.",
+          });
+        }
+
+        if (booking.status === "cancelled") {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Cannot revoke — the booking has already been cancelled.",
+          });
+        }
+
+        await lockSlotForWrite(tx, entry.slotId);
+
+        await tx
+          .update(bookings)
+          .set({ status: "cancelled", updatedAt: new Date() })
+          .where(eq(bookings.id, booking.id));
+
+        await tx.insert(seatHolds).values({
+          id: crypto.randomUUID(),
+          slotId: entry.slotId,
+          seatCount: booking.seats,
+          status: "active",
+          note: `From revoked waitlist promotion ${entry.id}`,
+          createdBy: adminUserId,
+          eventId: entry.eventId,
+        });
+
+        const [updated] = await tx
+          .update(waitlistEntries)
+          .set({ status: "revoked", updatedAt: new Date() })
+          .where(eq(waitlistEntries.id, entry.id))
+          .returning();
+
+        return updated;
+      });
+    }),
 });
