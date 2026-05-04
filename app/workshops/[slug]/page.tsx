@@ -5,6 +5,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { AnimateIn } from "@/components/animate-in";
+import { HostedBy } from "@/components/hosted-by";
 import { ImagePlaceholder } from "@/components/image-placeholder";
 import { PageLayout } from "@/components/page-layout";
 import { SectionLabel } from "@/components/ui/section-label";
@@ -62,9 +63,11 @@ export default async function WorkshopPage({
           <h1 className="font-display text-4xl tracking-tight">
             {workshop.title}
           </h1>
-          <p className="-mt-2 text-muted-foreground text-lg">
-            by {workshop.hostedBy}
-          </p>
+          {workshop.hostedBy.length > 0 && (
+            <p className="-mt-2 text-muted-foreground text-lg">
+              by <HostedBy hosts={workshop.hostedBy} />
+            </p>
+          )}
         </AnimateIn>
 
         <AnimateIn>

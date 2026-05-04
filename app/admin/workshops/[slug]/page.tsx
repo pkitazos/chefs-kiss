@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { getWorkshopBySlug } from "@/lib/config/workshops";
+import { formatHostNames, getWorkshopBySlug } from "@/lib/config/workshops";
 import { WorkshopDetail } from "./workshop-detail";
 
 export default async function WorkshopDetailPage({
@@ -32,7 +32,7 @@ export default async function WorkshopDetailPage({
     <WorkshopDetail
       slug={workshop.slug}
       title={workshop.title}
-      hostedBy={workshop.hostedBy}
+      hostedBy={formatHostNames(workshop.hostedBy)}
       tagline={workshop.tagline}
       slots={slots}
     />

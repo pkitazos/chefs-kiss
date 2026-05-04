@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/table";
 import { eventDateFormat } from "@/lib/config/event";
 import { DINING_DAYS } from "@/lib/config/private-dining";
-import { WORKSHOPS } from "@/lib/config/workshops";
+import { formatHostNames, WORKSHOPS } from "@/lib/config/workshops";
 import { api } from "@/lib/trpc/client";
 import { IconChevronRight, IconLoader2 } from "@tabler/icons-react";
 
@@ -116,7 +116,7 @@ function buildRows(summary: SummaryMap) {
     return {
       slug: workshop.slug,
       title: workshop.title,
-      hostedBy: workshop.hostedBy,
+      hostedBy: formatHostNames(workshop.hostedBy),
       rows,
       totalFilled: rows.reduce((sum, r) => sum + filledOf(r), 0),
       totalCapacity: rows.reduce((sum, r) => sum + r.capacity, 0),

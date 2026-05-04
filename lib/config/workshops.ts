@@ -1,5 +1,10 @@
 import { CURRENT_EVENT } from "./event";
 
+export type Host = {
+  name: string;
+  instagram?: string;
+};
+
 export type WorkshopSlot = {
   id: string;
   variantId?: string;
@@ -18,7 +23,7 @@ export type WorkshopConfig = {
   slug: string;
   shortId: string;
   title: string;
-  hostedBy: string;
+  hostedBy: Host[];
   tagline: string;
   longDescription: string;
   duration: string;
@@ -40,12 +45,19 @@ function defineWorkshop<
   return w;
 }
 
+// Plates & Paints	@ creative___sips
+
 export const WORKSHOPS = [
   defineWorkshop({
     slug: "boards-and-bordeaux",
     shortId: "BB",
     title: "Boards & Bordeaux",
-    hostedBy: "C(h)rystal art",
+    hostedBy: [
+      {
+        name: "@christal.art",
+        instagram: "https://www.instagram.com/christal.art/",
+      },
+    ],
     tagline:
       "A relaxed paint-and-sip workshop with wine, cheese, and handmade decor.",
     longDescription:
@@ -105,7 +117,12 @@ export const WORKSHOPS = [
     slug: "tote-dalin",
     shortId: "TD",
     title: "Tote Bag Workshop",
-    hostedBy: "Tote_Dalin",
+    hostedBy: [
+      {
+        name: "@tote_dalin",
+        instagram: "https://www.instagram.com/tote_dalin/",
+      },
+    ],
     tagline: "Learn textile painting and create a hand-painted tote bag.",
     longDescription:
       "The workshop introduces participants to basic textile painting techniques before guiding them through creating their own custom tote bag design. Beyond learning practical skills, they’ll enjoy a relaxed, creative experience, build confidence in their artistic expression, and leave with a unique, hand-painted tote bag they can proudly use.",
@@ -152,7 +169,9 @@ export const WORKSHOPS = [
     slug: "bead-and-sip",
     shortId: "BS",
     title: "Bead & Sip",
-    hostedBy: "Lolsies",
+    hostedBy: [
+      { name: "@lols_ies", instagram: "https://www.instagram.com/lols_ies/" },
+    ],
     tagline:
       "A creative charm-making workshop designed for fun, flow, and feel-good vibes.",
     longDescription:
@@ -200,7 +219,20 @@ export const WORKSHOPS = [
     slug: "pottery-and-wine",
     shortId: "PW",
     title: "Pottery & Wine",
-    hostedBy: "Olga Askoti",
+    hostedBy: [
+      {
+        name: "@askott.pottery",
+        instagram: "https://www.instagram.com/askott.pottery/",
+      },
+      {
+        name: "@stories.ofclay",
+        instagram: "https://www.instagram.com/stories.ofclay/",
+      },
+      {
+        name: "@cthru.store",
+        instagram: "https://www.instagram.com/cthru.store/",
+      },
+    ],
     tagline:
       "A refined, hands‑on ceramics experience with clay, colour, and wine.",
     longDescription:
@@ -268,7 +300,7 @@ export const WORKSHOPS = [
     slug: "whiskey-and-cigar-experience",
     shortId: "WC",
     title: "Whiskey & Cigar Experience",
-    hostedBy: "",
+    hostedBy: [],
     tagline: "An elegant waterfront experience with whiskey and cigars.",
     longDescription:
       "Whiskey & Cigar is a relaxed tasting experience taking place at the Sundeck of Ayia Napa Marina, where participants can enjoy premium whiskey and cigars while exploring rich flavours, aromas, and pairing notes in a refined waterfront setting.",
@@ -303,7 +335,7 @@ export const WORKSHOPS = [
     slug: "cocktail-making",
     shortId: "CM",
     title: "Cocktail Making",
-    hostedBy: "Signia x Payabl.",
+    hostedBy: [],
     tagline: "An interactive cocktail-making experience by the sea.",
     longDescription:
       "Cocktail Making Workshop is an interactive experience at the Sundeck of Ayia Napa Marina, where participants learn how to craft refreshing cocktails, discover mixing techniques, and enjoy a fun, lively atmosphere by the water.",
@@ -337,8 +369,13 @@ export const WORKSHOPS = [
   defineWorkshop({
     slug: "koupepia-by-cokones",
     shortId: "KC",
-    title: "Koupepia Making",
-    hostedBy: "cokones.cyprus",
+    title: "Traditional Koupepia Making",
+    hostedBy: [
+      {
+        name: "@cokones.cyprus",
+        instagram: "https://www.instagram.com/cokones.cyprus/",
+      },
+    ],
     tagline:
       "Roll traditional Koupepia and discover authentic Cypriot flavours.",
     longDescription:
@@ -404,7 +441,12 @@ export const WORKSHOPS = [
     slug: "plates-and-paints",
     shortId: "PP",
     title: "Plates & Paints",
-    hostedBy: "Creative Sips",
+    hostedBy: [
+      {
+        name: "@creative___sips",
+        instagram: "https://www.instagram.com/creative___sips/",
+      },
+    ],
     tagline: "Paint your own plate while enjoying a glass of wine.",
     longDescription:
       "Plates & Paints is a relaxed 45-minute creative workshop where participants can enjoy a glass of fine wine while designing and painting their own plate. It is a fun and expressive experience designed for all skill levels, with all materials provided and no previous experience needed.",
@@ -440,7 +482,16 @@ export const WORKSHOPS = [
     slug: "paint-and-sip",
     shortId: "PS",
     title: "Paint & Sip",
-    hostedBy: "Agapiou Art Studio x Askon Art Winery",
+    hostedBy: [
+      {
+        name: "@agapiouartstudio",
+        instagram: "https://www.instagram.com/agapiouartstudio/",
+      },
+      {
+        name: "@askonartvineyard",
+        instagram: "https://www.instagram.com/askonartvineyard/",
+      },
+    ],
     tagline:
       "Create your own set of painted coasters while enjoying a relaxed glass of wine.",
     longDescription:
@@ -540,6 +591,10 @@ export function getWorkshopSlotById(slotId: string) {
     }
   }
   return null;
+}
+
+export function formatHostNames(hosts: ReadonlyArray<Host>): string {
+  return hosts.map((h) => h.name).join(" & ");
 }
 
 export function getWorkshopPriceSummary(

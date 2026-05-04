@@ -17,6 +17,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
+import { HostedBy } from "@/components/hosted-by";
 import { MainLogo } from "@/components/main-logo";
 import { SiteNav } from "@/components/site-nav";
 import { buttonVariants } from "@/components/ui/button";
@@ -539,9 +540,9 @@ function WorkshopsSection() {
                   <div className="flex items-start justify-between gap-3">
                     <p className="font-display text-xl tracking-tight sm:text-2xl">
                       {workshop.title}
-                      {workshop.hostedBy !== "" && (
+                      {workshop.hostedBy.length > 0 && (
                         <span className="font-sans ml-2 text-base tracking-tight">
-                          by {workshop.hostedBy}
+                          by <HostedBy hosts={workshop.hostedBy} />
                         </span>
                       )}
                     </p>

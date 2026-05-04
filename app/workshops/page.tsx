@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { AnimateIn } from "@/components/animate-in";
 import { WavyPattern } from "@/components/brand-pattern";
+import { HostedBy } from "@/components/hosted-by";
 import { ImagePlaceholder } from "@/components/image-placeholder";
 import { PageLayout } from "@/components/page-layout";
 import { buttonVariants } from "@/components/ui/button";
@@ -78,9 +79,9 @@ export default function WorkshopsPage() {
                         <h2 className="text-lg font-display font-semibold">
                           {workshop.title}
                         </h2>
-                        {workshop.hostedBy !== "" && (
+                        {workshop.hostedBy.length > 0 && (
                           <p className="-mt-1 mb-2.5 text-sm">
-                            by {workshop.hostedBy}
+                            by <HostedBy hosts={workshop.hostedBy} />
                           </p>
                         )}
                       </div>
