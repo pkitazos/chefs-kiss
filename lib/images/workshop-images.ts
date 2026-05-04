@@ -7,6 +7,7 @@ import paintAndSip from "@/public/images/workshops/paint-and-sip.jpg";
 import platesAndPaints from "@/public/images/workshops/plates-and-paints.jpg";
 import potteryAndWine from "@/public/images/workshops/pottery-and-wine.jpg";
 import toteDalin from "@/public/images/workshops/tote-dalin.jpg";
+import koupepiaByCokones from "@/public/images/workshops/koupepia-by-cokones.jpg";
 import whiskeyAndCigarExperience from "@/public/images/workshops/whiskey-and-cigar-experience.jpg";
 
 import { type WorkshopSlug } from "@/lib/config/workshops";
@@ -21,12 +22,12 @@ export const WORKSHOP_IMAGES = {
   "pottery-and-wine": potteryAndWine,
   "whiskey-and-cigar-experience": whiskeyAndCigarExperience,
   "cocktail-making": cocktailMaking,
-  "koupepia-by-cocones": PENDING_IMAGE,
+  "koupepia-by-cokones": koupepiaByCokones,
   "plates-and-paints": platesAndPaints,
   "paint-and-sip": paintAndSip,
 } satisfies Record<WorkshopSlug, StaticImageData | PendingImage>;
 
 export function getWorkshopImage(slug: WorkshopSlug): StaticImageData | null {
-  const entry = WORKSHOP_IMAGES[slug];
+  const entry = WORKSHOP_IMAGES[slug] as StaticImageData | PendingImage;
   return entry === PENDING_IMAGE ? null : entry;
 }

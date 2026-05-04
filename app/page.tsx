@@ -531,9 +531,11 @@ function WorkshopsSection() {
                   <div className="flex items-start justify-between gap-3">
                     <p className="font-display text-xl tracking-tight sm:text-2xl">
                       {workshop.title}
-                      <span className="font-sans ml-2 text-base tracking-tight">
-                        by {workshop.hostedBy}
-                      </span>
+                      {workshop.hostedBy !== "" && (
+                        <span className="font-sans ml-2 text-base tracking-tight">
+                          by {workshop.hostedBy}
+                        </span>
+                      )}
                     </p>
                     {!COMING_SOON && (
                       <span className="inline-flex items-center gap-1.5 shrink-0 pt-1 text-sm font-medium text-primary">

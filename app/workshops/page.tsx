@@ -54,52 +54,58 @@ export default function WorkshopsPage() {
             {WORKSHOPS.map((workshop, i) => {
               const img = getWorkshopImage(workshop.slug);
               return (
-              <AnimateIn
-                key={workshop.slug}
-                transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.1 }}
-              >
-                <div className="flex h-full flex-col overflow-hidden rounded-lg border transition-colors hover:border-primary/30 hover:bg-muted/50">
-                  <ImagePlaceholder className="aspect-video h-60 bg-pink-600/30">
-                    {img && (
-                      <Image
-                        className="size-full object-cover"
-                        src={img}
-                        alt={""}
-                        placeholder="blur"
-                      />
-                    )}
-                  </ImagePlaceholder>
-                  <div className="flex flex-1 flex-col gap-3 p-5">
-                    <div>
-                      <h2 className="text-lg font-display font-semibold">
-                        {workshop.title}
-                      </h2>
-                      <p className="-mt-1 mb-2.5 text-sm">
-                        by {workshop.hostedBy}
-                      </p>
-                    </div>
-                    <p className="text-muted-foreground text-sm">
-                      {workshop.tagline}
-                    </p>
-                    <div className="mt-auto flex items-center justify-between pt-2">
-                      {!COMING_SOON && (
-                        <div className="text-sm">
-                          <WorkshopPriceSummary workshop={workshop} />
-                        </div>
+                <AnimateIn
+                  key={workshop.slug}
+                  transition={{
+                    duration: 0.5,
+                    ease: "easeOut",
+                    delay: i * 0.1,
+                  }}
+                >
+                  <div className="flex h-full flex-col overflow-hidden rounded-lg border transition-colors hover:border-primary/30 hover:bg-muted/50">
+                    <ImagePlaceholder className="aspect-video h-60 bg-pink-600/30">
+                      {img && (
+                        <Image
+                          className="size-full object-cover"
+                          src={img}
+                          alt={""}
+                          placeholder="blur"
+                        />
                       )}
-                      <Link
-                        href={`/workshops/${workshop.slug}`}
-                        className={cn(
-                          buttonVariants({ size: "cta-md" }),
-                          "ml-auto",
+                    </ImagePlaceholder>
+                    <div className="flex flex-1 flex-col gap-3 p-5">
+                      <div>
+                        <h2 className="text-lg font-display font-semibold">
+                          {workshop.title}
+                        </h2>
+                        {workshop.hostedBy !== "" && (
+                          <p className="-mt-1 mb-2.5 text-sm">
+                            by {workshop.hostedBy}
+                          </p>
                         )}
-                      >
-                        View Details
-                      </Link>
+                      </div>
+                      <p className="text-muted-foreground text-sm">
+                        {workshop.tagline}
+                      </p>
+                      <div className="mt-auto flex items-center justify-between pt-2">
+                        {!COMING_SOON && (
+                          <div className="text-sm">
+                            <WorkshopPriceSummary workshop={workshop} />
+                          </div>
+                        )}
+                        <Link
+                          href={`/workshops/${workshop.slug}`}
+                          className={cn(
+                            buttonVariants({ size: "cta-md" }),
+                            "ml-auto",
+                          )}
+                        >
+                          View Details
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </AnimateIn>
+                </AnimateIn>
               );
             })}
           </div>

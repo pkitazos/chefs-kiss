@@ -254,7 +254,7 @@ export function WorkshopBookingForm({
                   )}
                 </Field>
 
-                <Field>
+                {/*<Field>
                   <FieldLabel htmlFor="seats" required>
                     Number of Seats
                   </FieldLabel>
@@ -285,7 +285,7 @@ export function WorkshopBookingForm({
                   {errors.seats && (
                     <FieldError>{errors.seats.message}</FieldError>
                   )}
-                </Field>
+                </Field>*/}
               </FieldGroup>
             </CardContent>
           </Card>
