@@ -6,13 +6,18 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { PRIVATE_DINING_VISIBLE } from "@/lib/config/features";
 import { cn } from "@/lib/utils";
 
-const LINKS = [
+const ALL_LINKS = [
   { href: "/menu", label: "Vendors" },
   { href: "/workshops", label: "Workshops" },
   { href: "/private-dining", label: "Private Dining" },
 ] as const;
+
+const LINKS = ALL_LINKS.filter(
+  (link) => link.href !== "/private-dining" || PRIVATE_DINING_VISIBLE,
+);
 
 const REVEAL_SCROLL_THRESHOLD = 40;
 

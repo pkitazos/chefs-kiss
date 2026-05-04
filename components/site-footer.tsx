@@ -8,13 +8,18 @@ import {
 } from "@/lib/config/socials";
 import { COMPANY } from "@/lib/config/company";
 import { CURRENT_EVENT, eventDateFormat } from "@/lib/config/event";
+import { PRIVATE_DINING_VISIBLE } from "@/lib/config/features";
 
-const EXPLORE_LINKS = [
+const ALL_EXPLORE_LINKS = [
   { href: "/workshops", label: "Workshops" },
   { href: "/private-dining", label: "Private Dining" },
   { href: "/menu", label: "Menu" },
   { href: "/contact-us", label: "Contact" },
 ] as const;
+
+const EXPLORE_LINKS = ALL_EXPLORE_LINKS.filter(
+  (link) => link.href !== "/private-dining" || PRIVATE_DINING_VISIBLE,
+);
 
 const LEGAL_LINKS = [
   { href: "/toc", label: "Terms & Conditions" },

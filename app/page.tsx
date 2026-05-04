@@ -22,6 +22,7 @@ import { SiteNav } from "@/components/site-nav";
 import { buttonVariants } from "@/components/ui/button";
 import { SectionLabel } from "@/components/ui/section-label";
 import { CURRENT_EVENT, eventDateFormat } from "@/lib/config/event";
+import { PRIVATE_DINING_VISIBLE } from "@/lib/config/features";
 import { MENU_VENDORS } from "@/lib/config/menu";
 import { COMING_SOON } from "@/lib/config/mode";
 import { INSTAGRAM_HANDLE, INSTAGRAM_URL } from "@/lib/config/socials";
@@ -201,21 +202,28 @@ function HeroSection() {
           <Link
             href="/workshops"
             className={cn(
-              buttonVariants({ variant: "soft", size: "cta" }),
+              buttonVariants({
+                variant: PRIVATE_DINING_VISIBLE ? "soft" : "default",
+                size: "cta",
+              }),
               "hover:scale-105 transition-transform duration-200",
             )}
           >
             {COMING_SOON ? "Explore Workshops" : "Book a Workshop"}
           </Link>
-          <Link
-            href="/private-dining"
-            className={cn(
-              buttonVariants({ variant: "default", size: "cta" }),
-              "hover:scale-105 transition-transform duration-200",
-            )}
-          >
-            {COMING_SOON ? "Explore Private Dining" : "Reserve Private Dining"}
-          </Link>
+          {PRIVATE_DINING_VISIBLE && (
+            <Link
+              href="/private-dining"
+              className={cn(
+                buttonVariants({ variant: "default", size: "cta" }),
+                "hover:scale-105 transition-transform duration-200",
+              )}
+            >
+              {COMING_SOON
+                ? "Explore Private Dining"
+                : "Reserve Private Dining"}
+            </Link>
+          )}
         </div>
       </motion.div>
 
@@ -781,7 +789,7 @@ export default function LandingPage() {
       <SiteNav revealOnScroll />
       <HeroSection />
       <VendorMarquee />
-      <PrivateDiningSection />
+      {PRIVATE_DINING_VISIBLE && <PrivateDiningSection />}
       <WorkshopsSection />
       <MenuSection />
       <WorkshopCTA />
