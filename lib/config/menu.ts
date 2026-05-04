@@ -284,33 +284,6 @@ export const MENU_VENDORS = [
     ],
   }),
   defineVendor({
-    id: "zam-food-canteen",
-    name: "Zam Food Canteen",
-    cuisine: "Street Food",
-    accent: "orange",
-    icon: "pepper",
-    menu: [
-      {
-        section: "Jacket Potatoes",
-        items: [
-          { name: "Dirty Diana", price: 12 },
-          { name: "Hot AF", price: 10 },
-          { name: "Simple but Juicy", price: 9 },
-          { name: "Veggie Vibez", price: 8 },
-          { name: "Call-Slaw Me Baby", price: 10 },
-        ],
-      },
-      {
-        section: "Nachos",
-        items: [
-          { name: "Boring", price: 7 },
-          { name: "Nuevayol", price: 9 },
-          { name: "The Explosion", price: 11 },
-        ],
-      },
-    ],
-  }),
-  defineVendor({
     id: "wild-earth",
     name: "Wild Earth",
     cuisine: "Plant-Based",
@@ -362,7 +335,6 @@ export const MENU_VENDORS = [
     accent: "green",
     icon: "salad",
     menu: [
-      // todo: shorten descriptions
       {
         section: "Burgers",
         items: [
@@ -592,7 +564,7 @@ export const MENU_VENDORS = [
   }),
   defineVendor({
     id: "megastronomy",
-    name: "Megastronomy",
+    name: "ME Gastronomy",
     cuisine: "Street Food",
     accent: "sky",
     icon: "grill",

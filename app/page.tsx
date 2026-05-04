@@ -27,6 +27,7 @@ import { COMING_SOON } from "@/lib/config/mode";
 import { INSTAGRAM_HANDLE, INSTAGRAM_URL } from "@/lib/config/socials";
 import { WORKSHOPS } from "@/lib/config/workshops";
 import { cn } from "@/lib/utils";
+import { GALLERY_IMAGES } from "@/lib/images/gallery-images";
 
 /* ═══════════════════════════════════════════════
    SVG UTENSIL
@@ -695,14 +696,16 @@ function PhotoGallery() {
 
         <div className="columns-2 md:columns-3 lg:columns-4 gap-3 sm:gap-4">
           {GALLERY_ITEMS.map((item, i) => (
-            <div
+            <Image
               key={i}
               className={cn(
-                "mb-3 sm:mb-4 rounded-2xl overflow-hidden break-inside-avoid",
+                "mb-3 sm:mb-4 rounded-2xl overflow-hidden break-inside-avoid object-cover",
                 "hover:scale-[1.03] transition-transform duration-300 cursor-pointer",
                 item.color,
                 item.tall ? "aspect-3/4" : "aspect-4/3",
               )}
+              src={GALLERY_IMAGES[i]}
+              alt={""}
             />
           ))}
         </div>

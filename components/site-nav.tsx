@@ -6,11 +6,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { COMING_SOON } from "@/lib/config/mode";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
-  { href: "/menu", label: COMING_SOON ? "Vendors" : "Menu" },
+  { href: "/menu", label: "Vendors" },
   { href: "/workshops", label: "Workshops" },
   { href: "/private-dining", label: "Private Dining" },
 ] as const;

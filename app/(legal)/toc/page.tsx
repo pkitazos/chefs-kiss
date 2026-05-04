@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function TermsAndConditionsPage() {
   return (
-    <LegalDoc title="Terms & Conditions" lastUpdated="24.04.2026">
+    <LegalDoc title="Terms & Conditions" lastUpdated="04.05.2026">
       <p>
         These Terms &amp; Conditions (&quot;Terms&quot;) govern your use of the
         Chef&apos;s Kiss website (chefskiss.com.cy, &quot;the Site&quot;) and
@@ -102,8 +102,8 @@ export default function TermsAndConditionsPage() {
 
       <h3>Changes and cancellations by you</h3>
       <p>
-        {/* TODO: link to Refund Policy once published, and cross-check wording consistency with it. */}
-        Our cancellation and refund policy is set out on a separate page.
+        Our cancellation and refund policy is set out in our{" "}
+        <Link href="/refund">Refund &amp; Cancellation Policy</Link>.
       </p>
 
       <h2>4. Vendor and workshop host applications</h2>

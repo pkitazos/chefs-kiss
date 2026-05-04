@@ -72,9 +72,9 @@ export default function MenuPage() {
         />
         <div className="relative mx-auto max-w-4xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
           <AnimateIn>
-            <SectionLabel>Festival Vendors</SectionLabel>
+            <SectionLabel>Festival Menu</SectionLabel>
             <h1 className="mt-3 font-display text-3xl tracking-tight md:text-5xl">
-              Menu
+              Vendors
             </h1>
             <p className="mt-2 text-black text-pretty">
               Discover menus from our festival vendors
@@ -130,10 +130,7 @@ export default function MenuPage() {
               );
               if (COMING_SOON) {
                 return (
-                  <div
-                    key={vendor.id}
-                    className="flex items-center gap-4 py-5"
-                  >
+                  <div key={vendor.id} className="flex items-center gap-4 py-5">
                     {inner}
                   </div>
                 );
