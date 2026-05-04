@@ -1,6 +1,5 @@
-import { and, eq, inArray, sql } from "drizzle-orm";
-
 import type { db } from "./index";
+import { getTotalBookedSeats } from "./booked-seats";
 import { bookings } from "./schema";
 import { lockSlotForWrite } from "./seat-locks";
 
@@ -47,17 +46,7 @@ export async function insertPendingBooking(
   await database.transaction(async (tx) => {
     await lockSlotForWrite(tx, args.slotId);
 
-    const [booked] = await tx
-      .select({ total: sql<number>`coalesce(sum(${bookings.seats}), 0)` })
-      .from(bookings)
-      .where(
-        and(
-          eq(bookings.slotId, args.slotId),
-          inArray(bookings.status, ["confirmed", "pending"]),
-        ),
-      );
-
-    const bookedSeats = Number(booked?.total ?? 0);
+    const bookedSeats = await getTotalBookedSeats(tx, args.slotId);
     const remaining = args.capacity - bookedSeats;
 
     if (args.seats > remaining) {
