@@ -21,8 +21,6 @@ export interface Vendor {
   menu: MenuSection[];
 }
 
-const PLACEHOLDER_PRICE = 10;
-
 function defineVendor<const Id extends string>(
   v: { id: Id } & Omit<Vendor, "id">,
 ) {
@@ -33,8 +31,8 @@ export const MENU_VENDORS = [
   defineVendor({
     id: "to-glykatzidiko",
     name: "To Glykatzidiko",
-    cuisine: "Desserts & Ice Cream",
-    accent: "green",
+    cuisine: "Desserts",
+    accent: "pink",
     icon: "coffee",
     menu: [
       {
@@ -95,7 +93,7 @@ export const MENU_VENDORS = [
   defineVendor({
     id: "yozen",
     name: "Yozen",
-    cuisine: "Frozen Yoghurt & Desserts",
+    cuisine: "Desserts",
     accent: "pink",
     icon: "coffee",
     menu: [
@@ -132,15 +130,26 @@ export const MENU_VENDORS = [
       {
         section: "Mains",
         items: [
-          { name: "Κοτόπουλο με Σισάμι", price: 12 },
-          { name: "Γαρίδες και Κοτόπουλο σε Ψωμάκι", price: 12 },
+          { name: "Sesame Chicken with Fries & Jack Daniels Sauce", price: 12 },
+          {
+            name: "Sesame Chicken with Fries & Honey Mustard Sauce",
+            price: 12,
+          },
+          { name: "Beef Smash Burger with Fries", price: 12 },
+          { name: "Chicken Burger with Fries", price: 12 },
+          { name: "Prawns with Fries", price: 12 },
+          { name: "Mozzarella Sticks with Fries", price: 12 },
+          { name: "Spring Rolls with Fries", price: 12 },
+          { name: "BBQ Wings with Fries", price: 12 },
+          { name: "Honey Mustard Wings with Fries", price: 12 },
+          { name: "Prawn Burger with Fries", price: 12 },
         ],
       },
       {
         section: "Sides",
         items: [
-          { name: "Πατάτες", price: 4 },
-          { name: "Γλυκοπατάτες", price: 6 },
+          { name: "Fries", price: 4 },
+          { name: "Sweet Potato Fries", price: 6 },
         ],
       },
     ],
@@ -148,7 +157,7 @@ export const MENU_VENDORS = [
   defineVendor({
     id: "mays-diner",
     name: "May's Diner",
-    cuisine: "Burgers & BBQ",
+    cuisine: "Burgers",
     accent: "amber",
     icon: "grill",
     menu: [
@@ -193,26 +202,9 @@ export const MENU_VENDORS = [
       {
         section: "Pizza",
         items: [
-          {
-            name: "Margherita",
-            price: 6,
-            description: "Cheese Only",
-          },
-          {
-            name: "Salame Piccante",
-            price: 8,
-            description: "Cheese & Pepperoni",
-          },
-          {
-            name: "Prosciutto",
-            price: 8,
-            description: "Cheese & Ham",
-          },
-          {
-            name: "Venture",
-            price: 8,
-            description: "Cheese & Vegetables",
-          },
+          { name: "Rocket & Prosciutto", price: 12 },
+          { name: "Mozzarella, Cherry Tomato & Basil", price: 12 },
+          { name: "Pepperoni", price: 12 },
         ],
       },
     ],
@@ -239,14 +231,14 @@ export const MENU_VENDORS = [
     id: "cacio-e-pepe",
     name: "Cacio e Pepe",
     cuisine: "Italian",
-    accent: "sky",
+    accent: "green",
     icon: "pepper",
     menu: [
       {
         section: "Pizza",
         items: [
-          { name: "Pizza Margherita", price: PLACEHOLDER_PRICE },
-          { name: "Pizza Spianata", price: PLACEHOLDER_PRICE },
+          { name: "Pizza Margherita", price: 5 },
+          { name: "Pizza Spianata", price: 5 },
         ],
       },
       {
@@ -254,7 +246,7 @@ export const MENU_VENDORS = [
         items: [
           {
             name: "Casarecce with Creamy Mushrooms & Truffle Oil",
-            price: PLACEHOLDER_PRICE,
+            price: 5,
           },
         ],
       },
@@ -270,10 +262,20 @@ export const MENU_VENDORS = [
       {
         section: "Mains",
         items: [
-          { name: "Boneless Bodacious Tenders", price: 8 },
+          { name: "Pulled Pork Sandwich", price: 9 },
+          { name: "Boneless Bodacious Tenders", price: 9 },
+        ],
+      },
+      {
+        section: "Meals",
+        items: [
           {
-            name: "BBQ Pulled Pork Sandwich",
-            price: PLACEHOLDER_PRICE,
+            name: "Pulled Pork Sandwich + Fries",
+            price: 11,
+          },
+          {
+            name: "Boneless Bodacious Tenders + Fries",
+            price: 11,
           },
         ],
       },
@@ -362,7 +364,7 @@ export const MENU_VENDORS = [
         items: [
           {
             name: "Country-Style Fried Potatoes",
-            price: PLACEHOLDER_PRICE,
+            price: 4,
             description: "",
             // "Fresh potatoes, oven-baked and hand-cut into rustic pieces, then fried until golden and crispy, finished with our signature seasoning.",
           },
@@ -400,23 +402,15 @@ export const MENU_VENDORS = [
   defineVendor({
     id: "nikkei",
     name: "Nikkei",
-    cuisine: "Asian Fusion & Burgers",
-    accent: "pink",
+    cuisine: "Asian Fusion",
+    accent: "sky",
     icon: "grill",
     menu: [
       {
         section: "Nikkei Signature",
         items: [
-          {
-            name: "Spicy Tuna roll",
-            price: 8,
-            description: "4 pieces",
-          },
-          {
-            name: "Salmon roll",
-            price: 8,
-            description: "4 pieces",
-          },
+          { name: "Spicy Tuna roll", price: 8, description: "4 pieces" },
+          { name: "Salmon roll", price: 8, description: "4 pieces" },
           { name: "Duck bao bun", price: 7 },
         ],
       },
@@ -440,7 +434,27 @@ export const MENU_VENDORS = [
     cuisine: "Desserts",
     accent: "pink",
     icon: "coffee",
-    menu: [],
+    menu: [
+      {
+        section: "Cookie Dough",
+        items: [
+          { name: "Cookie Dough Classic", price: 6 },
+          { name: "Cookie Dough Special", price: 7 },
+          { name: "Cookie Dough Stacks (Double)", price: 9 },
+        ],
+      },
+      {
+        section: "Ice Cream",
+        items: [
+          { name: "Ice Cream Sundaes", price: 5 },
+          { name: "Soft Serve Ice Cream", price: 3 },
+        ],
+      },
+      {
+        section: "Extras",
+        items: [{ name: "Extra Toppings", price: 1 }],
+      },
+    ],
   }),
   defineVendor({
     id: "kawacom",
@@ -453,10 +467,21 @@ export const MENU_VENDORS = [
   defineVendor({
     id: "big-bad-wolf",
     name: "Big Bad Woolf",
-    cuisine: "Burgers",
+    cuisine: "Greek Grill",
     accent: "amber",
-    icon: "grill",
-    menu: [],
+    icon: "meat",
+    menu: [
+      {
+        section: "Mains",
+        items: [
+          {
+            name: "Pork Giros Portion",
+            price: 10,
+            description: "With chips, pitta, and sauce",
+          },
+        ],
+      },
+    ],
   }),
   defineVendor({
     id: "tarantula-fried-chicken",
@@ -464,7 +489,24 @@ export const MENU_VENDORS = [
     cuisine: "Fried Chicken",
     accent: "orange",
     icon: "meat",
-    menu: [],
+    menu: [
+      {
+        section: "Menu",
+        items: [
+          {
+            name: "Bucket",
+            price: 14,
+            description:
+              "Fries, 4 chicken fingers, 2 sliders, 1 mega mac-mac sauce",
+          },
+          {
+            name: "Loaded Fries",
+            price: 10,
+            description: "Fried chicken, aioli sauce, and parmesan",
+          },
+        ],
+      },
+    ],
   }),
   defineVendor({
     id: "german-donner",
@@ -475,20 +517,42 @@ export const MENU_VENDORS = [
     menu: [],
   }),
   defineVendor({
-    id: "roomates-streetfood",
-    name: "Roomates Streetfood",
-    cuisine: "Street Food",
-    accent: "sky",
-    icon: "pepper",
-    menu: [],
-  }),
-  defineVendor({
     id: "chef-avraam",
     name: "Chef Avraam",
-    cuisine: "Gourmet",
-    accent: "green",
-    icon: "salad",
-    menu: [],
+    cuisine: "Asian",
+    accent: "orange",
+    icon: "pepper",
+    menu: [
+      {
+        section: "Chow Mein",
+        items: [
+          {
+            name: "Vegetable Chow Mein",
+            price: 10,
+            description: "Choice of rice noodles or egg noodles",
+          },
+          {
+            name: "Chicken Chow Mein",
+            price: 10,
+            description: "Choice of rice noodles or egg noodles",
+          },
+          {
+            name: "Beef Chow Mein",
+            price: 12,
+            description: "Choice of rice noodles or egg noodles",
+          },
+        ],
+      },
+      {
+        section: "Add-ons",
+        items: [
+          { name: "Extra Chicken", price: 2 },
+          { name: "Extra Beef", price: 2 },
+          { name: "Extra Vegetables", price: 2 },
+          { name: "Fried Egg Topping", price: 2 },
+        ],
+      },
+    ],
   }),
   defineVendor({
     id: "chef-noel",
@@ -503,8 +567,13 @@ export const MENU_VENDORS = [
     name: "Karas Fish Tavern",
     cuisine: "Seafood",
     accent: "sky",
-    icon: "salad",
-    menu: [],
+    icon: "grill",
+    menu: [
+      {
+        section: "Mains",
+        items: [{ name: "Seafood Paella", price: 9 }],
+      },
+    ],
   }),
   defineVendor({
     id: "regrub",
@@ -512,7 +581,24 @@ export const MENU_VENDORS = [
     cuisine: "Burgers",
     accent: "amber",
     icon: "grill",
-    menu: [],
+    menu: [
+      {
+        section: "Burgers",
+        items: [
+          { name: "Smash", price: 8 },
+          { name: "Double Smash", price: 11 },
+        ],
+      },
+      {
+        section: "Add-ons",
+        items: [
+          { name: "Add Bacon", price: 1 },
+          { name: "Add Jalapenos", price: 1 },
+          { name: "Add Crispy Onions", price: 1 },
+          { name: "Add Patty", price: 3 },
+        ],
+      },
+    ],
   }),
   defineVendor({
     id: "midtown-bistro",
@@ -546,29 +632,85 @@ export const MENU_VENDORS = [
     icon: "pepper",
     menu: [],
   }),
-  defineVendor({
-    id: "chefs-kiss-sliders",
-    name: "Chef's Kiss Sliders",
-    cuisine: "Sliders",
-    accent: "amber",
-    icon: "grill",
-    menu: [],
-  }),
+  // defineVendor({
+  //   id: "chefs-kiss-sliders",
+  //   name: "Chef's Kiss Sliders",
+  //   cuisine: "Sliders",
+  //   accent: "amber",
+  //   icon: "grill",
+  //   menu: [],
+  // }),
   defineVendor({
     id: "hb-hotdogs",
     name: "HB Hotdogs",
     cuisine: "Hot Dogs",
     accent: "orange",
     icon: "meat",
-    menu: [],
+    menu: [
+      {
+        section: "Hot Dogs",
+        items: [{ name: "Hot Dog", price: 7 }],
+      },
+    ],
   }),
   defineVendor({
     id: "megastronomy",
     name: "ME Gastronomy",
-    cuisine: "Street Food",
+    cuisine: "Seafood",
     accent: "sky",
     icon: "grill",
-    menu: [],
+    menu: [
+      {
+        section: "Mains",
+        items: [
+          {
+            name: "Shrimp and Lobster Roll",
+            price: 12,
+            description:
+              "Truffle honey mayo, cheddar cheese, pickled onions, chives",
+          },
+          {
+            name: "Shrimp and Lobster Roll + Plain Fries",
+            price: 14,
+            description:
+              "Truffle honey mayo, cheddar cheese, pickled onions, chives",
+          },
+          {
+            name: "Scallops in Shell",
+            price: 12,
+            description: "Garlic butter, yuzu, carrot puree, pickled radish",
+          },
+        ],
+      },
+      {
+        section: "Oysters",
+        items: [
+          {
+            name: "Oyster (1 pc)",
+            price: 5,
+            description:
+              "Soy truffle sriracha, onion vinegar tabasco, fresh lemon, red tabasco",
+          },
+          {
+            name: "Oysters (5 pcs)",
+            price: 20,
+            description:
+              "Soy truffle sriracha, onion vinegar tabasco, fresh lemon, red tabasco",
+          },
+        ],
+      },
+      {
+        section: "Sides",
+        items: [
+          { name: "Plain Fries", price: 4 },
+          {
+            name: "Loaded Fries",
+            price: 5,
+            description: "Truffle honey mayo, parmesan cheese, chives",
+          },
+        ],
+      },
+    ],
   }),
 ];
 

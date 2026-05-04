@@ -5,7 +5,6 @@ import {
   IconArrowRight,
   IconBrandInstagram,
   IconChevronDown,
-  IconClock,
 } from "@tabler/icons-react";
 import {
   motion,
@@ -17,7 +16,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
-import { HostedBy } from "@/components/hosted-by";
 import { MainLogo } from "@/components/main-logo";
 import { SiteNav } from "@/components/site-nav";
 import { buttonVariants } from "@/components/ui/button";
@@ -31,6 +29,10 @@ import { WORKSHOPS } from "@/lib/config/workshops";
 import { cn } from "@/lib/utils";
 import { GALLERY_IMAGES } from "@/lib/images/gallery-images";
 import { SPONSOR_ROW_1, SPONSOR_ROW_2 } from "@/lib/images/sponsor-images";
+import {
+  WorkshopCarouselCard,
+  type WorkshopCarouselCardVariant,
+} from "@/components/workshop-carousel-card";
 
 /* ═══════════════════════════════════════════════
    SVG UTENSIL
@@ -328,13 +330,8 @@ function PrivateDiningSection() {
    WORKSHOPS PREVIEW
    ═══════════════════════════════════════════════ */
 
-const WORKSHOP_CARD_ACCENTS = [
-  "bg-amber-500",
-  "bg-pink-500",
-  "bg-sky-500",
-  "bg-orange-500",
-  "bg-green-500",
-] as const;
+// Toggle this to preview different card designs: "overlay" | "minimal" | "detailed"
+const WORKSHOP_CARD_VARIANT: WorkshopCarouselCardVariant = "detailed";
 
 const WORKSHOPS_AUTO_ADVANCE_MS = 4500;
 const TRANSITION_MS = 600;
@@ -511,55 +508,20 @@ function WorkshopsSection() {
           }}
         >
           {slides.map((workshop, i) => {
-            // Colour is keyed off the ORIGINAL workshop index, not the
-            // flattened position, so each workshop keeps the same accent
-            // no matter which copy of the list it's currently living in.
-            const originalIndex = i % count;
             const isMiddleCopy = i >= count && i < count * 2;
 
             return (
-              <Link
+              <div
                 key={`${workshop.slug}-${i}`}
-                href={`/workshops/${workshop.slug}`}
-                // Only expose the middle copy to screen readers; the
-                // side copies are visual-only buffer.
                 aria-hidden={!isMiddleCopy ? true : undefined}
-                tabIndex={!isMiddleCopy ? -1 : undefined}
-                className="group flex shrink-0 flex-col gap-3"
+                className="shrink-0"
                 style={{ width: `${slideWidth}px` }}
               >
-                <div
-                  className={cn(
-                    "aspect-3/4 w-full overflow-hidden rounded-2xl transition-transform duration-300 group-hover:scale-[1.02]",
-                    "text-center text-9xl",
-                    WORKSHOP_CARD_ACCENTS[
-                      originalIndex % WORKSHOP_CARD_ACCENTS.length
-                    ],
-                  )}
+                <WorkshopCarouselCard
+                  workshop={workshop}
+                  variant={WORKSHOP_CARD_VARIANT}
                 />
-                <div className="flex flex-col gap-1.5 px-1">
-                  <div className="flex items-start justify-between gap-3">
-                    <p className="font-display text-xl tracking-tight sm:text-2xl">
-                      {workshop.title}
-                      {workshop.hostedBy.length > 0 && (
-                        <span className="font-sans ml-2 text-base tracking-tight">
-                          by <HostedBy hosts={workshop.hostedBy} />
-                        </span>
-                      )}
-                    </p>
-                    {!COMING_SOON && (
-                      <span className="inline-flex items-center gap-1.5 shrink-0 pt-1 text-sm font-medium text-primary">
-                        <IconClock size={16} />
-                        {workshop.duration}
-                      </span>
-                    )}
-                  </div>
-
-                  <p className="text-sm text-muted-foreground">
-                    {workshop.tagline}
-                  </p>
-                </div>
-              </Link>
+              </div>
             );
           })}
         </div>
