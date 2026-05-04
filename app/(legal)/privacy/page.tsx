@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <LegalDoc title="Privacy Policy" lastUpdated="24.04.2026">
+    <LegalDoc title="Privacy Policy" lastUpdated="04.05.2026">
       <p>
         This Privacy Policy explains how DMC Nexus Hospitality Ltd
         (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) collects, uses, and

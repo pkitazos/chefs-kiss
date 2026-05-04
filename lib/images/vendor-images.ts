@@ -51,7 +51,6 @@ export const VENDOR_IMAGES = {
   regrub: regrub,
   "midtown-bistro": midtownBistro,
   "meraki-tastes": merakiTastes,
-  "zam-food-canteen": PENDING_IMAGE,
   kawacom: PENDING_IMAGE,
   "german-donner": PENDING_IMAGE,
   "roomates-streetfood": PENDING_IMAGE,

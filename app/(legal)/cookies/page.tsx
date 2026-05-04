@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function CookiePolicyPage() {
   return (
-    <LegalDoc title="Cookie Policy" lastUpdated="24.04.2026">
+    <LegalDoc title="Cookie Policy" lastUpdated="04.05.2026">
       <p>
         This Cookie Policy explains what cookies are, which cookies are used on
         the Chef&apos;s Kiss website (chefskiss.com.cy), and how you can manage
