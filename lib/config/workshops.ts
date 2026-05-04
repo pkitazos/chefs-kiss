@@ -26,7 +26,7 @@ export type WorkshopConfig = {
   days: WorkshopDay[];
 };
 
-const DEFAULT_MAX_SEATS_PER_BOOKING = 6;
+const DEFAULT_MAX_SEATS_PER_BOOKING = 1;
 
 function defineWorkshop<
   const Slug extends string,
@@ -268,20 +268,34 @@ export const WORKSHOPS = [
     slug: "whiskey-and-cigar-experience",
     shortId: "WC",
     title: "Whiskey & Cigar Experience",
-    hostedBy: "Cavaway",
+    hostedBy: "",
     tagline: "An elegant waterfront experience with whiskey and cigars.",
     longDescription:
       "Whiskey & Cigar is a relaxed tasting experience taking place at the Sundeck of Ayia Napa Marina, where participants can enjoy premium whiskey and cigars while exploring rich flavours, aromas, and pairing notes in a refined waterfront setting.",
-    duration: "TBC",
-    maxSeatsPerBooking: 4,
+    duration: "1 hour",
+    maxSeatsPerBooking: DEFAULT_MAX_SEATS_PER_BOOKING,
     days: [
       {
         date: CURRENT_EVENT.startDate,
-        slots: [],
+        slots: [
+          {
+            id: "WS-WC-D1-1530",
+            time: "15:30 - 16:30",
+            capacity: 12,
+            price: 20,
+          },
+        ],
       },
       {
         date: CURRENT_EVENT.endDate,
-        slots: [],
+        slots: [
+          {
+            id: "WS-WC-D2-1530",
+            time: "15:30 - 16:30",
+            capacity: 12,
+            price: 20,
+          },
+        ],
       },
     ],
   }),
@@ -293,30 +307,44 @@ export const WORKSHOPS = [
     tagline: "An interactive cocktail-making experience by the sea.",
     longDescription:
       "Cocktail Making Workshop is an interactive experience at the Sundeck of Ayia Napa Marina, where participants learn how to craft refreshing cocktails, discover mixing techniques, and enjoy a fun, lively atmosphere by the water.",
-    duration: "TBC",
-    maxSeatsPerBooking: 4,
+    duration: "1 hour",
+    maxSeatsPerBooking: DEFAULT_MAX_SEATS_PER_BOOKING,
     days: [
       {
         date: CURRENT_EVENT.startDate,
-        slots: [],
+        slots: [
+          {
+            id: "WS-CM-D1-1700",
+            time: "17:00 - 18:00",
+            capacity: 12,
+            price: 20,
+          },
+        ],
       },
       {
         date: CURRENT_EVENT.endDate,
-        slots: [],
+        slots: [
+          {
+            id: "WS-CM-D@-1700",
+            time: "17:00 - 18:00",
+            capacity: 12,
+            price: 20,
+          },
+        ],
       },
     ],
   }),
   defineWorkshop({
-    slug: "koupepia-by-cocones",
+    slug: "koupepia-by-cokones",
     shortId: "KC",
     title: "Koupepia Making",
-    hostedBy: "cocones.cyprus",
+    hostedBy: "cokones.cyprus",
     tagline:
       "Roll traditional Koupepia and discover authentic Cypriot flavours.",
     longDescription:
       "Roll Your Own Koupepia by Lisko is a hands-on workshop where participants learn how to prepare and roll traditional koupepia with guidance from the Cokones Team. Guests can choose between pork mince and vegetarian/vegan sessions, enjoy an authentic culinary experience, and discover the flavours of a beloved Cypriot recipe in a fun and interactive setting.",
     duration: "45 minutes",
-    maxSeatsPerBooking: 4,
+    maxSeatsPerBooking: DEFAULT_MAX_SEATS_PER_BOOKING,
     days: [
       {
         date: CURRENT_EVENT.startDate,
@@ -381,7 +409,7 @@ export const WORKSHOPS = [
     longDescription:
       "Plates & Paints is a relaxed 45-minute creative workshop where participants can enjoy a glass of fine wine while designing and painting their own plate. It is a fun and expressive experience designed for all skill levels, with all materials provided and no previous experience needed.",
     duration: "45 minutes",
-    maxSeatsPerBooking: 4,
+    maxSeatsPerBooking: DEFAULT_MAX_SEATS_PER_BOOKING,
     days: [
       {
         date: CURRENT_EVENT.endDate,
@@ -411,14 +439,14 @@ export const WORKSHOPS = [
   defineWorkshop({
     slug: "paint-and-sip",
     shortId: "PS",
-    title: "Paint and Sip",
+    title: "Paint & Sip",
     hostedBy: "Agapiou Art Studio x Askon Art Winery",
     tagline:
       "Create your own set of painted coasters while enjoying a relaxed glass of wine.",
     longDescription:
       "Join us for a relaxed paint-and-sip workshop where participants will create a set of four custom coasters using acrylic paints. No experience is needed — just come, enjoy a glass of wine, and get creative while designing a unique set to take home.",
     duration: "1.5 hours",
-    maxSeatsPerBooking: 6,
+    maxSeatsPerBooking: DEFAULT_MAX_SEATS_PER_BOOKING,
     days: [
       {
         date: CURRENT_EVENT.startDate,
