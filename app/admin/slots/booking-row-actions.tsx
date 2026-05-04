@@ -79,8 +79,8 @@ export function BookingRowActions({
       setCancelNote("");
       toast.success(
         variables.sendEmail
-          ? `Booking cancelled — email sent to ${email}`
-          : "Booking cancelled — no email sent",
+          ? `Booking cancelled - email sent to ${email}`
+          : "Booking cancelled - no email sent",
       );
     },
     onError: (err) => {
@@ -151,7 +151,7 @@ export function BookingRowActions({
         open={confirmCancelOpen}
         onOpenChange={handleCancelOpen}
         title="Cancel booking"
-        description={`Cancel booking ${bookingId} for ${fullName} (${seats} seat${seats === 1 ? "" : "s"}). Seats will be moved to admin-held — you can allocate them to a waitlist customer or release them to the public from the slot view.`}
+        description={`Cancel booking ${bookingId} for ${fullName} (${seats} seat${seats === 1 ? "" : "s"}). Seats will be moved to admin-held. You can allocate them to a waitlist customer or release them to the public from the slot view.`}
         confirmLabel="Cancel booking"
         pendingLabel="Cancelling..."
         cancelLabel="Back"

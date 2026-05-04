@@ -133,7 +133,7 @@ export function PrivateDiningWaitlistForm({
           <CardContent>
             <div className="space-y-3 text-sm">
               <p>
-                Thanks — we&apos;ll email you at the address you provided if a
+                Thanks, we&apos;ll email you at the address you provided if a
                 spot opens up for {sessionTitle} on{" "}
                 {eventDateFormat.dayName(date)}.
               </p>

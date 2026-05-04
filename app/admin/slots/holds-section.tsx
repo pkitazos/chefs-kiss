@@ -223,14 +223,14 @@ function CreateHoldDialog({
         </Label>
         <Textarea
           id="hold-note"
-          placeholder="e.g. Press allocation — Cyprus Mail"
+          placeholder="e.g. Press allocation, Sponsor"
           value={note}
           onChange={(e) => setNote(e.target.value)}
           disabled={create.isPending}
           maxLength={500}
         />
         <p className="text-xs text-muted-foreground">
-          Admin-only — never sent to anyone.
+          Admin-only / never sent to anyone.
         </p>
       </div>
 

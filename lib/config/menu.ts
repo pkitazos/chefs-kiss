@@ -532,7 +532,7 @@ export const MENU_VENDORS = [
   }),
   defineVendor({
     id: "taste-of-tradition",
-    name: "Achnagal - Taste of Tradition",
+    name: "Taste of Tradition",
     cuisine: "Cypriot",
     accent: "amber",
     icon: "meat",

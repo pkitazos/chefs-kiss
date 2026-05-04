@@ -111,7 +111,7 @@ function EditNoteDialog({
       open={open}
       onOpenChange={handleOpenChange}
       title="Edit hold note"
-      description="Admin-only — never sent to anyone."
+      description="Admin-only / never sent to anyone."
       confirmLabel="Save"
       pendingLabel="Saving..."
       isPending={update.isPending}
@@ -153,7 +153,7 @@ function ReleaseHoldDialog({
       utils.slots.bySlot.invalidate();
       utils.slots.summary.invalidate();
       onOpenChange(false);
-      toast.success("Hold released — seats returned to public pool");
+      toast.success("Hold released - seats returned to public pool");
     },
     onError: (err) => {
       toast.error("Failed to release", { description: err.message });

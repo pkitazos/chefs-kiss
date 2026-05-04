@@ -30,6 +30,7 @@ import { INSTAGRAM_HANDLE, INSTAGRAM_URL } from "@/lib/config/socials";
 import { WORKSHOPS } from "@/lib/config/workshops";
 import { cn } from "@/lib/utils";
 import { GALLERY_IMAGES } from "@/lib/images/gallery-images";
+import { SPONSOR_ROW_1, SPONSOR_ROW_2 } from "@/lib/images/sponsor-images";
 
 /* ═══════════════════════════════════════════════
    SVG UTENSIL
@@ -178,7 +179,7 @@ function HeroSection() {
 
   return (
     <section ref={ref} className="relative h-dvh overflow-hidden bg-background">
-      {/* Decorative utensils — blur on scroll */}
+      {/* Decorative utensils - blur on scroll */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{ filter }}
@@ -399,7 +400,7 @@ function WorkshopsSection() {
 
   // When a transition ends outside the middle copy, silently snap back
   // into the middle copy. Because adjacent copies are identical, the
-  // user sees no change — but the next animation will start from a
+  // user sees no change - but the next animation will start from a
   // position that has room to move in either direction.
   const handleTransitionEnd = () => {
     if (index >= count * 2) {
@@ -585,11 +586,10 @@ function MenuSection() {
           Taste the Festival
         </h2>
         <SectionLabel className="mt-3 block">
-          {truncateWithPlus(MENU_VENDORS.length)} vendors &middot; Hundreds of
-          dishes
+          {truncateWithPlus(MENU_VENDORS.length)} vendors
         </SectionLabel>
         <p className="mx-auto mt-6 max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed">
-          From smash burgers to handmade loukoumades — browse every vendor menu
+          From smash burgers to handmade loukoumades, browse every vendor menu
           and plan your festival bites before you arrive.
         </p>
         <div className="mt-8 sm:mt-10">
@@ -666,11 +666,6 @@ function WorkshopCTA() {
               </div>
             ))}
           </div>
-
-          <p className="text-lg sm:text-xl text-foreground/80 max-w-xl mx-auto">
-            Join hands-on culinary workshops led by acclaimed chefs.
-            {/* todo: need better/longer description */}
-          </p>
         </div>
       </section>
 
@@ -720,6 +715,107 @@ function PhotoGallery() {
             />
           ))}
         </div>
+      </div>
+    </motion.section>
+  );
+}
+
+/* ═══════════════════════════════════════════════
+   SPONSORS
+   ═══════════════════════════════════════════════ */
+
+function SponsorLogoGroup({
+  sponsors,
+  logoHeight,
+}: {
+  sponsors: typeof SPONSOR_ROW_1;
+  logoHeight: string;
+}) {
+  return (
+    <div className="flex shrink-0 items-center">
+      {sponsors.map((sponsor) => (
+        <div
+          key={sponsor.alt}
+          className="flex shrink-0 items-center justify-center px-8 sm:px-12"
+        >
+          <Image
+            src={sponsor.src}
+            alt={sponsor.alt}
+            width={200}
+            height={80}
+            className={cn(
+              logoHeight,
+              "w-auto object-contain grayscale opacity-60 transition-all duration-300 group-hover:grayscale-0 group-hover:opacity-100",
+            )}
+            unoptimized={typeof sponsor.src === "string"}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SponsorMarqueeRow({
+  sponsors,
+  reverse = false,
+  logoHeight,
+  speed,
+}: {
+  sponsors: typeof SPONSOR_ROW_1;
+  reverse?: boolean;
+  logoHeight: string;
+  speed?: string;
+}) {
+  const copies = sponsors.length <= 4 ? 4 : 2;
+
+  return (
+    <div className="marquee-container group overflow-hidden">
+      <div
+        className={cn(
+          reverse ? "marquee-track-reverse" : "marquee-track",
+          "flex w-max",
+        )}
+        style={speed ? { animationDuration: speed } : undefined}
+      >
+        {Array.from({ length: copies }, (_, i) => (
+          <SponsorLogoGroup
+            key={i}
+            sponsors={sponsors}
+            logoHeight={logoHeight}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SponsorsSection() {
+  return (
+    <motion.section
+      className="py-16 sm:py-24"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
+      <div className="mx-auto mb-10 max-w-6xl px-4 text-center sm:mb-14 sm:px-6">
+        <SectionLabel className="mb-3 block">Sponsors</SectionLabel>
+        <h2 className="text-3xl font-display leading-tight sm:text-4xl md:text-[40pt]">
+          Special Thanks To
+        </h2>
+      </div>
+
+      <div className="space-y-6 sm:space-y-8">
+        <SponsorMarqueeRow
+          sponsors={SPONSOR_ROW_1}
+          logoHeight="h-14 sm:h-18"
+          speed="35s"
+        />
+        <SponsorMarqueeRow
+          sponsors={SPONSOR_ROW_2}
+          reverse
+          logoHeight="h-9 sm:h-11"
+        />
       </div>
     </motion.section>
   );
@@ -795,6 +891,7 @@ export default function LandingPage() {
       <MenuSection />
       <WorkshopCTA />
       <PhotoGallery />
+      <SponsorsSection />
       <LocationSection />
     </main>
   );

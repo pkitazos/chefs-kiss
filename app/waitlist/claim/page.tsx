@@ -101,8 +101,9 @@ function WaitlistClaimContent() {
             <div className="flex items-start gap-3 rounded-md bg-primary/5 p-3">
               <IconCircleCheck className="text-primary mt-0.5 size-5 shrink-0" />
               <p className="text-sm">
-                You&apos;re all set — your booking for {data.slot.label} is
-                confirmed. A confirmation email was sent to {data.booking.email}.
+                You&apos;re all set! Your booking for {data.slot.label} is
+                confirmed. A confirmation email was sent to {data.booking.email}
+                .
               </p>
             </div>
           </CardContent>
@@ -130,8 +131,7 @@ function WaitlistClaimContent() {
             <p>
               <span>Party size:</span>{" "}
               <span className="text-foreground font-medium">
-                {data.slot.seats}{" "}
-                {data.slot.seats === 1 ? "person" : "people"}
+                {data.slot.seats} {data.slot.seats === 1 ? "person" : "people"}
               </span>
             </p>
             <p>
