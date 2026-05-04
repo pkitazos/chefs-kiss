@@ -27,7 +27,7 @@ export const ROUTES = {
   // ============================================================================
 
   vendors: true, // Browse all vendors (enable when finalized)
-  "vendors/apply": true, // Vendor application form (enable during application period)
+  "vendors/apply": false, // Vendor application form (enable during application period)
 
   // Note: vendors/[slug] is a dynamic route and will be accessible if 'vendors' is enabled
 
@@ -41,14 +41,14 @@ export const ROUTES = {
   // PRIVATE DINING
   // ============================================================================
 
-  "private-dining": true, // Private dining landing + booking (enable when bookings open)
+  "private-dining": false, // Private dining landing + booking (enable when bookings open)
 
   // ============================================================================
   // WORKSHOPS
   // ============================================================================
 
   workshops: true, // Browse all workshops (enable when finalized)
-  "workshops/apply": true, // Workshop application form (enable during application period)
+  "workshops/apply": false, // Workshop application form (enable during application period)
 
   // Note: workshops/[slug] and workshops/[slug]/register are dynamic routes
   //       They will be accessible if 'workshops' is enabled
@@ -57,7 +57,7 @@ export const ROUTES = {
   // PAST EVENTS ARCHIVE
   // ============================================================================
 
-  events: true, // Past events archive/gallery overview
+  events: false, // Past events archive/gallery overview
 
   // Note: events/[slug] is a dynamic route and will be accessible if 'events' is enabled
 
@@ -66,9 +66,9 @@ export const ROUTES = {
   // ============================================================================
   // These are typically always enabled
 
-  about: true, // About the festival organization
-  faq: true, // Frequently asked questions
-  contact: true, // Contact information
+  about: false, // About the festival organization
+  faq: false, // Frequently asked questions
+  "contact-us": true, // Contact information
 
   // ============================================================================
   // ADMIN PAGES
@@ -107,7 +107,7 @@ export const POST_EVENT_CONFIG = {
   events: true,
   about: true,
   faq: true,
-  contact: true,
+  "contact-us": true,
   admin: true,
   "admin/login": true,
   "admin/applications": true,
@@ -136,7 +136,7 @@ export const HIBERNATION_CONFIG = {
   events: true, // Keep archive accessible
   about: true,
   faq: true,
-  contact: true,
+  "contact-us": true,
   admin: true,
   "admin/login": true,
   "admin/applications": true,
@@ -165,7 +165,7 @@ export const VENDOR_APPLICATIONS_CONFIG = {
   events: true,
   about: true,
   faq: true,
-  contact: true,
+  "contact-us": true,
   admin: true,
   "admin/login": true,
   "admin/applications": true,
@@ -194,7 +194,7 @@ export const VENDORS_LIVE_CONFIG = {
   events: true,
   about: true,
   faq: true,
-  contact: true,
+  "contact-us": true,
   admin: true,
   "admin/login": true,
   "admin/applications": true,
@@ -223,7 +223,7 @@ export const WORKSHOPS_LIVE_CONFIG = {
   events: true,
   about: true,
   faq: true,
-  contact: true,
+  "contact-us": true,
   admin: true,
   "admin/login": true,
   "admin/applications": true,
@@ -252,7 +252,7 @@ export const FULL_EVENT_CONFIG = {
   events: true,
   about: true,
   faq: true,
-  contact: true,
+  "contact-us": true,
   admin: true,
   "admin/login": true,
   "admin/applications": true,
