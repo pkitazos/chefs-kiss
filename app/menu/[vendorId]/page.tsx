@@ -6,7 +6,7 @@ import { AnimateIn } from "@/components/animate-in";
 import { WavyPattern } from "@/components/brand-pattern";
 import { SectionLabel } from "@/components/ui/section-label";
 import { PageLayout } from "@/components/page-layout";
-import { COMING_SOON } from "@/lib/config/mode";
+import { VENDOR_DETAIL_VISIBLE } from "@/lib/config/features";
 import { euro } from "@/lib/utils/format-currency";
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default async function VendorPage({ params }: Props) {
-  if (COMING_SOON) {
+  if (!VENDOR_DETAIL_VISIBLE) {
     redirect("/menu");
   }
   const { vendorId } = await params;

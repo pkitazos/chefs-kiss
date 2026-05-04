@@ -6,7 +6,7 @@ import { ImagePlaceholder } from "@/components/image-placeholder";
 import { PageLayout } from "@/components/page-layout";
 import { buttonVariants } from "@/components/ui/button";
 import { SectionLabel } from "@/components/ui/section-label";
-import { COMING_SOON } from "@/lib/config/mode";
+import { VENDOR_DETAIL_VISIBLE } from "@/lib/config/features";
 import {
   MENU_VENDORS,
   type VendorAccent,
@@ -120,7 +120,7 @@ export default function MenuPage() {
                     </p>
                     <p className={cn("text-sm", a.text)}>{vendor.cuisine}</p>
                   </div>
-                  {!COMING_SOON && (
+                  {VENDOR_DETAIL_VISIBLE && (
                     <IconChevronRight
                       size={18}
                       className="text-muted-foreground shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:text-primary"
@@ -128,7 +128,7 @@ export default function MenuPage() {
                   )}
                 </>
               );
-              if (COMING_SOON) {
+              if (!VENDOR_DETAIL_VISIBLE) {
                 return (
                   <div key={vendor.id} className="flex items-center gap-4 py-5">
                     {inner}
@@ -180,7 +180,7 @@ export default function MenuPage() {
                   <p className="font-display text-xl tracking-tight">
                     {vendor.name}
                   </p>
-                  {!COMING_SOON && (
+                  {VENDOR_DETAIL_VISIBLE && (
                     <div className="mt-auto pt-3">
                       <span
                         className={cn(
@@ -195,7 +195,7 @@ export default function MenuPage() {
                 </div>
               </>
             );
-            if (COMING_SOON) {
+            if (!VENDOR_DETAIL_VISIBLE) {
               return (
                 <div
                   key={vendor.id}
