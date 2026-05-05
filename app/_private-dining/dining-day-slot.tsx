@@ -68,9 +68,10 @@ function DiningSessionRow({
 }
 
 function SessionActionButton({ sessionId }: { sessionId: string }) {
-  const availability = api.bookings.getSlotAvailability.useQuery({
-    slotId: sessionId,
-  });
+  const availability = api.bookings.getSlotAvailability.useQuery(
+    { slotId: sessionId },
+    { refetchInterval: 30_000 },
+  );
 
   const available = availability.data?.available;
   const isLoading = available === undefined;

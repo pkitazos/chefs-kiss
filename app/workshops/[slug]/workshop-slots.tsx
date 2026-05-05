@@ -71,9 +71,10 @@ function SlotRow({
   shortDescription?: string;
   workshopSlug: string;
 }) {
-  const availability = api.bookings.getSlotAvailability.useQuery({
-    slotId,
-  });
+  const availability = api.bookings.getSlotAvailability.useQuery(
+    { slotId },
+    { refetchInterval: 30_000 },
+  );
 
   const available = availability.data?.available;
   const isLoading = available === undefined;
