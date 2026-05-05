@@ -14,7 +14,9 @@ interface WaitlistPaymentConfirmationEmailProps {
   fullName: string;
   bookingId: string;
   type: "private-dining" | "workshop";
-  slotLabel: string;
+  sessionTitle: string;
+  sessionDate: string;
+  sessionTime: string;
   seats: number;
   totalFormatted: string;
 }
@@ -23,7 +25,9 @@ export default function WaitlistPaymentConfirmationEmail({
   fullName,
   bookingId,
   type,
-  slotLabel,
+  sessionTitle,
+  sessionDate,
+  sessionTime,
   seats,
   totalFormatted,
 }: WaitlistPaymentConfirmationEmailProps) {
@@ -41,7 +45,7 @@ export default function WaitlistPaymentConfirmationEmail({
               </Heading>
               <Text className="mb-3.75 text-base">Dear {fullName},</Text>
               <Text className="mb-3.75 text-base">
-                Great news - your spot for {slotLabel} is secured!
+                Great news - your spot for {sessionTitle} is secured!
               </Text>
 
               <Section className="my-5 rounded-md bg-white p-5">
@@ -65,9 +69,23 @@ export default function WaitlistPaymentConfirmationEmail({
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-2 text-sm text-gray-500">Session:</td>
+                      <td className="py-2 text-sm text-gray-500">
+                        Experience:
+                      </td>
                       <td className="py-2 text-sm font-semibold">
-                        {slotLabel}
+                        {sessionTitle}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 text-sm text-gray-500">Date:</td>
+                      <td className="py-2 text-sm font-semibold">
+                        {sessionDate}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 text-sm text-gray-500">Time:</td>
+                      <td className="py-2 text-sm font-semibold">
+                        {sessionTime}
                       </td>
                     </tr>
                     <tr>
@@ -103,7 +121,9 @@ WaitlistPaymentConfirmationEmail.PreviewProps = {
   fullName: "Jane Doe",
   bookingId: "26BK02AYN",
   type: "private-dining",
-  slotLabel: "Private Dining Experience - Saturday, May 16 at 19:00",
+  sessionTitle: "Private Dining Experience",
+  sessionDate: "Saturday, May 16",
+  sessionTime: "19:00 - 21:00",
   seats: 2,
   totalFormatted: "€240.00",
 } as WaitlistPaymentConfirmationEmailProps;

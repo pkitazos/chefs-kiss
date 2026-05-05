@@ -1,6 +1,6 @@
 import { render } from "@react-email/render";
 import { sendEmail } from "./index";
-import { resolveSlotDetails, resolveSlotLabel } from "./booking-emails";
+import { resolveSlotDetails, resolveSlotInfo } from "./booking-emails";
 import WaitlistConfirmationEmail from "@/emails/waitlist-confirmation";
 import WaitlistPaymentConfirmationEmail from "@/emails/waitlist-payment-confirmation";
 import WaitlistPromotionEmail from "@/emails/waitlist-promotion";
@@ -24,7 +24,7 @@ export async function sendWaitlistConfirmation({
   partySize,
   slotId,
 }: SendWaitlistConfirmationParams) {
-  const slotLabel = resolveSlotLabel(slotId, type);
+  const slot = resolveSlotInfo(slotId, type);
   const submissionDate = new Date().toLocaleDateString("en-GB", {
     year: "numeric",
     month: "long",
@@ -35,7 +35,9 @@ export async function sendWaitlistConfirmation({
     WaitlistConfirmationEmail({
       fullName,
       waitlistId,
-      slotLabel,
+      sessionTitle: slot.title,
+      sessionDate: slot.date,
+      sessionTime: slot.time,
       partySize,
       submissionDate,
     }),
@@ -75,7 +77,7 @@ export async function sendWaitlistPromotion({
   partySize,
   slotId,
 }: SendWaitlistPromotionParams) {
-  const { label: slotLabel, price } = resolveSlotDetails(slotId, type);
+  const { slot, price } = resolveSlotDetails(slotId, type);
   const total = price * partySize;
   const totalFormatted = `€${total.toFixed(2)}`;
   const claimUrl = `${clientEnv.NEXT_PUBLIC_APP_URL}/waitlist/claim?id=${waitlistEntryId}`;
@@ -84,7 +86,9 @@ export async function sendWaitlistPromotion({
     WaitlistPromotionEmail({
       fullName,
       claimUrl,
-      slotLabel,
+      sessionTitle: slot.title,
+      sessionDate: slot.date,
+      sessionTime: slot.time,
       partySize,
       totalFormatted,
     }),
@@ -124,7 +128,7 @@ export async function sendWaitlistPaymentConfirmation({
   seats,
   slotId,
 }: SendWaitlistPaymentConfirmationParams) {
-  const { label: slotLabel, price } = resolveSlotDetails(slotId, type);
+  const { slot, price } = resolveSlotDetails(slotId, type);
   const total = price * seats;
   const totalFormatted = `€${total.toFixed(2)}`;
 
@@ -133,7 +137,9 @@ export async function sendWaitlistPaymentConfirmation({
       fullName,
       bookingId,
       type,
-      slotLabel,
+      sessionTitle: slot.title,
+      sessionDate: slot.date,
+      sessionTime: slot.time,
       seats,
       totalFormatted,
     }),

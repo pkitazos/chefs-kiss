@@ -15,10 +15,16 @@ type SendBookingConfirmationParams = {
   slotId: string;
 };
 
-export function resolveSlotLabel(
+export type SlotInfo = {
+  title: string;
+  date: string;
+  time: string;
+};
+
+export function resolveSlotInfo(
   slotId: string,
   type: "private-dining" | "workshop",
-): string {
+): SlotInfo {
   if (type === "private-dining") {
     const result = getDiningSessionById(slotId);
 
@@ -27,7 +33,11 @@ export function resolveSlotLabel(
         `Private dining session not found for slot ID: ${slotId}`,
       );
 
-    return `${result.session.title} - ${eventDateFormat.dayName(result.day.date)} at ${result.session.time}`;
+    return {
+      title: result.session.title,
+      date: eventDateFormat.dayName(result.day.date),
+      time: result.session.time,
+    };
   }
 
   const result = getWorkshopSlotById(slotId);
@@ -35,19 +45,31 @@ export function resolveSlotLabel(
   if (!result)
     throw new Error(`Workshop slot not found for slot ID: ${slotId}`);
 
-  return `${result.workshop.title} - ${eventDateFormat.dayName(result.day.date)} at ${result.slot.time}`;
+  return {
+    title: result.workshop.title,
+    date: eventDateFormat.dayName(result.day.date),
+    time: result.slot.time,
+  };
+}
+
+export function resolveSlotLabel(
+  slotId: string,
+  type: "private-dining" | "workshop",
+): string {
+  const { title, date, time } = resolveSlotInfo(slotId, type);
+  return `${title} - ${date} at ${time}`;
 }
 
 export function resolveSlotDetails(
   slotId: string,
   type: "private-dining" | "workshop",
-): { label: string; price: number } {
-  const label = resolveSlotLabel(slotId, type);
+): { slot: SlotInfo; price: number } {
+  const slot = resolveSlotInfo(slotId, type);
   const price =
     type === "private-dining"
       ? getDiningSessionById(slotId)!.session.price
       : getWorkshopSlotById(slotId)!.slot.price;
-  return { label, price };
+  return { slot, price };
 }
 
 export async function sendBookingConfirmation({
@@ -58,7 +80,7 @@ export async function sendBookingConfirmation({
   seats,
   slotId,
 }: SendBookingConfirmationParams) {
-  const { label: slotLabel, price } = resolveSlotDetails(slotId, type);
+  const { slot, price } = resolveSlotDetails(slotId, type);
   const total = price * seats;
   const totalFormatted = `\u20AC${total.toFixed(2)}`;
 
@@ -67,7 +89,9 @@ export async function sendBookingConfirmation({
       fullName,
       bookingId,
       type,
-      slotLabel,
+      sessionTitle: slot.title,
+      sessionDate: slot.date,
+      sessionTime: slot.time,
       seats,
       totalFormatted,
     }),
@@ -109,14 +133,16 @@ export async function sendBookingCancellation({
   seats,
   slotId,
 }: SendBookingCancellationParams) {
-  const slotLabel = resolveSlotLabel(slotId, type);
+  const slot = resolveSlotInfo(slotId, type);
 
   const html = await render(
     BookingCancellationEmail({
       fullName,
       bookingId,
       type,
-      slotLabel,
+      sessionTitle: slot.title,
+      sessionDate: slot.date,
+      sessionTime: slot.time,
       seats,
     }),
   );

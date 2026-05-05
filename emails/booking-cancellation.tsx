@@ -14,7 +14,9 @@ interface BookingCancellationEmailProps {
   fullName: string;
   bookingId: string;
   type: "private-dining" | "workshop";
-  slotLabel: string;
+  sessionTitle: string;
+  sessionDate: string;
+  sessionTime: string;
   seats: number;
 }
 
@@ -22,7 +24,9 @@ export default function BookingCancellationEmail({
   fullName,
   bookingId,
   type,
-  slotLabel,
+  sessionTitle,
+  sessionDate,
+  sessionTime,
   seats,
 }: BookingCancellationEmailProps) {
   const typeLabel = type === "private-dining" ? "Private Dining" : "Workshop";
@@ -64,9 +68,23 @@ export default function BookingCancellationEmail({
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-2 text-sm text-gray-500">Session:</td>
+                      <td className="py-2 text-sm text-gray-500">
+                        Experience:
+                      </td>
                       <td className="py-2 text-sm font-semibold">
-                        {slotLabel}
+                        {sessionTitle}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 text-sm text-gray-500">Date:</td>
+                      <td className="py-2 text-sm font-semibold">
+                        {sessionDate}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 text-sm text-gray-500">Time:</td>
+                      <td className="py-2 text-sm font-semibold">
+                        {sessionTime}
                       </td>
                     </tr>
                     <tr>
@@ -96,6 +114,8 @@ BookingCancellationEmail.PreviewProps = {
   fullName: "John Doe",
   bookingId: "26BK-PD001-ANM",
   type: "private-dining",
-  slotLabel: "Private Dining Experience - Saturday, May 16 at 19:00",
+  sessionTitle: "Private Dining Experience",
+  sessionDate: "Saturday, May 16",
+  sessionTime: "19:00 - 21:00",
   seats: 2,
 } as BookingCancellationEmailProps;

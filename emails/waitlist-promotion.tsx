@@ -14,7 +14,9 @@ import { Signature } from "./components/signature";
 interface WaitlistPromotionEmailProps {
   fullName: string;
   claimUrl: string;
-  slotLabel: string;
+  sessionTitle: string;
+  sessionDate: string;
+  sessionTime: string;
   partySize: number;
   totalFormatted: string;
 }
@@ -22,7 +24,9 @@ interface WaitlistPromotionEmailProps {
 export default function WaitlistPromotionEmail({
   fullName,
   claimUrl,
-  slotLabel,
+  sessionTitle,
+  sessionDate,
+  sessionTime,
   partySize,
   totalFormatted,
 }: WaitlistPromotionEmailProps) {
@@ -38,7 +42,7 @@ export default function WaitlistPromotionEmail({
               </Heading>
               <Text className="mb-3.75 text-base">Dear {fullName},</Text>
               <Text className="mb-3.75 text-base">
-                We&apos;ve reserved your seat for {slotLabel}. To confirm,
+                We&apos;ve reserved your seat for {sessionTitle}. To confirm,
                 complete your payment using the link below.
               </Text>
 
@@ -46,9 +50,23 @@ export default function WaitlistPromotionEmail({
                 <table className="w-full border-collapse">
                   <tbody>
                     <tr>
-                      <td className="py-2 text-sm text-gray-500">Session:</td>
+                      <td className="py-2 text-sm text-gray-500">
+                        Experience:
+                      </td>
                       <td className="py-2 text-sm font-semibold">
-                        {slotLabel}
+                        {sessionTitle}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 text-sm text-gray-500">Date:</td>
+                      <td className="py-2 text-sm font-semibold">
+                        {sessionDate}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 text-sm text-gray-500">Time:</td>
+                      <td className="py-2 text-sm font-semibold">
+                        {sessionTime}
                       </td>
                     </tr>
                     <tr>
@@ -72,7 +90,7 @@ export default function WaitlistPromotionEmail({
               <Section className="my-6 text-center">
                 <Button
                   href={claimUrl}
-                  className="rounded-md bg-[#98244c] px-8 py-3 text-base font-semibold text-white"
+                  className="rounded-md bg-[#c42353] px-8 py-3 text-base font-semibold text-white"
                 >
                   Pay now and confirm your seat
                 </Button>
@@ -95,7 +113,9 @@ export default function WaitlistPromotionEmail({
 WaitlistPromotionEmail.PreviewProps = {
   fullName: "Jane Doe",
   claimUrl: "http://localhost:3000/waitlist/claim?id=26WL02AYN",
-  slotLabel: "Private Dining Experience - Saturday, May 16 at 19:00",
+  sessionTitle: "Private Dining Experience",
+  sessionDate: "Saturday, May 16",
+  sessionTime: "19:00 - 21:00",
   partySize: 2,
   totalFormatted: "€240.00",
 } as WaitlistPromotionEmailProps;
