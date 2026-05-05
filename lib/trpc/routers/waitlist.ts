@@ -469,7 +469,7 @@ export const waitlistRouter = createTRPCRouter({
           .where(eq(bookings.id, booking.id));
       }
 
-      const urlReturn = `${clientEnv.NEXT_PUBLIC_APP_URL}/waitlist/claim?id=${entry.id}`;
+      const urlReturn = `${clientEnv.NEXT_PUBLIC_APP_URL}/waitlist/claim?id=${entry.id}&returning=1`;
 
       return initBookingPayment({
         database: ctx.db,

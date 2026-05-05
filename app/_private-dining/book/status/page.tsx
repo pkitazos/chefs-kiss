@@ -3,7 +3,6 @@
 import {
   IconAlertCircle,
   IconCircleCheck,
-  IconClock,
   IconLoader2,
 } from "@tabler/icons-react";
 import Link from "next/link";
@@ -154,10 +153,10 @@ function StatusMessage({ status }: { status: string }) {
     case "pending":
       return (
         <div className="flex items-start gap-3 rounded-md bg-amber-500/10 p-3">
-          <IconClock className="text-amber-500 mt-0.5 size-5 shrink-0" />
+          <IconLoader2 className="text-amber-500 mt-0.5 size-5 shrink-0 animate-spin" />
           <p className="text-sm">
-            Your booking is awaiting payment. Please complete payment within 15
-            minutes.
+            Hang tight, we&apos;re confirming your booking. This usually takes a
+            few seconds.
           </p>
         </div>
       );

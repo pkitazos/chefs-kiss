@@ -30,10 +30,14 @@ export default function WaitlistClaimPage() {
 function WaitlistClaimContent() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+  const returning = searchParams.get("returning") === "1";
 
   const { data, isLoading } = api.waitlist.getClaimEntry.useQuery(
     { id: id! },
-    { enabled: !!id },
+    {
+      enabled: !!id,
+      refetchInterval: returning ? 2_000 : false,
+    },
   );
 
   if (!id) {
@@ -104,6 +108,31 @@ function WaitlistClaimContent() {
                 You&apos;re all set! Your booking for {data.slot.label} is
                 confirmed. A confirmation email was sent to {data.booking.email}
                 .
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </PageLayout>
+    );
+  }
+
+  if (returning && data.state === "ready-to-pay") {
+    return (
+      <PageLayout className="max-w-2xl">
+        <div className="mb-6 space-y-2">
+          <SectionLabel>Waitlist</SectionLabel>
+          <h1 className="font-display text-3xl tracking-tight">
+            Confirming your booking
+          </h1>
+        </div>
+
+        <Card>
+          <CardContent>
+            <div className="flex items-start gap-3 rounded-md bg-amber-500/10 p-3">
+              <IconLoader2 className="text-amber-500 mt-0.5 size-5 shrink-0 animate-spin" />
+              <p className="text-sm">
+                Hang tight, we&apos;re confirming your booking. This usually
+                takes a few seconds.
               </p>
             </div>
           </CardContent>
