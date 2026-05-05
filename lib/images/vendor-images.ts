@@ -6,9 +6,11 @@ import chefAvraam from "@/public/images/vendors/chef-avraam.jpg";
 import crepaland from "@/public/images/vendors/crepaland.jpg";
 import gardenGourmet from "@/public/images/vendors/garden-gourmet.jpg";
 import gemsFoodTruck from "@/public/images/vendors/gems-food-truck.jpg";
+import germanDonner from "@/public/images/vendors/german-donner.jpg";
 import hardRockCafe from "@/public/images/vendors/hard-rock-cafe.jpg";
 import hbHotdogs from "@/public/images/vendors/hb-hotdogs.jpg";
 import karasFishTavern from "@/public/images/vendors/karas-fish-tavern.jpg";
+import kawacom from "@/public/images/vendors/kawacom.jpg";
 import maysDiner from "@/public/images/vendors/mays-diner.jpg";
 import midtownBistro from "@/public/images/vendors/midtown-bistro.jpg";
 import mrWurst from "@/public/images/vendors/mr-wurst.jpg";
@@ -38,11 +40,11 @@ export const VENDOR_IMAGES = {
   crepaland: crepaland,
   "garden-gourmet": gardenGourmet,
   "gems-food-truck": gemsFoodTruck,
-  "german-donner": PENDING_IMAGE,
+  "german-donner": germanDonner,
   "hard-rock-cafe": hardRockCafe,
   "hb-hotdogs": hbHotdogs,
   "karas-fish-tavern": karasFishTavern,
-  kawacom: PENDING_IMAGE,
+  kawacom: kawacom,
   "little-chefs": PENDING_IMAGE,
   "mays-diner": maysDiner,
   megastronomy: PENDING_IMAGE,

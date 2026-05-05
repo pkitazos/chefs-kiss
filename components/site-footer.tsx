@@ -93,8 +93,8 @@ export function SiteFooter() {
             reserved.
           </p>
           <p>
-            Operated by {COMPANY.name} &middot; No. {COMPANY.registrationNumber}{" "}
-            &middot; {COMPANY.registeredAddress}
+            Operated by {COMPANY.name} &middot; Reg. No.{" "}
+            {COMPANY.registrationNumber} &middot; {COMPANY.registeredAddress}
           </p>
         </div>
       </div>
