@@ -125,13 +125,25 @@ export const waitlistRouter = createTRPCRouter({
 
   listBySlot: protectedProcedure
     .input(z.object({ slotId: z.string().min(1) }))
-    .query(async ({ ctx, input }) =>
-      ctx.db
+    .query(async ({ ctx, input }) => {
+      const rows = await ctx.db
         .select()
         .from(waitlistEntries)
+        .leftJoin(bookings, eq(bookings.waitlistEntryId, waitlistEntries.id))
         .where(eq(waitlistEntries.slotId, input.slotId))
-        .orderBy(asc(waitlistEntries.createdAt)),
-    ),
+        .orderBy(asc(waitlistEntries.createdAt));
+
+      return rows.map((row) => ({
+        ...row.waitlist_entries,
+        booking: row.bookings
+          ? {
+              id: row.bookings.id,
+              status: row.bookings.status,
+              paidAt: row.bookings.paidAt,
+            }
+          : null,
+      }));
+    }),
 
   promote: protectedProcedure
     .input(z.object({ id: z.string().min(1) }))

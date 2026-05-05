@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { waitlistEntries } from "@/lib/db/schema";
+import { bookings, waitlistEntries } from "@/lib/db/schema";
 import type { SeatBreakdown } from "@/lib/db/seat-counting";
 
 import { WaitlistRowActions } from "./waitlist-row-actions";
@@ -21,6 +21,29 @@ const waitlistStatusVariants = {
   revoked: "outline",
 } as const;
 
+const paymentStatusConfig = {
+  pending: {
+    label: "Awaiting payment",
+    className: "bg-amber-500/15 text-amber-400 border-amber-500/50",
+  },
+  confirmed: {
+    label: "Paid",
+    className: "bg-green-500/10 text-green-600 border-green-500/40",
+  },
+  failed: {
+    label: "Payment failed",
+    className: "bg-red-500/10 text-red-600 border-red-500/40",
+  },
+  expired: {
+    label: "Payment expired",
+    className: "bg-amber-500/15 text-amber-400 border-amber-500/50",
+  },
+  cancelled: {
+    label: "Cancelled",
+    className: "bg-red-500/10 text-red-600 border-red-500/40",
+  },
+} as const;
+
 function formatDate(date: Date) {
   return new Intl.DateTimeFormat("en-GB", {
     dateStyle: "medium",
@@ -28,7 +51,9 @@ function formatDate(date: Date) {
   }).format(new Date(date));
 }
 
-type WaitlistEntry = typeof waitlistEntries.$inferSelect;
+type WaitlistEntry = typeof waitlistEntries.$inferSelect & {
+  booking: Pick<typeof bookings.$inferSelect, "id" | "status" | "paidAt"> | null;
+};
 
 interface WaitlistTableProps {
   entries: WaitlistEntry[];
@@ -57,6 +82,7 @@ export function WaitlistTable({ entries, breakdown }: WaitlistTableProps) {
             <TableHead>Phone</TableHead>
             <TableHead>Party size</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Payment</TableHead>
             <TableHead>Submitted</TableHead>
             <TableHead className="w-12" />
           </TableRow>
@@ -77,6 +103,21 @@ export function WaitlistTable({ entries, breakdown }: WaitlistTableProps) {
                 <Badge variant={waitlistStatusVariants[entry.status]}>
                   {entry.status}
                 </Badge>
+              </TableCell>
+              <TableCell>
+                {entry.status === "promoted" && entry.booking ? (
+                  <div className="space-y-0.5">
+                    <p className="font-mono text-xs">{entry.booking.id}</p>
+                    <Badge
+                      variant="outline"
+                      className={paymentStatusConfig[entry.booking.status].className}
+                    >
+                      {paymentStatusConfig[entry.booking.status].label}
+                    </Badge>
+                  </div>
+                ) : (
+                  <span className="text-muted-foreground">—</span>
+                )}
               </TableCell>
               <TableCell className="text-xs">
                 <span className="font-mono">#{idx + 1}</span>
