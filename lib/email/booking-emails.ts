@@ -5,6 +5,7 @@ import BookingCancellationEmail from "@/emails/booking-cancellation";
 import { CURRENT_EVENT, eventDateFormat } from "@/lib/config/event";
 import { getDiningSessionById } from "../config/private-dining";
 import { getWorkshopSlotById } from "@/lib/config/workshops";
+import { clientEnv } from "@/lib/env";
 
 type SendBookingConfirmationParams = {
   email: string;
@@ -86,6 +87,7 @@ export async function sendBookingConfirmation({
 
   const html = await render(
     BookingConfirmationEmail({
+      baseUrl: clientEnv.NEXT_PUBLIC_APP_URL,
       fullName,
       bookingId,
       type,
@@ -137,6 +139,7 @@ export async function sendBookingCancellation({
 
   const html = await render(
     BookingCancellationEmail({
+      baseUrl: clientEnv.NEXT_PUBLIC_APP_URL,
       fullName,
       bookingId,
       type,

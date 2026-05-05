@@ -5,6 +5,7 @@ import WorkshopAcceptanceEmail from "@/emails/workshop-acceptance";
 import WorkshopRejectionEmail from "@/emails/workshop-rejection";
 import { formatDateRange } from "@/lib/utils/format-date-range";
 import { CURRENT_EVENT } from "@/lib/config/event";
+import { clientEnv } from "@/lib/env";
 
 type SendWorkshopConfirmationParams = {
   email: string;
@@ -21,6 +22,7 @@ export async function sendWorkshopConfirmation({
 }: SendWorkshopConfirmationParams) {
   const html = await render(
     WorkshopConfirmationEmail({
+      baseUrl: clientEnv.NEXT_PUBLIC_APP_URL,
       contactPerson,
       workshopTitle,
       applicationId,
@@ -69,6 +71,7 @@ export async function sendWorkshopAcceptance({
 }: SendWorkshopAcceptanceParams) {
   const html = await render(
     WorkshopAcceptanceEmail({
+      baseUrl: clientEnv.NEXT_PUBLIC_APP_URL,
       contactPerson,
       workshopTitle,
       applicationId,
@@ -109,6 +112,7 @@ export async function sendWorkshopRejection({
 }: SendWorkshopRejectionParams) {
   const html = await render(
     WorkshopRejectionEmail({
+      baseUrl: clientEnv.NEXT_PUBLIC_APP_URL,
       contactPerson,
       reason,
     }),

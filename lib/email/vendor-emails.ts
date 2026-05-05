@@ -4,6 +4,7 @@ import VendorConfirmationEmail from "@/emails/vendor-confirmation";
 import VendorAcceptanceEmail from "@/emails/vendor-acceptance";
 import VendorRejectionEmail from "@/emails/vendor-rejection";
 import { CURRENT_EVENT, eventDateFormat } from "@/lib/config/event";
+import { clientEnv } from "@/lib/env";
 
 type SendVendorConfirmationParams = {
   email: string;
@@ -18,6 +19,7 @@ export async function sendVendorConfirmation({
 }: SendVendorConfirmationParams) {
   const html = await render(
     VendorConfirmationEmail({
+      baseUrl: clientEnv.NEXT_PUBLIC_APP_URL,
       businessName,
       applicationId,
       submissionDate: new Date().toLocaleDateString("en-GB", {
@@ -58,6 +60,7 @@ export async function sendVendorAcceptance({
 }: SendVendorAcceptanceParams) {
   const html = await render(
     VendorAcceptanceEmail({
+      baseUrl: clientEnv.NEXT_PUBLIC_APP_URL,
       businessName,
       applicationId,
       festivalDate: eventDateFormat.range(),
@@ -94,6 +97,7 @@ export async function sendVendorRejection({
 }: SendVendorRejectionParams) {
   const html = await render(
     VendorRejectionEmail({
+      baseUrl: clientEnv.NEXT_PUBLIC_APP_URL,
       businessName,
       reason,
     }),
