@@ -23,13 +23,6 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { SectionLabel } from "@/components/ui/section-label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { eventDateFormat } from "@/lib/config/event";
 import { api } from "@/lib/trpc/client";
 import {
@@ -47,9 +40,9 @@ function getBrowserSessionId() {
   return id;
 }
 
-function getSeatOptions(maxSeats: number): number[] {
-  return Array.from({ length: maxSeats }, (_, i) => i + 1);
-}
+// function getSeatOptions(maxSeats: number): number[] {
+//   return Array.from({ length: maxSeats }, (_, i) => i + 1);
+// }
 
 interface WorkshopBookingFormProps {
   workshopSlug: string;
@@ -105,7 +98,7 @@ export function WorkshopBookingForm({
   });
 
   const available = availability.data?.available ?? capacity;
-  const maxBookable = Math.min(maxSeatsPerBooking, available);
+  // const maxBookable = Math.min(maxSeatsPerBooking, available);
 
   const browserSessionId =
     typeof window !== "undefined" ? getBrowserSessionId() : undefined;
@@ -183,7 +176,7 @@ export function WorkshopBookingForm({
         </CardContent>
       </Card>
 
-      {overlaps.data && overlaps.data.conflicts.length > 0 && (
+      {/*{overlaps.data && overlaps.data.conflicts.length > 0 && (
         <div className="flex items-start gap-3 rounded-md border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-950/30">
           <IconAlertTriangle className="mt-0.5 size-5 shrink-0 text-amber-600" />
           <div className="space-y-1">
@@ -200,7 +193,7 @@ export function WorkshopBookingForm({
             </ul>
           </div>
         </div>
-      )}
+      )}*/}
 
       {available > 0 ? (
         <form onSubmit={handleSubmit(onSubmit)}>

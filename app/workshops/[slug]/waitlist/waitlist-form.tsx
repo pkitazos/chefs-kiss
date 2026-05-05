@@ -23,13 +23,6 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { SectionLabel } from "@/components/ui/section-label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { eventDateFormat } from "@/lib/config/event";
 import { api } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils";
@@ -38,9 +31,9 @@ import {
   type BookingFormData,
 } from "@/lib/validations/booking";
 
-function getSeatOptions(maxSeats: number): number[] {
-  return Array.from({ length: maxSeats }, (_, i) => i + 1);
-}
+// function getSeatOptions(maxSeats: number): number[] {
+//   return Array.from({ length: maxSeats }, (_, i) => i + 1);
+// }
 
 interface WorkshopWaitlistFormProps {
   workshopSlug: string;
@@ -241,7 +234,7 @@ export function WorkshopWaitlistForm({
                 )}
               </Field>
 
-              <Field>
+              {/*<Field>
                 <FieldLabel htmlFor="seats" required>
                   Party Size
                 </FieldLabel>
@@ -272,7 +265,7 @@ export function WorkshopWaitlistForm({
                 {errors.seats && (
                   <FieldError>{errors.seats.message}</FieldError>
                 )}
-              </Field>
+              </Field>*/}
             </FieldGroup>
           </CardContent>
         </Card>
