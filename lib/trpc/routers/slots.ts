@@ -73,11 +73,23 @@ export const slotsRouter = createTRPCRouter({
         .where(eq(bookings.slotId, input.slotId))
         .orderBy(desc(bookings.createdAt));
 
-      const slotWaitlist = await ctx.db
+      const waitlistRows = await ctx.db
         .select()
         .from(waitlistEntries)
+        .leftJoin(bookings, eq(bookings.waitlistEntryId, waitlistEntries.id))
         .where(eq(waitlistEntries.slotId, input.slotId))
         .orderBy(asc(waitlistEntries.createdAt));
+
+      const slotWaitlist = waitlistRows.map((row) => ({
+        ...row.waitlist_entries,
+        booking: row.bookings
+          ? {
+              id: row.bookings.id,
+              status: row.bookings.status,
+              paidAt: row.bookings.paidAt,
+            }
+          : null,
+      }));
 
       const activeHoldRows = await ctx.db
         .select({
