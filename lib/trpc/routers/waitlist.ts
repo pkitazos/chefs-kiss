@@ -19,6 +19,7 @@ import { clientEnv } from "@/lib/env";
 import { categoryFromSlotId, refLikePatternForCategory } from "@/lib/ids";
 import { initBookingPayment } from "@/lib/payments/init-booking-payment";
 import { createWaitlistEntrySchema } from "@/lib/validations/waitlist";
+import { verifyClaimToken } from "@/lib/waitlist/claim-token";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../init";
 
 export const waitlistRouter = createTRPCRouter({
@@ -280,7 +281,7 @@ export const waitlistRouter = createTRPCRouter({
     }),
 
   getClaimEntry: publicProcedure
-    .input(z.object({ id: z.string().min(1) }))
+    .input(z.object({ id: z.string().min(1), token: z.string().min(1) }))
     .query(async ({ ctx, input }) => {
       await expireStalePendingBookings(ctx.db);
 
@@ -291,6 +292,14 @@ export const waitlistRouter = createTRPCRouter({
         .limit(1);
 
       if (!entry) {
+        console.warn(`[waitlist.getClaimEntry] Entry not found: ${input.id}`);
+        return { state: "not-found" as const };
+      }
+
+      if (!verifyClaimToken(entry.email, input.token)) {
+        console.warn(
+          `[waitlist.getClaimEntry] Invalid claim token for entry ${input.id}`,
+        );
         return { state: "not-found" as const };
       }
 
@@ -340,7 +349,12 @@ export const waitlistRouter = createTRPCRouter({
     }),
 
   initPayment: publicProcedure
-    .input(z.object({ waitlistEntryId: z.string().min(1) }))
+    .input(
+      z.object({
+        waitlistEntryId: z.string().min(1),
+        token: z.string().min(1),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       await expireStalePendingBookings(ctx.db);
 
@@ -353,7 +367,14 @@ export const waitlistRouter = createTRPCRouter({
       if (!entry) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "This offer could not be found.",
+          message: "This offer is no longer available.",
+        });
+      }
+
+      if (!verifyClaimToken(entry.email, input.token)) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "This offer is no longer available.",
         });
       }
 
@@ -444,7 +465,7 @@ export const waitlistRouter = createTRPCRouter({
           .where(eq(bookings.id, booking.id));
       }
 
-      const urlReturn = `${clientEnv.NEXT_PUBLIC_APP_URL}/waitlist/claim?id=${entry.id}&returning=1`;
+      const urlReturn = `${clientEnv.NEXT_PUBLIC_APP_URL}/waitlist/claim?id=${entry.id}&t=${input.token}&returning=1`;
 
       return initBookingPayment({
         database: ctx.db,

@@ -97,6 +97,14 @@ const serverEnvSchema = z.object({
     .min(16)
     .optional()
     .describe("Secret token for late workshop applications"),
+
+  // Waitlist claim link signing
+  WAITLIST_CLAIM_SECRET: z
+    .string()
+    .min(32, "WAITLIST_CLAIM_SECRET must be at least 32 characters")
+    .describe(
+      "Secret for HMAC-signing waitlist claim tokens (generate with: openssl rand -base64 32). Rotating this invalidates all outstanding claim links.",
+    ),
 });
 
 /**

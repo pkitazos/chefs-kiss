@@ -30,17 +30,18 @@ export default function WaitlistClaimPage() {
 function WaitlistClaimContent() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+  const token = searchParams.get("t");
   const returning = searchParams.get("returning") === "1";
 
   const { data, isLoading } = api.waitlist.getClaimEntry.useQuery(
-    { id: id! },
+    { id: id!, token: token! },
     {
-      enabled: !!id,
+      enabled: !!id && !!token,
       refetchInterval: returning ? 2_000 : false,
     },
   );
 
-  if (!id) {
+  if (!id || !token) {
     return (
       <ClaimMessage
         title="Missing offer reference"
@@ -178,7 +179,7 @@ function WaitlistClaimContent() {
           Clicking will redirect you to our secure payment provider. Your spot
           is held until you complete payment.
         </p>
-        <ClaimPayButton entryId={data.entry.id} />
+        <ClaimPayButton entryId={data.entry.id} token={token!} />
       </div>
     </PageLayout>
   );
