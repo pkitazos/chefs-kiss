@@ -22,7 +22,6 @@ import { buildSeatBreakdown, type SeatBreakdown } from "@/lib/db/seat-counting";
 import { api } from "@/lib/trpc/client";
 import { IconArrowLeft, IconLoader2 } from "@tabler/icons-react";
 
-import { PaymentBadge } from "../../bookings/payment-badge";
 import { BookingRowActions } from "../booking-row-actions";
 import { CapacityInfoIcon } from "../capacity-info";
 import { HoldsSection } from "../holds-section";
@@ -136,7 +135,6 @@ export function SlotDetail(props: SlotDetailProps) {
                       <TableHead>Email</TableHead>
                       <TableHead>Seats</TableHead>
                       <TableHead>Status</TableHead>
-                      <TableHead>Payment</TableHead>
                       <TableHead>Amount</TableHead>
                       <TableHead>Created</TableHead>
                       <TableHead className="w-12" />
@@ -159,12 +157,6 @@ export function SlotDetail(props: SlotDetailProps) {
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          <PaymentBadge
-                            paymentMethod={booking.paymentMethod}
-                            paidAt={booking.paidAt}
-                          />
-                        </TableCell>
-                        <TableCell>
                           &euro;{(booking.totalAmount / 100).toFixed(2)}
                         </TableCell>
                         <TableCell className="text-muted-foreground text-xs">
@@ -177,8 +169,6 @@ export function SlotDetail(props: SlotDetailProps) {
                             fullName={booking.fullName}
                             seats={booking.seats}
                             status={booking.status}
-                            paymentMethod={booking.paymentMethod}
-                            paidAt={booking.paidAt}
                           />
                         </TableCell>
                       </TableRow>

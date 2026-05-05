@@ -237,45 +237,6 @@ export const bookingsRouter = createTRPCRouter({
       });
     }),
 
-  markPaid: protectedProcedure
-    .input(z.object({ id: z.string().min(1) }))
-    .mutation(async ({ ctx, input }) => {
-      const [booking] = await ctx.db
-        .select()
-        .from(bookings)
-        .where(eq(bookings.id, input.id))
-        .limit(1);
-
-      if (!booking) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Booking not found.",
-        });
-      }
-
-      if (booking.paymentMethod !== "in-person") {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Only in-person bookings can be marked as paid.",
-        });
-      }
-
-      if (booking.paidAt !== null) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Booking is already marked as paid.",
-        });
-      }
-
-      const [updated] = await ctx.db
-        .update(bookings)
-        .set({ paidAt: new Date(), updatedAt: new Date() })
-        .where(eq(bookings.id, input.id))
-        .returning();
-
-      return updated;
-    }),
-
   cancel: protectedProcedure
     .input(
       z.object({

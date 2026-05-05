@@ -24,7 +24,6 @@ import { api } from "@/lib/trpc/client";
 import { getDiningSessionById } from "@/lib/config/private-dining";
 import { getWorkshopSlotById } from "@/lib/config/workshops";
 import { BookingRowActions } from "../slots/booking-row-actions";
-import { PaymentBadge } from "./payment-badge";
 
 function getSlotLabel(
   type: "private-dining" | "workshop",
@@ -150,7 +149,6 @@ export function BookingsTable() {
                 <TableHead>Seats</TableHead>
                 <TableHead>Slot</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Payment</TableHead>
                 <TableHead>Amount</TableHead>
                 <TableHead>Created</TableHead>
                 <TableHead className="w-12" />
@@ -205,12 +203,6 @@ export function BookingsTable() {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <PaymentBadge
-                        paymentMethod={booking.paymentMethod}
-                        paidAt={booking.paidAt}
-                      />
-                    </TableCell>
-                    <TableCell>
                       &euro;{(booking.totalAmount / 100).toFixed(2)}
                     </TableCell>
                     <TableCell className="text-muted-foreground text-xs">
@@ -223,8 +215,6 @@ export function BookingsTable() {
                         fullName={booking.fullName}
                         seats={booking.seats}
                         status={booking.status}
-                        paymentMethod={booking.paymentMethod}
-                        paidAt={booking.paidAt}
                       />
                     </TableCell>
                   </TableRow>
