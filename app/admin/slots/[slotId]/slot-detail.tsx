@@ -64,7 +64,7 @@ export function SlotDetail(props: SlotDetailProps) {
   const parsedDate = new Date(date);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 mb-16">
       <div className="flex items-center gap-3">
         <Link
           href="/admin/slots"
@@ -208,10 +208,7 @@ export function SlotDetail(props: SlotDetailProps) {
                 {data.waitlistCount} waiting
               </p>
             </div>
-            <WaitlistTable
-              entries={data.waitlist}
-              available={breakdown.available}
-            />
+            <WaitlistTable entries={data.waitlist} breakdown={breakdown} />
           </section>
         </>
       ) : null}

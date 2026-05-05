@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { waitlistEntries } from "@/lib/db/schema";
+import type { SeatBreakdown } from "@/lib/db/seat-counting";
 
 import { WaitlistRowActions } from "./waitlist-row-actions";
 
@@ -31,10 +32,10 @@ type WaitlistEntry = typeof waitlistEntries.$inferSelect;
 
 interface WaitlistTableProps {
   entries: WaitlistEntry[];
-  available: number;
+  breakdown: SeatBreakdown;
 }
 
-export function WaitlistTable({ entries, available }: WaitlistTableProps) {
+export function WaitlistTable({ entries, breakdown }: WaitlistTableProps) {
   if (entries.length === 0) {
     return (
       <div className="rounded-lg border bg-muted/30 p-6 text-center">
@@ -90,7 +91,7 @@ export function WaitlistTable({ entries, available }: WaitlistTableProps) {
                   email={entry.email}
                   fullName={entry.fullName}
                   partySize={entry.partySize}
-                  available={available}
+                  breakdown={breakdown}
                   status={entry.status}
                 />
               </TableCell>

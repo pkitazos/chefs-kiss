@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { SeatBreakdown } from "@/lib/db/seat-counting";
 import { api } from "@/lib/trpc/client";
 import { copyToClipboard } from "@/lib/utils";
 import {
@@ -29,7 +30,7 @@ interface WaitlistRowActionsProps {
   email: string;
   fullName: string;
   partySize: number;
-  available: number;
+  breakdown: SeatBreakdown;
   status: "waiting" | "promoted" | "cancelled" | "revoked";
 }
 
@@ -38,7 +39,7 @@ export function WaitlistRowActions({
   email,
   fullName,
   partySize,
-  available,
+  breakdown,
   status,
 }: WaitlistRowActionsProps) {
   const utils = api.useUtils();
@@ -80,11 +81,16 @@ export function WaitlistRowActions({
       toast.error("Failed to revoke", { description: err.message }),
   });
 
-  const overBy = partySize - available;
-  const overfillWarning = overBy > 0 && (
+  const totalAfter = breakdown.booked + breakdown.reserved + partySize;
+  const overfillWarning = totalAfter > breakdown.capacity && (
     <div className="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900">
-      This will put the slot <strong>{overBy} over capacity.</strong> Proceed
-      only if you&apos;ve confirmed the extra seats can be accommodated.
+      This will bring total bookings to{" "}
+      <strong>
+        {totalAfter} of {breakdown.capacity} seats.
+      </strong>{" "}
+      {breakdown.held > 0 &&
+        `${breakdown.held} seat${breakdown.held === 1 ? " is" : "s are"} currently held separately. `}
+      Proceed only if you&apos;ve confirmed the extra seats can be accommodated.
     </div>
   );
 

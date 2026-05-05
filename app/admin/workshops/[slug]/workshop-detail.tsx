@@ -141,7 +141,7 @@ function SlotSection({ slot }: { slot: SlotInfo }) {
         ) : data ? (
           <WaitlistTable
             entries={data.waitlist}
-            available={breakdown.available}
+            breakdown={breakdown}
           />
         ) : null}
       </CardContent>
