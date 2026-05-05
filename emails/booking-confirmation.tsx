@@ -14,7 +14,9 @@ interface BookingConfirmationEmailProps {
   fullName: string;
   bookingId: string;
   type: "private-dining" | "workshop";
-  slotLabel: string;
+  sessionTitle: string;
+  sessionDate: string;
+  sessionTime: string;
   seats: number;
   totalFormatted: string;
 }
@@ -23,7 +25,9 @@ export default function BookingConfirmationEmail({
   fullName,
   bookingId,
   type,
-  slotLabel,
+  sessionTitle,
+  sessionDate,
+  sessionTime,
   seats,
   totalFormatted,
 }: BookingConfirmationEmailProps) {
@@ -66,9 +70,23 @@ export default function BookingConfirmationEmail({
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-2 text-sm text-gray-500">Session:</td>
+                      <td className="py-2 text-sm text-gray-500">
+                        Experience:
+                      </td>
                       <td className="py-2 text-sm font-semibold">
-                        {slotLabel}
+                        {sessionTitle}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 text-sm text-gray-500">Date:</td>
+                      <td className="py-2 text-sm font-semibold">
+                        {sessionDate}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 text-sm text-gray-500">Time:</td>
+                      <td className="py-2 text-sm font-semibold">
+                        {sessionTime}
                       </td>
                     </tr>
                     <tr>
@@ -104,7 +122,9 @@ BookingConfirmationEmail.PreviewProps = {
   fullName: "John Doe",
   bookingId: "26BK01AYN",
   type: "private-dining",
-  slotLabel: "Private Dining Experience - Saturday, May 16 at 19:00",
+  sessionTitle: "Private Dining Experience",
+  sessionDate: "Saturday, May 16",
+  sessionTime: "19:00 - 21:00",
   seats: 2,
   totalFormatted: "\u20AC240.00",
 } as BookingConfirmationEmailProps;

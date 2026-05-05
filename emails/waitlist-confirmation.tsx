@@ -13,7 +13,9 @@ import { Signature } from "./components/signature";
 interface WaitlistConfirmationEmailProps {
   fullName: string;
   waitlistId: string;
-  slotLabel: string;
+  sessionTitle: string;
+  sessionDate: string;
+  sessionTime: string;
   partySize: number;
   submissionDate: string;
 }
@@ -21,7 +23,9 @@ interface WaitlistConfirmationEmailProps {
 export default function WaitlistConfirmationEmail({
   fullName,
   waitlistId,
-  slotLabel,
+  sessionTitle,
+  sessionDate,
+  sessionTime,
   partySize,
   submissionDate,
 }: WaitlistConfirmationEmailProps) {
@@ -57,9 +61,23 @@ export default function WaitlistConfirmationEmail({
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-2 text-sm text-gray-500">Session:</td>
+                      <td className="py-2 text-sm text-gray-500">
+                        Experience:
+                      </td>
                       <td className="py-2 text-sm font-semibold">
-                        {slotLabel}
+                        {sessionTitle}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 text-sm text-gray-500">Date:</td>
+                      <td className="py-2 text-sm font-semibold">
+                        {sessionDate}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 text-sm text-gray-500">Time:</td>
+                      <td className="py-2 text-sm font-semibold">
+                        {sessionTime}
                       </td>
                     </tr>
                     <tr>
@@ -112,7 +130,9 @@ export default function WaitlistConfirmationEmail({
 WaitlistConfirmationEmail.PreviewProps = {
   fullName: "Jane Doe",
   waitlistId: "26WL01AYN",
-  slotLabel: "Private Dining Experience - Saturday, May 16 at 19:00",
+  sessionTitle: "Private Dining Experience",
+  sessionDate: "Saturday, May 16",
+  sessionTime: "19:00 - 21:00",
   partySize: 2,
   submissionDate: "April 24, 2026",
 } as WaitlistConfirmationEmailProps;
