@@ -6,6 +6,7 @@ import WaitlistPaymentConfirmationEmail from "@/emails/waitlist-payment-confirma
 import WaitlistPromotionEmail from "@/emails/waitlist-promotion";
 import { CURRENT_EVENT } from "@/lib/config/event";
 import { clientEnv } from "@/lib/env";
+import { signClaimToken } from "@/lib/waitlist/claim-token";
 
 type SendWaitlistConfirmationParams = {
   email: string;
@@ -81,7 +82,7 @@ export async function sendWaitlistPromotion({
   const { slot, price } = resolveSlotDetails(slotId, type);
   const total = price * partySize;
   const totalFormatted = `€${total.toFixed(2)}`;
-  const claimUrl = `${clientEnv.NEXT_PUBLIC_APP_URL}/waitlist/claim?id=${waitlistEntryId}`;
+  const claimUrl = `${clientEnv.NEXT_PUBLIC_APP_URL}/waitlist/claim?id=${waitlistEntryId}&t=${signClaimToken(email)}`;
 
   const html = await render(
     WaitlistPromotionEmail({

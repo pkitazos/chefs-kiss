@@ -9,9 +9,10 @@ import { api } from "@/lib/trpc/client";
 
 interface ClaimPayButtonProps {
   entryId: string;
+  token: string;
 }
 
-export function ClaimPayButton({ entryId }: ClaimPayButtonProps) {
+export function ClaimPayButton({ entryId, token }: ClaimPayButtonProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const initPayment = api.waitlist.initPayment.useMutation({
@@ -26,7 +27,7 @@ export function ClaimPayButton({ entryId }: ClaimPayButtonProps) {
 
   const handleClick = () => {
     setIsSubmitting(true);
-    initPayment.mutate({ waitlistEntryId: entryId });
+    initPayment.mutate({ waitlistEntryId: entryId, token });
   };
 
   return (
