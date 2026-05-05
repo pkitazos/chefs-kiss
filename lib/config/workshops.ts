@@ -70,19 +70,19 @@ export const WORKSHOPS = [
         slots: [
           {
             id: "WS-BB-D1-1200",
-            time: "12:00 – 13:00",
+            time: "12:00 - 13:00",
             capacity: 20,
             price: 25,
           },
           {
             id: "WS-BB-D1-1330",
-            time: "13:30 – 14:30",
+            time: "13:30 - 14:30",
             capacity: 20,
             price: 25,
           },
           {
             id: "WS-BB-D1-1500",
-            time: "15:00 – 16:00",
+            time: "15:00 - 16:00",
             capacity: 20,
             price: 25,
           },
@@ -93,19 +93,19 @@ export const WORKSHOPS = [
         slots: [
           {
             id: "WS-BB-D2-1200",
-            time: "12:00 – 13:00",
+            time: "12:00 - 13:00",
             capacity: 20,
             price: 25,
           },
           {
             id: "WS-BB-D2-1315",
-            time: "13:15 – 14:15",
+            time: "13:15 - 14:15",
             capacity: 20,
             price: 25,
           },
           {
             id: "WS-BB-D2-1430",
-            time: "14:30 – 15:30",
+            time: "14:30 - 15:30",
             capacity: 20,
             price: 25,
           },
@@ -134,13 +134,13 @@ export const WORKSHOPS = [
         slots: [
           {
             id: "WS-TD-D1-1400",
-            time: "14:00 – 16:00",
+            time: "14:00 - 16:00",
             capacity: 20,
             price: 25,
           },
           {
             id: "WS-TD-D1-1700",
-            time: "17:00 – 19:00",
+            time: "17:00 - 19:00",
             capacity: 20,
             price: 25,
           },
@@ -151,13 +151,13 @@ export const WORKSHOPS = [
         slots: [
           {
             id: "WS-TD-D2-1400",
-            time: "14:00 – 16:00",
+            time: "14:00 - 16:00",
             capacity: 20,
             price: 25,
           },
           {
             id: "WS-TD-D2-1700",
-            time: "17:00 – 19:00",
+            time: "17:00 - 19:00",
             capacity: 20,
             price: 25,
           },
@@ -184,13 +184,13 @@ export const WORKSHOPS = [
         slots: [
           {
             id: "WS-BS-D1-1600",
-            time: "16:00 – 17:30",
+            time: "16:00 - 17:30",
             capacity: 12,
             price: 25,
           },
           {
             id: "WS-BS-D1-1830",
-            time: "18:30 – 20:00",
+            time: "18:30 - 10:00",
             capacity: 12,
             price: 25,
           },
@@ -201,13 +201,13 @@ export const WORKSHOPS = [
         slots: [
           {
             id: "WS-BS-D2-1200",
-            time: "12:00 – 13:30",
+            time: "12:00 - 13:30",
             capacity: 12,
             price: 25,
           },
           {
             id: "WS-BS-D2-1500",
-            time: "15:00 – 16:30",
+            time: "15:00 - 16:30",
             capacity: 12,
             price: 25,
           },
@@ -252,7 +252,7 @@ export const WORKSHOPS = [
           {
             id: "WS-PW-MG-D1-1730",
             variantId: "MG",
-            time: "17:30 – 19:00",
+            time: "17:30 - 19:00",
             capacity: 15,
             price: 30,
             shortDescription: "Paint Your Own - Mug Edition",
@@ -260,7 +260,7 @@ export const WORKSHOPS = [
           {
             id: "WS-PW-BL-D1-1730",
             variantId: "BL",
-            time: "17:30 – 19:00",
+            time: "17:30 - 19:00",
             capacity: 10,
             price: 35,
             shortDescription: "Paint Your Own - Bowl Edition",
@@ -279,7 +279,7 @@ export const WORKSHOPS = [
           {
             id: "WS-PW-MG-D2-1730",
             variantId: "MG",
-            time: "17:30 – 19:00",
+            time: "17:30 - 19:00",
             capacity: 15,
             price: 30,
             shortDescription: "Paint Your Own - Mug Edition",
@@ -287,7 +287,7 @@ export const WORKSHOPS = [
           {
             id: "WS-PW-BL-D2-1730",
             variantId: "BL",
-            time: "17:30 – 19:00",
+            time: "17:30 - 19:00",
             capacity: 10,
             price: 35,
             shortDescription: "Paint Your Own - Bowl Edition",
@@ -389,7 +389,7 @@ export const WORKSHOPS = [
           {
             id: "WS-KC-PK-D1-1200",
             variantId: "PK",
-            time: "12:00 – 12:45",
+            time: "12:00 - 12:45",
             capacity: 6,
             price: 25,
             shortDescription: "Pork mince",
@@ -397,7 +397,7 @@ export const WORKSHOPS = [
           {
             id: "WS-KC-VG-D1-1300",
             variantId: "VG",
-            time: "13:00 – 13:45",
+            time: "13:00 - 13:45",
             capacity: 6,
             price: 25,
             shortDescription: "Vegetarian / Vegan",
@@ -405,7 +405,7 @@ export const WORKSHOPS = [
           {
             id: "WS-KC-PK-D1-1400",
             variantId: "PK",
-            time: "14:00 – 14:45",
+            time: "14:00 - 14:45",
             capacity: 6,
             price: 25,
             shortDescription: "Pork mince",
@@ -413,7 +413,7 @@ export const WORKSHOPS = [
           {
             id: "WS-KC-VG-D1-1615",
             variantId: "VG",
-            time: "16:15 – 17:00",
+            time: "16:15 - 17:00",
             capacity: 6,
             price: 25,
             shortDescription: "Vegetarian / Vegan",
@@ -421,7 +421,7 @@ export const WORKSHOPS = [
           {
             id: "WS-KC-PK-D1-1715",
             variantId: "PK",
-            time: "17:15 – 18:00",
+            time: "17:15 - 18:00",
             capacity: 6,
             price: 25,
             shortDescription: "Pork mince",
@@ -429,7 +429,7 @@ export const WORKSHOPS = [
           // {
           //   // Extra slot based on demand
           //   id: "WS-KC-VG-D1-1815",
-          //   time: "18:15 – 19:00",
+          //   time: "18:15 - 19:00",
           //   capacity: 6,
           //   price: 25,
           // },
@@ -458,19 +458,19 @@ export const WORKSHOPS = [
         slots: [
           {
             id: "WS-PP-D2-1430",
-            time: "14:30 – 15:30",
+            time: "14:30 - 15:30",
             capacity: 10,
             price: 40,
           },
           {
             id: "WS-PP-D2-1600",
-            time: "16:00 – 17:00",
+            time: "16:00 - 17:00",
             capacity: 10,
             price: 40,
           },
           {
             id: "WS-PP-D2-1730",
-            time: "17:30 – 18:30",
+            time: "17:30 - 18:30",
             capacity: 10,
             price: 40,
           },
@@ -495,7 +495,7 @@ export const WORKSHOPS = [
     tagline:
       "Create your own set of painted coasters while enjoying a relaxed glass of wine.",
     longDescription:
-      "Join us for a relaxed paint-and-sip workshop where participants will create a set of four custom coasters using acrylic paints. No experience is needed — just come, enjoy a glass of wine, and get creative while designing a unique set to take home.",
+      "Join us for a relaxed paint-and-sip workshop where participants will create a set of four custom coasters using acrylic paints. No experience is needed - just come, enjoy a glass of wine, and get creative while designing a unique set to take home.",
     duration: "1.5 hours",
     maxSeatsPerBooking: DEFAULT_MAX_SEATS_PER_BOOKING,
     days: [

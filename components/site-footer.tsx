@@ -37,7 +37,7 @@ export function SiteFooter() {
           <div className="col-span-2 space-y-5 sm:col-span-1">
             <Link
               href="/"
-              aria-label={`${FESTIVAL_NAME} — home`}
+              aria-label={`${FESTIVAL_NAME} - home`}
               className="inline-flex items-center gap-3"
             >
               <Image
