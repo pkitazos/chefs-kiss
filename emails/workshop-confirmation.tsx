@@ -8,9 +8,11 @@ import {
   Tailwind,
   Text,
 } from "@react-email/components";
+import { Header } from "./components/header";
 import { Signature } from "./components/signature";
 
 interface WorkshopConfirmationEmailProps {
+  baseUrl: string;
   contactPerson: string;
   workshopTitle: string;
   applicationId: string;
@@ -18,6 +20,7 @@ interface WorkshopConfirmationEmailProps {
 }
 
 export default function WorkshopConfirmationEmail({
+  baseUrl,
   contactPerson,
   workshopTitle,
   applicationId,
@@ -30,6 +33,7 @@ export default function WorkshopConfirmationEmail({
         <Body className="bg-white font-sans leading-relaxed text-[#333]">
           <Container className="mx-auto max-w-150 p-5">
             <div className="mb-5 rounded-lg bg-gray-50 p-7.5">
+              <Header baseUrl={baseUrl} />
               <Heading className="mb-5 text-2xl text-[#2c3e50]">
                 Application Received!
               </Heading>
@@ -110,6 +114,7 @@ export default function WorkshopConfirmationEmail({
 }
 
 WorkshopConfirmationEmail.PreviewProps = {
+  baseUrl: "http://localhost:3000",
   contactPerson: "[Contact Person]",
   workshopTitle: "[Workshop Name]",
   applicationId: "WS-2025-001234",

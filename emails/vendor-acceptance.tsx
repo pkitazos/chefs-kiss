@@ -8,15 +8,18 @@ import {
   Tailwind,
   Text,
 } from "@react-email/components";
+import { Header } from "./components/header";
 import { Signature } from "./components/signature";
 
 interface VendorAcceptanceEmailProps {
+  baseUrl: string;
   businessName: string;
   applicationId: string;
   festivalDate: string;
 }
 
 export default function VendorAcceptanceEmail({
+  baseUrl,
   businessName,
   applicationId,
   festivalDate,
@@ -28,6 +31,7 @@ export default function VendorAcceptanceEmail({
         <Body className="bg-white font-sans leading-relaxed text-[#333]">
           <Container className="mx-auto max-w-150 p-5">
             <div className="mb-5 rounded-lg bg-gray-50 p-7.5">
+              <Header baseUrl={baseUrl} />
               <Heading className="mb-5 text-2xl text-[#2c3e50]">
                 Congratulations! Your Application is Approved!
               </Heading>
@@ -95,6 +99,7 @@ export default function VendorAcceptanceEmail({
 }
 
 VendorAcceptanceEmail.PreviewProps = {
+  baseUrl: "http://localhost:3000",
   businessName: "[Vendor Business Name]",
   applicationId: "VEN-2025-001234",
   festivalDate: "[Actual Festival Date]",
