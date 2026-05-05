@@ -2,7 +2,7 @@ import type { StaticImageData } from "next/image";
 
 import bigBadWolf from "@/public/images/vendors/big-bad-wolf.jpg";
 import cacioEPepe from "@/public/images/vendors/cacio-e-pepe.jpg";
-// import chefAvraam from "@/public/images/vendors/chef-avraam.jpg";
+import chefAvraam from "@/public/images/vendors/chef-avraam.jpg";
 import crepaland from "@/public/images/vendors/crepaland.jpg";
 import gardenGourmet from "@/public/images/vendors/garden-gourmet.jpg";
 import gemsFoodTruck from "@/public/images/vendors/gems-food-truck.jpg";
@@ -11,7 +11,7 @@ import hbHotdogs from "@/public/images/vendors/hb-hotdogs.jpg";
 import karasFishTavern from "@/public/images/vendors/karas-fish-tavern.jpg";
 import maysDiner from "@/public/images/vendors/mays-diner.jpg";
 import midtownBistro from "@/public/images/vendors/midtown-bistro.jpg";
-// import mrWurst from "@/public/images/vendors/mr-wurst.jpg";
+import mrWurst from "@/public/images/vendors/mr-wurst.jpg";
 import myCookieDough from "@/public/images/vendors/my-cookie-dough.jpg";
 import nikkei from "@/public/images/vendors/nikkei.jpg";
 import omniEats from "@/public/images/vendors/omni-eats.jpg";
@@ -31,36 +31,36 @@ export const PENDING_IMAGE = Symbol("pending-vendor-image");
 export type PendingImage = typeof PENDING_IMAGE;
 
 export const VENDOR_IMAGES = {
+  "big-bad-wolf": bigBadWolf,
   "cacio-e-pepe": cacioEPepe,
+  "chef-avraam": chefAvraam,
+  "chef-noel": PENDING_IMAGE,
   crepaland: crepaland,
   "garden-gourmet": gardenGourmet,
   "gems-food-truck": gemsFoodTruck,
+  "german-donner": PENDING_IMAGE,
   "hard-rock-cafe": hardRockCafe,
+  "hb-hotdogs": hbHotdogs,
+  "karas-fish-tavern": karasFishTavern,
+  kawacom: PENDING_IMAGE,
+  "little-chefs": PENDING_IMAGE,
   "mays-diner": maysDiner,
-  "mr-wurst": PENDING_IMAGE,
+  megastronomy: PENDING_IMAGE,
+  "meraki-tastes": PENDING_IMAGE,
+  "midtown-bistro": midtownBistro,
+  "mr-wurst": mrWurst,
+  "my-cookie-dough": myCookieDough,
   nikkei: nikkei,
   "omni-eats": omniEats,
   pizzella: pizzella,
   "por-favor": porFavor,
+  regrub: regrub,
+  "tarantula-fried-chicken": tarantula,
+  "taste-of-tradition": tasteOfTradition,
   "to-glykatzidiko": toGlykatzidiko,
   "to-souvlaki-tou-soukri": toSouvlakiTouSoukri,
   "wild-earth": wildEarth,
   yozen: yozen,
-  "my-cookie-dough": myCookieDough,
-  "big-bad-wolf": bigBadWolf,
-  "tarantula-fried-chicken": tarantula,
-  "karas-fish-tavern": karasFishTavern,
-  regrub: regrub,
-  "midtown-bistro": midtownBistro,
-  "meraki-tastes": PENDING_IMAGE,
-  kawacom: PENDING_IMAGE,
-  "german-donner": PENDING_IMAGE,
-  "chef-avraam": PENDING_IMAGE,
-  "chef-noel": PENDING_IMAGE,
-  "taste-of-tradition": tasteOfTradition,
-  "little-chefs": PENDING_IMAGE,
-  "hb-hotdogs": hbHotdogs,
-  megastronomy: PENDING_IMAGE,
 } satisfies Record<VendorId, StaticImageData | PendingImage>;
 
 export function getVendorImage(id: VendorId): StaticImageData | null {
