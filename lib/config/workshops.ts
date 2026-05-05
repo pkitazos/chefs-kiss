@@ -335,7 +335,15 @@ export const WORKSHOPS = [
     slug: "cocktail-making",
     shortId: "CM",
     title: "Cocktail Making",
-    hostedBy: [],
+    hostedBy: [
+      {
+        name: "Siginia",
+      },
+      {
+        name: "@payabl_eu",
+        instagram: "https://www.instagram.com/payabl_eu/",
+      },
+    ],
     tagline: "An interactive cocktail-making experience by the sea.",
     longDescription:
       "Cocktail Making Workshop is an interactive experience at the Sundeck of Ayia Napa Marina, where participants learn how to craft refreshing cocktails, discover mixing techniques, and enjoy a fun, lively atmosphere by the water.",
