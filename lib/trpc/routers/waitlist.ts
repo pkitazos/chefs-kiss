@@ -561,14 +561,14 @@ export const waitlistRouter = createTRPCRouter({
           throw new TRPCError({
             code: "BAD_REQUEST",
             message:
-              "Cannot revoke — the customer has already paid. Cancel the booking instead.",
+              "Cannot revoke - the customer has already paid. Cancel the booking instead.",
           });
         }
 
         if (booking.status === "cancelled") {
           throw new TRPCError({
             code: "BAD_REQUEST",
-            message: "Cannot revoke — the booking has already been cancelled.",
+            message: "Cannot revoke - the booking has already been cancelled.",
           });
         }
 

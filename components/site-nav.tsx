@@ -49,7 +49,7 @@ export function SiteNav({
       <div className="pointer-events-auto flex items-center gap-1 rounded-full border border-border/60 bg-background/75 px-1.5 py-1.5 shadow-lg backdrop-blur-md sm:gap-1.5 sm:px-2 sm:py-2">
         <Link
           href="/"
-          aria-label="Chef's Kiss — home"
+          aria-label="Chef's Kiss - home"
           className="flex size-8 shrink-0 items-center justify-center rounded-full transition-transform hover:scale-105 sm:size-9"
         >
           <Image
