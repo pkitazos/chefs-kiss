@@ -1,5 +1,5 @@
 import { waitUntil } from "@vercel/functions";
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { NextRequest } from "next/server";
 import { db } from "@/lib/db";
 import { bookings } from "@/lib/db/schema";
@@ -103,16 +103,21 @@ export async function POST(
   }
 
   // ---------- State transition rules ----------
-  // See the commit message for the full decision table; briefly:
   //   pending + success     -> confirmed (+ email)
   //   pending + failure     -> failed
+  //   expired + success     -> confirmed (+ email) — late payment after expiry
   //   anything else         -> no-op (log if unexpected, always 200)
 
-  if (booking.status !== "pending") {
+  const actionableStatuses = ["pending", "expired"] as const;
+  const isActionable =
+    isSuccess && booking.status === "expired"
+      ? true
+      : booking.status === "pending";
+
+  if (!isActionable) {
     const unexpected =
       (booking.status === "confirmed" && !isSuccess) ||
-      (booking.status === "failed" && isSuccess) ||
-      booking.status === "expired";
+      (booking.status === "failed" && isSuccess);
 
     if (unexpected) {
       console.warn(
@@ -128,12 +133,17 @@ export async function POST(
     return new Response("OK", { status: 200 });
   }
 
-  // Booking is pending; apply the transition.
+  if (booking.status === "expired" && isSuccess) {
+    console.warn(
+      `[callback] ${bookingId} accepting late payment (was expired); promoting to confirmed`,
+    );
+  }
+
   const newStatus = isSuccess ? "confirmed" : "failed";
   const now = new Date();
 
   // Atomic UPDATE guarded on current status.
-  // The WHERE status='pending' clause is the idempotency barrier:
+  // The WHERE clause is the idempotency barrier:
   // if two callbacks race, only the first one affects rows.
   const [updated] = await db
     .update(bookings)
@@ -145,7 +155,12 @@ export async function POST(
       paidAt: isSuccess ? now : null,
       updatedAt: now,
     })
-    .where(and(eq(bookings.id, bookingId), eq(bookings.status, "pending")))
+    .where(
+      and(
+        eq(bookings.id, bookingId),
+        inArray(bookings.status, actionableStatuses),
+      ),
+    )
     .returning();
 
   if (!updated) {
