@@ -92,6 +92,13 @@
       "when": 1777634460316,
       "tag": "0012_waitlist_promotion_schema",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1777972002033,
+      "tag": "0013_drop_payment_method",
+      "breakpoints": true
     }
   ]
 }

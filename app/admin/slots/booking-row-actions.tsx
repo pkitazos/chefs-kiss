@@ -17,12 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/lib/trpc/client";
 import { copyToClipboard } from "@/lib/utils";
-import {
-  IconCash,
-  IconCopy,
-  IconDotsVertical,
-  IconX,
-} from "@tabler/icons-react";
+import { IconCopy, IconDotsVertical, IconX } from "@tabler/icons-react";
 
 type BookingStatus =
   | "pending"
@@ -37,8 +32,6 @@ interface BookingRowActionsProps {
   fullName: string;
   seats: number;
   status: BookingStatus;
-  paymentMethod: "online" | "in-person";
-  paidAt: Date | null;
 }
 
 export function BookingRowActions({
@@ -47,28 +40,13 @@ export function BookingRowActions({
   fullName,
   seats,
   status,
-  paymentMethod,
-  paidAt,
 }: BookingRowActionsProps) {
-  const [confirmPaidOpen, setConfirmPaidOpen] = useState(false);
   const [confirmCancelOpen, setConfirmCancelOpen] = useState(false);
   const [cancelNote, setCancelNote] = useState("");
   const [sendCancelEmail, setSendCancelEmail] = useState(
     status === "confirmed",
   );
   const utils = api.useUtils();
-
-  const markPaid = api.bookings.markPaid.useMutation({
-    onSuccess: () => {
-      utils.slots.bySlot.invalidate();
-      utils.bookings.adminList.invalidate();
-      setConfirmPaidOpen(false);
-      toast.success("Marked as paid");
-    },
-    onError: (err) => {
-      toast.error("Failed to mark as paid", { description: err.message });
-    },
-  });
 
   const cancel = api.bookings.cancel.useMutation({
     onSuccess: (_data, variables) => {
@@ -88,7 +66,6 @@ export function BookingRowActions({
     },
   });
 
-  const canMarkPaid = paymentMethod === "in-person" && paidAt === null;
   const canCancel = status === "pending" || status === "confirmed";
 
   const handleCopyEmail = async () => {
@@ -115,13 +92,6 @@ export function BookingRowActions({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-40">
           <DropdownMenuItem
-            onClick={() => setConfirmPaidOpen(true)}
-            disabled={!canMarkPaid}
-          >
-            <IconCash />
-            Mark as paid
-          </DropdownMenuItem>
-          <DropdownMenuItem
             variant="destructive"
             onClick={() => setConfirmCancelOpen(true)}
             disabled={!canCancel}
@@ -136,16 +106,6 @@ export function BookingRowActions({
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-
-      <ConfirmActionDialog
-        open={confirmPaidOpen}
-        onOpenChange={setConfirmPaidOpen}
-        title="Mark booking as paid"
-        description={`Record that ${fullName} paid for booking ${bookingId} in person. This cannot be undone here.`}
-        confirmLabel="Confirm"
-        isPending={markPaid.isPending}
-        onConfirm={() => markPaid.mutate({ id: bookingId })}
-      />
 
       <ConfirmActionDialog
         open={confirmCancelOpen}

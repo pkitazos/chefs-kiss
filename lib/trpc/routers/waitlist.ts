@@ -262,7 +262,6 @@ export const waitlistRouter = createTRPCRouter({
             id: bookingId,
             type: entry.type,
             status: "pending",
-            paymentMethod: "online",
             slotId: entry.slotId,
             fullName: entry.fullName,
             email: entry.email,
