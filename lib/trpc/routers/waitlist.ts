@@ -1,11 +1,12 @@
 import { TRPCError } from "@trpc/server";
-import { and, asc, count, eq, sql } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { getDiningSessionById } from "@/lib/config/private-dining";
 import { getWorkshopSlotById } from "@/lib/config/workshops";
 import { isUniqueViolation } from "@/lib/db/errors";
 import { expireStalePendingBookings } from "@/lib/db/expire-stale-bookings";
+import { nextRef } from "@/lib/db/ref-sequence";
 import { getSlotSeatBreakdown } from "@/lib/db/seat-counting";
 import { lockSlotForWrite } from "@/lib/db/seat-locks";
 import { bookings, events, seatHolds, waitlistEntries } from "@/lib/db/schema";
@@ -15,11 +16,7 @@ import {
   sendWaitlistPromotion,
 } from "@/lib/email/waitlist-emails";
 import { clientEnv } from "@/lib/env";
-import {
-  buildBookingOrWaitlistRef,
-  categoryFromSlotId,
-  refLikePatternForCategory,
-} from "@/lib/ids";
+import { categoryFromSlotId, refLikePatternForCategory } from "@/lib/ids";
 import { initBookingPayment } from "@/lib/payments/init-booking-payment";
 import { createWaitlistEntrySchema } from "@/lib/validations/waitlist";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../init";
@@ -64,21 +61,10 @@ export const waitlistRouter = createTRPCRouter({
       const year = activeEvent.startDate.getFullYear();
       const refPattern = refLikePatternForCategory(year, "WL", category);
 
-      const [countResult] = await ctx.db
-        .select({ count: count() })
-        .from(waitlistEntries)
-        .where(
-          and(
-            eq(waitlistEntries.eventId, activeEvent.id),
-            sql`${waitlistEntries.id} LIKE ${refPattern}`,
-          ),
-        );
-      const sequence = (countResult?.count ?? 0) + 1;
-      const id = buildBookingOrWaitlistRef({
+      const id = await nextRef(ctx.db, waitlistEntries, refPattern, {
         year,
         type: "WL",
         category,
-        sequence,
         locationCode: activeEvent.locationCode,
       });
 
@@ -236,21 +222,10 @@ export const waitlistRouter = createTRPCRouter({
         const year = activeEvent.startDate.getFullYear();
         const refPattern = refLikePatternForCategory(year, "BK", category);
 
-        const [countResult] = await tx
-          .select({ count: count() })
-          .from(bookings)
-          .where(
-            and(
-              eq(bookings.eventId, activeEvent.id),
-              sql`${bookings.id} LIKE ${refPattern}`,
-            ),
-          );
-        const sequence = (countResult?.count ?? 0) + 1;
-        const bookingId = buildBookingOrWaitlistRef({
+        const bookingId = await nextRef(tx, bookings, refPattern, {
           year,
           type: "BK",
           category,
-          sequence,
           locationCode: activeEvent.locationCode,
         });
 

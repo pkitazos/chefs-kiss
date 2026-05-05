@@ -1,4 +1,9 @@
+import { sql } from "drizzle-orm";
+
+import type { RefCategory } from "@/lib/ids";
+
 import type { db } from "./index";
+import { nextRef } from "./ref-sequence";
 import { bookings } from "./schema";
 import { getSlotSeatBreakdown } from "./seat-counting";
 import { lockSlotForWrite } from "./seat-locks";
@@ -15,7 +20,6 @@ export class CapacityExceededError extends Error {
 }
 
 export type InsertPendingBookingArgs = {
-  id: string;
   slotId: string;
   capacity: number;
   seats: number;
@@ -27,6 +31,10 @@ export type InsertPendingBookingArgs = {
   totalAmount: number;
   expiresAt: Date;
   eventId: string;
+  refPattern: string;
+  year: number;
+  category: RefCategory;
+  locationCode: string;
 };
 
 /**
@@ -42,8 +50,13 @@ export type InsertPendingBookingArgs = {
 export async function insertPendingBooking(
   database: typeof db,
   args: InsertPendingBookingArgs,
-): Promise<void> {
-  await database.transaction(async (tx) => {
+): Promise<string> {
+  return await database.transaction(async (tx) => {
+    // Serialize ID generation across all slots in the same category to
+    // prevent two concurrent requests from computing the same sequence.
+    await tx.execute(
+      sql`SELECT pg_advisory_xact_lock(hashtextextended(${`booking-seq:${args.refPattern}`}, 0))`,
+    );
     await lockSlotForWrite(tx, args.slotId);
 
     const breakdown = await getSlotSeatBreakdown(tx, {
@@ -55,8 +68,15 @@ export async function insertPendingBooking(
       throw new CapacityExceededError(breakdown.available);
     }
 
+    const bookingId = await nextRef(tx, bookings, args.refPattern, {
+      year: args.year,
+      type: "BK",
+      category: args.category,
+      locationCode: args.locationCode,
+    });
+
     await tx.insert(bookings).values({
-      id: args.id,
+      id: bookingId,
       type: args.type,
       slotId: args.slotId,
       fullName: args.fullName,
@@ -68,5 +88,7 @@ export async function insertPendingBooking(
       eventId: args.eventId,
       expiresAt: args.expiresAt,
     });
+
+    return bookingId;
   });
 }

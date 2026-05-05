@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:debug": "> .debug.log; tail -f .debug.log",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

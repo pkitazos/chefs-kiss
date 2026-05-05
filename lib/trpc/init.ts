@@ -14,7 +14,14 @@ export const createTRPCContext = async (opts: FetchCreateContextFnOptions) => {
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
-  errorFormatter({ shape }) {
+  errorFormatter({ shape, error }) {
+    if (
+      error.code === "INTERNAL_SERVER_ERROR" &&
+      error.cause &&
+      !(error.cause instanceof TRPCError)
+    ) {
+      return { ...shape, message: "An unexpected error occurred." };
+    }
     return shape;
   },
 });

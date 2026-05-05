@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server";
-import { and, count, desc, eq, inArray, sql } from "drizzle-orm";
+import { and, desc, eq, inArray } from "drizzle-orm";
 import { z } from "zod";
 
 import { COMING_SOON } from "@/lib/config/mode";
@@ -15,11 +15,7 @@ import { lockSlotForWrite } from "@/lib/db/seat-locks";
 import { bookings, events, seatHolds } from "@/lib/db/schema";
 import { initBookingPayment } from "@/lib/payments/init-booking-payment";
 import { buildReturnUrl } from "@/lib/payments/payabl";
-import {
-  buildBookingOrWaitlistRef,
-  categoryFromSlotId,
-  refLikePatternForCategory,
-} from "@/lib/ids";
+import { categoryFromSlotId, refLikePatternForCategory } from "@/lib/ids";
 import { sendBookingCancellation } from "@/lib/email/booking-emails";
 import { createBookingSchema } from "@/lib/validations/booking";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../init";
@@ -68,30 +64,11 @@ export const bookingsRouter = createTRPCRouter({
 
       const year = activeEvent.startDate.getFullYear();
       const refPattern = refLikePatternForCategory(year, "BK", category);
-
-      const [countResult] = await ctx.db
-        .select({ count: count() })
-        .from(bookings)
-        .where(
-          and(
-            eq(bookings.eventId, activeEvent.id),
-            sql`${bookings.id} LIKE ${refPattern}`,
-          ),
-        );
-      const sequence = (countResult?.count ?? 0) + 1;
-      const bookingId = buildBookingOrWaitlistRef({
-        year,
-        type: "BK",
-        category,
-        sequence,
-        locationCode: activeEvent.locationCode,
-      });
-
       const totalAmount = slotConfig.price * input.seats * 100; // cents
 
+      let bookingId: string;
       try {
-        await insertPendingBooking(ctx.db, {
-          id: bookingId,
+        bookingId = await insertPendingBooking(ctx.db, {
           slotId: input.slotId,
           capacity: slotConfig.capacity,
           seats: input.seats,
@@ -103,6 +80,10 @@ export const bookingsRouter = createTRPCRouter({
           totalAmount,
           expiresAt: new Date(Date.now() + 15 * 60 * 1000),
           eventId: activeEvent.id,
+          refPattern,
+          year,
+          category,
+          locationCode: activeEvent.locationCode,
         });
       } catch (err) {
         if (err instanceof CapacityExceededError) {
@@ -111,7 +92,12 @@ export const bookingsRouter = createTRPCRouter({
             message: err.message,
           });
         }
-        throw err;
+        console.error("[bookings.create] failed to insert booking:", err);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message:
+            "Something went wrong creating your booking. Please try again.",
+        });
       }
 
       // Append the booking ref to the return URL so the status page can
