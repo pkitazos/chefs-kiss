@@ -3,6 +3,7 @@ import type { StaticImageData } from "next/image";
 import bigBadWolf from "@/public/images/vendors/big-bad-wolf.jpg";
 import cacioEPepe from "@/public/images/vendors/cacio-e-pepe.jpg";
 import chefAvraam from "@/public/images/vendors/chef-avraam.jpg";
+import chefNoel from "@/public/images/vendors/chef-noel.jpg";
 import crepaland from "@/public/images/vendors/crepaland.jpg";
 import gardenGourmet from "@/public/images/vendors/garden-gourmet.jpg";
 import gemsFoodTruck from "@/public/images/vendors/gems-food-truck.jpg";
@@ -11,7 +12,10 @@ import hardRockCafe from "@/public/images/vendors/hard-rock-cafe.jpg";
 import hbHotdogs from "@/public/images/vendors/hb-hotdogs.jpg";
 import karasFishTavern from "@/public/images/vendors/karas-fish-tavern.jpg";
 import kawacom from "@/public/images/vendors/kawacom.jpg";
+import littleChefs from "@/public/images/vendors/little-chefs.jpg";
 import maysDiner from "@/public/images/vendors/mays-diner.jpg";
+import meGastronomy from "@/public/images/vendors/me-gastronomy.jpg";
+import merakiTaste from "@/public/images/vendors/meraki-taste.jpg";
 import midtownBistro from "@/public/images/vendors/midtown-bistro.jpg";
 import mrWurst from "@/public/images/vendors/mr-wurst.jpg";
 import myCookieDough from "@/public/images/vendors/my-cookie-dough.jpg";
@@ -36,7 +40,7 @@ export const VENDOR_IMAGES = {
   "big-bad-wolf": bigBadWolf,
   "cacio-e-pepe": cacioEPepe,
   "chef-avraam": chefAvraam,
-  "chef-noel": PENDING_IMAGE,
+  "chef-noel": chefNoel,
   crepaland: crepaland,
   "garden-gourmet": gardenGourmet,
   "gems-food-truck": gemsFoodTruck,
@@ -45,10 +49,10 @@ export const VENDOR_IMAGES = {
   "hb-hotdogs": hbHotdogs,
   "karas-fish-tavern": karasFishTavern,
   kawacom: kawacom,
-  "little-chefs": PENDING_IMAGE,
+  "little-chefs": littleChefs,
   "mays-diner": maysDiner,
-  megastronomy: PENDING_IMAGE,
-  "meraki-tastes": PENDING_IMAGE,
+  meGastronomy: meGastronomy,
+  "meraki-taste": merakiTaste,
   "midtown-bistro": midtownBistro,
   "mr-wurst": mrWurst,
   "my-cookie-dough": myCookieDough,
@@ -66,6 +70,6 @@ export const VENDOR_IMAGES = {
 } satisfies Record<VendorId, StaticImageData | PendingImage>;
 
 export function getVendorImage(id: VendorId): StaticImageData | null {
-  const entry = VENDOR_IMAGES[id];
+  const entry = VENDOR_IMAGES[id] as StaticImageData | PendingImage;
   return entry === PENDING_IMAGE ? null : entry;
 }

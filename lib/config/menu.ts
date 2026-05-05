@@ -511,7 +511,7 @@ export const MENU_VENDORS = [
   defineVendor({
     id: "german-donner",
     name: "German Donner",
-    cuisine: "Kebab",
+    cuisine: "Donner",
     accent: "orange",
     icon: "meat",
     menu: [],
@@ -557,7 +557,7 @@ export const MENU_VENDORS = [
   defineVendor({
     id: "chef-noel",
     name: "Chef Noel",
-    cuisine: "Gourmet",
+    cuisine: "Steak & Fries",
     accent: "pink",
     icon: "meat",
     menu: [],
@@ -609,7 +609,7 @@ export const MENU_VENDORS = [
     menu: [],
   }),
   defineVendor({
-    id: "meraki-tastes",
+    id: "meraki-taste",
     name: "Meraki Taste",
     cuisine: "Greek",
     accent: "amber",
@@ -654,7 +654,7 @@ export const MENU_VENDORS = [
     ],
   }),
   defineVendor({
-    id: "megastronomy",
+    id: "meGastronomy",
     name: "ME Gastronomy",
     cuisine: "Seafood",
     accent: "sky",

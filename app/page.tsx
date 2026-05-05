@@ -28,7 +28,11 @@ import { INSTAGRAM_HANDLE, INSTAGRAM_URL } from "@/lib/config/socials";
 import { WORKSHOPS } from "@/lib/config/workshops";
 import { cn } from "@/lib/utils";
 import { GALLERY_IMAGES } from "@/lib/images/gallery-images";
-import { SPONSOR_ROW_1, SPONSOR_ROW_2 } from "@/lib/images/sponsor-images";
+import {
+  SPONSOR_ROW_0,
+  SPONSOR_ROW_1,
+  SPONSOR_ROW_2,
+} from "@/lib/images/sponsor-images";
 import {
   WorkshopCarouselCard,
   type WorkshopCarouselCardVariant,
@@ -705,10 +709,7 @@ function SponsorLogoGroup({
             alt={sponsor.alt}
             width={200}
             height={80}
-            className={cn(
-              logoHeight,
-              "w-auto object-contain grayscale opacity-60 transition-all duration-300 group-hover:grayscale-0 group-hover:opacity-100",
-            )}
+            className={cn(logoHeight, "w-auto object-contain")}
             unoptimized={typeof sponsor.src === "string"}
           />
         </div>
@@ -760,17 +761,26 @@ function SponsorsSection() {
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <div className="mx-auto mb-10 max-w-6xl px-4 text-center sm:mb-14 sm:px-6">
-        <SectionLabel className="mb-3 block">Sponsors</SectionLabel>
+      <div className="mx-auto mb-10 max-w-6xl px-4 text-center sm:mb-8 sm:px-6">
         <h2 className="text-3xl font-display leading-tight sm:text-4xl md:text-[40pt]">
           Special Thanks To
         </h2>
+        <div className="mx-auto mt-4 h-0.5 w-16 bg-muted-foreground/30" />
       </div>
 
       <div className="space-y-6 sm:space-y-8">
+        <Image
+          src={SPONSOR_ROW_0.src}
+          alt={SPONSOR_ROW_0.alt}
+          width={200}
+          height={80}
+          className={cn(
+            "mx-auto max-w-[70%] sm:max-w-xl w-auto object-contain -mb-2",
+          )}
+        />
         <SponsorMarqueeRow
           sponsors={SPONSOR_ROW_1}
-          logoHeight="h-14 sm:h-18"
+          logoHeight="h-14 sm:h-18 mb-8"
           speed="35s"
         />
         <SponsorMarqueeRow

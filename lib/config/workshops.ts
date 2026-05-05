@@ -45,8 +45,6 @@ function defineWorkshop<
   return w;
 }
 
-// Plates & Paints	@ creative___sips
-
 export const WORKSHOPS = [
   defineWorkshop({
     slug: "boards-and-bordeaux",
@@ -59,7 +57,7 @@ export const WORKSHOPS = [
       },
     ],
     tagline:
-      "A relaxed paint-and-sip workshop with wine, cheese, and handmade decor.",
+      "A relaxed sip-and-paint workshop with wine, cheese, and handmade decor.",
     longDescription:
       "Boards & Bordeaux is a relaxed, creative workshop where participants enjoy wine, cheese, and delicious accompaniments while designing and painting their own plaster board. With simple techniques and guidance from the team, each guest leaves with a unique handmade piece of décor to take home.",
     duration: "1 hour",
@@ -468,28 +466,28 @@ export const WORKSHOPS = [
             id: "WS-PP-D2-1430",
             time: "14:30 - 15:30",
             capacity: 10,
-            price: 40,
+            price: 30,
           },
           {
             id: "WS-PP-D2-1600",
             time: "16:00 - 17:00",
             capacity: 10,
-            price: 40,
+            price: 30,
           },
           {
             id: "WS-PP-D2-1730",
             time: "17:30 - 18:30",
             capacity: 10,
-            price: 40,
+            price: 30,
           },
         ],
       },
     ],
   }),
   defineWorkshop({
-    slug: "paint-and-sip",
+    slug: "sip-and-paint",
     shortId: "PS",
-    title: "Paint & Sip",
+    title: "Sip & Paint",
     hostedBy: [
       {
         name: "@agapiouartstudio",
@@ -503,7 +501,7 @@ export const WORKSHOPS = [
     tagline:
       "Create your own set of painted coasters while enjoying a relaxed glass of wine.",
     longDescription:
-      "Join us for a relaxed paint-and-sip workshop where participants will create a set of four custom coasters using acrylic paints. No experience is needed - just come, enjoy a glass of wine, and get creative while designing a unique set to take home.",
+      "Join us for a relaxed sip-and-paint workshop where participants will create a set of four custom coasters using acrylic paints. No experience is needed - just come, enjoy a glass of wine, and get creative while designing a unique set to take home.",
     duration: "1.5 hours",
     maxSeatsPerBooking: DEFAULT_MAX_SEATS_PER_BOOKING,
     days: [
