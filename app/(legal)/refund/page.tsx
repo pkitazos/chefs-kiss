@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { LegalDoc } from "@/components/legal-doc";
 
 export const metadata: Metadata = {
-  title: "Refund & Cancellation Policy | Chef's Kiss Festival",
+  title: "Refund & Cancellation Policy",
   description:
     "How cancellations and refunds work for workshop and private dining bookings made through the Chef's Kiss website.",
 };

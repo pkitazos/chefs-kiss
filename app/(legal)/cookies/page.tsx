@@ -3,7 +3,7 @@ import Link from "next/link";
 import { LegalDoc } from "@/components/legal-doc";
 
 export const metadata: Metadata = {
-  title: "Cookie Policy | Chef's Kiss Festival",
+  title: "Cookie Policy",
   description:
     "What cookies are, which cookies are used on the Chef's Kiss website, and how you can manage them.",
 };

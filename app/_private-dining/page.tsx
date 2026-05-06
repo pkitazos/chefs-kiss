@@ -7,7 +7,7 @@ import { DashPattern } from "@/components/brand-pattern";
 import { DiningDaySlot } from "./dining-day-slot";
 
 export const metadata: Metadata = {
-  title: "Private Dining | Chef's Kiss Festival",
+  title: "Private Dining",
   description:
     "Reserve your seat at an exclusive private dining experience during the Chef's Kiss Festival.",
 };

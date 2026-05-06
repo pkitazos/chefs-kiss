@@ -6,7 +6,7 @@ import { PageLayout } from "@/components/page-layout";
 import { PrivateDiningBookingForm } from "./booking-form";
 
 export const metadata: Metadata = {
-  title: "Book Private Dining | Chef's Kiss Festival",
+  title: "Book Private Dining",
   description: "Reserve your seat at a private dining session.",
 };
 

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
@@ -5,6 +6,11 @@ import { ReactNode } from "react";
 import { SignOutButton } from "./sign-out-button";
 import { AdminNav } from "./admin-nav";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Admin",
+  robots: "noindex, nofollow",
+};
 
 export default async function AdminLayout({
   children,

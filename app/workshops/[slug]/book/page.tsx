@@ -7,7 +7,7 @@ import { getWorkshopBySlug, getWorkshopSlotById } from "@/lib/config/workshops";
 import { WorkshopBookingForm } from "./booking-form";
 
 export const metadata: Metadata = {
-  title: "Book Workshop | Chef's Kiss Festival",
+  title: "Book Workshop",
   description: "Book your spot at a workshop session.",
 };
 

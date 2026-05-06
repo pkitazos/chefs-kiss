@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { env } from "@/lib/env/server";
 import { WorkshopApplicationForm } from "../workshop-application-form";
+
+export const metadata: Metadata = {
+  title: "Workshop Application",
+  robots: "noindex, nofollow",
+};
 
 export default async function LateWorkshopApplicationPage({
   params,

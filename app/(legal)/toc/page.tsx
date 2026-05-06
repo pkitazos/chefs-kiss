@@ -3,7 +3,7 @@ import Link from "next/link";
 import { LegalDoc } from "@/components/legal-doc";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions | Chef's Kiss Festival",
+  title: "Terms & Conditions",
   description:
     "The terms governing your use of the Chef's Kiss website and any workshop bookings or applications made through it.",
 };

@@ -5,7 +5,7 @@ import { CURRENT_EVENT } from "@/lib/config/event";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Vendor Application | Chef's Kiss Festival",
+  title: "Vendor Application",
   description:
     "Apply to become a vendor at Chef's Kiss Festival. Submit your application with business information, menu details, and required documents.",
 };

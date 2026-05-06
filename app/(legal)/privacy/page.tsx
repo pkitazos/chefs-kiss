@@ -3,7 +3,7 @@ import Link from "next/link";
 import { LegalDoc } from "@/components/legal-doc";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Chef's Kiss Festival",
+  title: "Privacy Policy",
   description:
     "How DMC Nexus Hospitality Ltd collects, uses, and protects your personal data when you use the Chef's Kiss website.",
 };

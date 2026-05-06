@@ -7,8 +7,11 @@ import { manrope, ppNeueMachina } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: CURRENT_EVENT.name,
-  description: `${CURRENT_EVENT.name} | ${eventDateFormat.range()} | ${CURRENT_EVENT.locationName}`,
+  title: {
+    template: "%s | Chef's Kiss Festival",
+    default: CURRENT_EVENT.name,
+  },
+  description: `Workshops, private dining, and street food at ${CURRENT_EVENT.locationName}. ${eventDateFormat.range()}.`,
   icons: { icon: "/favicon.svg" },
 };
 

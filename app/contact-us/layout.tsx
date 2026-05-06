@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { SiteNav } from "@/components/site-nav";
 
 export const metadata: Metadata = {
-  title: "Contact | Chef's Kiss Festival",
+  title: "Contact",
   description: "Get in touch with the Chef's Kiss team.",
 };
 
