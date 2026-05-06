@@ -21,8 +21,10 @@ import { IconLoader2 } from "@tabler/icons-react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { api } from "@/lib/trpc/client";
+import { formatDate } from "@/lib/utils/format-date";
 import { getDiningSessionById } from "@/lib/config/private-dining";
 import { getWorkshopSlotById } from "@/lib/config/workshops";
+import { EmailSentIndicator } from "../email-sent-indicator";
 import { BookingRowActions } from "../slots/booking-row-actions";
 
 function getSlotLabel(
@@ -57,13 +59,6 @@ const typeLabels = {
   "private-dining": "Private Dining",
   workshop: "Workshop",
 } as const;
-
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat("en-GB", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(date));
-}
 
 export function BookingsTable() {
   const [typeFilter, setTypeFilter] = useState<string>("all");
@@ -150,6 +145,7 @@ export function BookingsTable() {
                 <TableHead>Slot</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Amount</TableHead>
+                <TableHead>Email Sent</TableHead>
                 <TableHead>Created</TableHead>
                 <TableHead className="w-12" />
               </TableRow>
@@ -205,17 +201,19 @@ export function BookingsTable() {
                     <TableCell>
                       &euro;{(booking.totalAmount / 100).toFixed(2)}
                     </TableCell>
+                    <TableCell>
+                      <EmailSentIndicator
+                        status={booking.status}
+                        confirmationEmailSentAt={
+                          booking.confirmationEmailSentAt
+                        }
+                      />
+                    </TableCell>
                     <TableCell className="text-muted-foreground text-xs">
                       {formatDate(booking.createdAt)}
                     </TableCell>
                     <TableCell>
-                      <BookingRowActions
-                        bookingId={booking.id}
-                        email={booking.email}
-                        fullName={booking.fullName}
-                        seats={booking.seats}
-                        status={booking.status}
-                      />
+                      <BookingRowActions booking={booking} />
                     </TableCell>
                   </TableRow>
                 );

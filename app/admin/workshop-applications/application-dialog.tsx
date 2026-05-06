@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { formatDate } from "@/lib/utils/format-date";
 import { Separator } from "@/components/ui/separator";
 import { api } from "@/lib/trpc/client";
 import { copyToClipboard } from "@/lib/utils";
@@ -26,12 +27,6 @@ const statusVariants = {
   rejected: "destructive",
 } as const;
 
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat("en-GB", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(date));
-}
 
 function Section({
   title,

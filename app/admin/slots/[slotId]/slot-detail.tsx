@@ -18,12 +18,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { eventDateFormat } from "@/lib/config/event";
+import { formatDate } from "@/lib/utils/format-date";
 import { buildSeatBreakdown, type SeatBreakdown } from "@/lib/db/seat-counting";
 import { api } from "@/lib/trpc/client";
 import { IconArrowLeft, IconLoader2 } from "@tabler/icons-react";
 
 import { BookingRowActions } from "../booking-row-actions";
 import { CapacityInfoIcon } from "../capacity-info";
+import { EmailSentIndicator } from "../../email-sent-indicator";
 import { HoldsSection } from "../holds-section";
 import { WaitlistTable } from "../waitlist-table";
 
@@ -34,13 +36,6 @@ const statusVariants = {
   expired: "outline",
   cancelled: "outline",
 } as const;
-
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat("en-GB", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(date));
-}
 
 type SlotDetailProps = {
   slotId: string;
@@ -136,6 +131,7 @@ export function SlotDetail(props: SlotDetailProps) {
                       <TableHead>Seats</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Amount</TableHead>
+                      <TableHead>Email Sent</TableHead>
                       <TableHead>Created</TableHead>
                       <TableHead className="w-12" />
                     </TableRow>
@@ -159,17 +155,19 @@ export function SlotDetail(props: SlotDetailProps) {
                         <TableCell>
                           &euro;{(booking.totalAmount / 100).toFixed(2)}
                         </TableCell>
+                        <TableCell>
+                          <EmailSentIndicator
+                            status={booking.status}
+                            confirmationEmailSentAt={
+                              booking.confirmationEmailSentAt
+                            }
+                          />
+                        </TableCell>
                         <TableCell className="text-muted-foreground text-xs">
                           {formatDate(booking.createdAt)}
                         </TableCell>
                         <TableCell>
-                          <BookingRowActions
-                            bookingId={booking.id}
-                            email={booking.email}
-                            fullName={booking.fullName}
-                            seats={booking.seats}
-                            status={booking.status}
-                          />
+                          <BookingRowActions booking={booking} />
                         </TableCell>
                       </TableRow>
                     ))}

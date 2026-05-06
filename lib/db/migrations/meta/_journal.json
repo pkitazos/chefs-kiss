@@ -99,6 +99,13 @@
       "when": 1777972002033,
       "tag": "0013_drop_payment_method",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1778087767056,
+      "tag": "0014_add_confirmation_email_sent_at",
+      "breakpoints": true
     }
   ]
 }

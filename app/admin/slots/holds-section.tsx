@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { ConfirmActionDialog } from "@/components/confirm-action-dialog";
+import { formatDate } from "@/lib/utils/format-date";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -42,12 +43,6 @@ interface HoldsSectionProps {
   available: number;
 }
 
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat("en-GB", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(date));
-}
 
 function creatorLabel(hold: HoldRow): string {
   return hold.creatorName ?? hold.creatorEmail ?? hold.createdBy;

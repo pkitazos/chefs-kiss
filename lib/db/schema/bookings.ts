@@ -21,6 +21,8 @@ export const bookingStatusEnum = pgEnum("booking_status", [
   "cancelled",
 ]);
 
+export type Booking = typeof bookings.$inferSelect;
+
 export const bookings = pgTable(
   "bookings",
   {
@@ -50,6 +52,8 @@ export const bookings = pgTable(
       () => waitlistEntries.id,
       { onDelete: "set null" },
     ),
+
+    confirmationEmailSentAt: timestamp("confirmation_email_sent_at"),
 
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),

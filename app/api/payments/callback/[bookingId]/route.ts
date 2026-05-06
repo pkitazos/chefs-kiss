@@ -6,6 +6,7 @@ import { bookings } from "@/lib/db/schema";
 import { env } from "@/lib/env/server";
 import { sendBookingConfirmation } from "@/lib/email/booking-emails";
 import { sendWaitlistPaymentConfirmation } from "@/lib/email/waitlist-emails";
+import { debug } from "@/lib/debug";
 import { verifyNotification } from "@/lib/payments/payabl";
 
 interface NotificationFields {
@@ -186,6 +187,10 @@ export async function POST(
         ? sendBookingConfirmation
         : sendWaitlistPaymentConfirmation;
 
+    // debug(
+    //   "callback",
+    //   `${bookingId} sending confirmation email to ${updated.email}`,
+    // );
     waitUntil(
       sendConfirmation({
         email: updated.email,
@@ -194,12 +199,27 @@ export async function POST(
         type: updated.type,
         seats: updated.seats,
         slotId: updated.slotId,
-      }).catch((err) => {
-        console.error(
-          `[callback] ${bookingId} email send failed:`,
-          err instanceof Error ? err.message : err,
-        );
-      }),
+      })
+        .then((result) => {
+          // debug("callback", `${bookingId} email result`, result);
+          if (result.success) {
+            return db
+              .update(bookings)
+              .set({ confirmationEmailSentAt: new Date() })
+              .where(eq(bookings.id, bookingId));
+          }
+        })
+        .catch((err) => {
+          // debug(
+          //   "callback",
+          //   `${bookingId} email/db update error`,
+          //   err instanceof Error ? err.message : err,
+          // );
+          console.error(
+            `[callback] ${bookingId} email send failed:`,
+            err instanceof Error ? err.message : err,
+          );
+        }),
     );
   }
 

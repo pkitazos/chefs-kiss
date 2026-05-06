@@ -15,33 +15,28 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { type Booking } from "@/lib/db/schema";
 import { api } from "@/lib/trpc/client";
+import { formatDate } from "@/lib/utils/format-date";
 import { copyToClipboard } from "@/lib/utils";
-import { IconCopy, IconDotsVertical, IconX } from "@tabler/icons-react";
+import {
+  IconCopy,
+  IconDotsVertical,
+  IconMail,
+  IconX,
+} from "@tabler/icons-react";
 
-type BookingStatus =
-  | "pending"
-  | "confirmed"
-  | "failed"
-  | "expired"
-  | "cancelled";
-
-interface BookingRowActionsProps {
-  bookingId: string;
-  email: string;
-  fullName: string;
-  seats: number;
-  status: BookingStatus;
-}
-
-export function BookingRowActions({
-  bookingId,
-  email,
-  fullName,
-  seats,
-  status,
-}: BookingRowActionsProps) {
+export function BookingRowActions({ booking }: { booking: Booking }) {
+  const {
+    id: bookingId,
+    email,
+    fullName,
+    seats,
+    status,
+    confirmationEmailSentAt,
+  } = booking;
   const [confirmCancelOpen, setConfirmCancelOpen] = useState(false);
+  const [resendOpen, setResendOpen] = useState(false);
   const [cancelNote, setCancelNote] = useState("");
   const [sendCancelEmail, setSendCancelEmail] = useState(
     status === "confirmed",
@@ -63,6 +58,20 @@ export function BookingRowActions({
     },
     onError: (err) => {
       toast.error("Failed to cancel booking", { description: err.message });
+    },
+  });
+
+  const resend = api.bookings.resendConfirmation.useMutation({
+    onSuccess: () => {
+      utils.slots.bySlot.invalidate();
+      utils.bookings.adminList.invalidate();
+      setResendOpen(false);
+      toast.success(`Confirmation email sent to ${email}`);
+    },
+    onError: (err) => {
+      toast.error("Failed to send confirmation email", {
+        description: err.message,
+      });
     },
   });
 
@@ -90,7 +99,7 @@ export function BookingRowActions({
             <IconDotsVertical className="size-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-40">
+        <DropdownMenuContent align="end" className="w-60">
           <DropdownMenuItem
             variant="destructive"
             onClick={() => setConfirmCancelOpen(true)}
@@ -99,6 +108,12 @@ export function BookingRowActions({
             <IconX />
             Cancel booking
           </DropdownMenuItem>
+          {status === "confirmed" && (
+            <DropdownMenuItem onClick={() => setResendOpen(true)}>
+              <IconMail />
+              Resend confirmation email
+            </DropdownMenuItem>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleCopyEmail}>
             <IconCopy />
@@ -165,6 +180,31 @@ export function BookingRowActions({
             <span className="text-secondary">{email}</span>
           </Label>
         </div>
+      </ConfirmActionDialog>
+
+      <ConfirmActionDialog
+        open={resendOpen}
+        onOpenChange={setResendOpen}
+        title="Resend confirmation email"
+        description={`${fullName} — ${email}`}
+        confirmLabel="Send email"
+        pendingLabel="Sending..."
+        cancelLabel="Close"
+        isPending={resend.isPending}
+        onConfirm={() => resend.mutate({ bookingId })}
+      >
+        {confirmationEmailSentAt ? (
+          <p className="text-sm text-muted-foreground">
+            Last sent: {formatDate(confirmationEmailSentAt)}
+          </p>
+        ) : (
+          <p className="text-sm font-medium text-amber-600">Never sent</p>
+        )}
+        <p className="text-sm text-muted-foreground">
+          This will send the standard confirmation email to{" "}
+          <span className="text-secondary">{email}</span>. They will receive a
+          duplicate if their original confirmation went through.
+        </p>
       </ConfirmActionDialog>
     </>
   );

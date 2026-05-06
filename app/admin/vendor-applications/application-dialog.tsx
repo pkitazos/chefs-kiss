@@ -8,6 +8,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { euro } from "@/lib/utils/format-currency";
+import { formatDate } from "@/lib/utils/format-date";
 import { Separator } from "@/components/ui/separator";
 import { api } from "@/lib/trpc/client";
 import { copyToClipboard } from "@/lib/utils";
@@ -25,20 +27,6 @@ const statusVariants = {
   approved: "default",
   rejected: "destructive",
 } as const;
-
-function formatCurrency(value: string) {
-  return new Intl.NumberFormat("en-EU", {
-    style: "currency",
-    currency: "EUR",
-  }).format(parseFloat(value));
-}
-
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat("en-GB", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(date));
-}
 
 function DocumentLink({ href, label }: { href: string; label: string }) {
   return (
@@ -175,7 +163,7 @@ export function ApplicationDialog({
                         className="flex justify-between text-foreground"
                       >
                         <span>{dish.name}</span>
-                        <span>{formatCurrency(dish.price)}</span>
+                        <span>{euro(parseFloat(dish.price))}</span>
                       </div>
                     ))}
                   </div>

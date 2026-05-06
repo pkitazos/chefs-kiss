@@ -15,7 +15,7 @@ export const sendEmail = async ({
   from?: string;
 }) => {
   try {
-    const data = await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from,
       to,
       subject,
@@ -28,6 +28,12 @@ export const sendEmail = async ({
         },
       ],
     });
+
+    if (error) {
+      console.error("Failed to send email:", error);
+      return { success: false, error };
+    }
+
     return { success: true, data };
   } catch (error) {
     console.error("Failed to send email:", error);

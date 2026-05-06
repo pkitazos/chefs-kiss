@@ -9,8 +9,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { bookings, waitlistEntries } from "@/lib/db/schema";
+import { Booking, waitlistEntries } from "@/lib/db/schema";
 import type { SeatBreakdown } from "@/lib/db/seat-counting";
+import { formatDate } from "@/lib/utils/format-date";
 
 import { WaitlistRowActions } from "./waitlist-row-actions";
 
@@ -44,15 +45,8 @@ const paymentStatusConfig = {
   },
 } as const;
 
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat("en-GB", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(new Date(date));
-}
-
 type WaitlistEntry = typeof waitlistEntries.$inferSelect & {
-  booking: Pick<typeof bookings.$inferSelect, "id" | "status" | "paidAt"> | null;
+  booking: Pick<Booking, "id" | "status" | "paidAt"> | null;
 };
 
 interface WaitlistTableProps {
@@ -110,7 +104,9 @@ export function WaitlistTable({ entries, breakdown }: WaitlistTableProps) {
                     <p className="font-mono text-xs">{entry.booking.id}</p>
                     <Badge
                       variant="outline"
-                      className={paymentStatusConfig[entry.booking.status].className}
+                      className={
+                        paymentStatusConfig[entry.booking.status].className
+                      }
                     >
                       {paymentStatusConfig[entry.booking.status].label}
                     </Badge>

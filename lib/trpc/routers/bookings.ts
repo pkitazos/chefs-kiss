@@ -10,13 +10,17 @@ import {
   CapacityExceededError,
   insertPendingBooking,
 } from "@/lib/db/insert-pending-booking";
+import { bookings, events, seatHolds } from "@/lib/db/schema";
 import { getSlotSeatBreakdown } from "@/lib/db/seat-counting";
 import { lockSlotForWrite } from "@/lib/db/seat-locks";
-import { bookings, events, seatHolds } from "@/lib/db/schema";
+import {
+  sendBookingCancellation,
+  sendBookingConfirmation,
+} from "@/lib/email/booking-emails";
+import { sendWaitlistPaymentConfirmation } from "@/lib/email/waitlist-emails";
+import { categoryFromSlotId, refLikePatternForCategory } from "@/lib/ids";
 import { initBookingPayment } from "@/lib/payments/init-booking-payment";
 import { buildReturnUrl } from "@/lib/payments/payabl";
-import { categoryFromSlotId, refLikePatternForCategory } from "@/lib/ids";
-import { sendBookingCancellation } from "@/lib/email/booking-emails";
 import { createBookingSchema } from "@/lib/validations/booking";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../init";
 
@@ -221,6 +225,80 @@ export const bookingsRouter = createTRPCRouter({
         slotId: input.slotId,
         capacity,
       });
+    }),
+
+  resendConfirmation: protectedProcedure
+    .input(z.object({ bookingId: z.string().min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      const [booking] = await ctx.db
+        .select()
+        .from(bookings)
+        .where(eq(bookings.id, input.bookingId))
+        .limit(1);
+
+      if (!booking) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Booking not found.",
+        });
+      }
+
+      if (booking.status !== "confirmed") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Can only resend confirmation for confirmed bookings (current status: ${booking.status}).`,
+        });
+      }
+
+      const isWaitlist = booking.waitlistEntryId !== null;
+      const sendConfirmation = isWaitlist
+        ? sendWaitlistPaymentConfirmation
+        : sendBookingConfirmation;
+
+      // debug("resendConfirmation", `sending to ${booking.email}`, {
+      //   bookingId: booking.id,
+      //   isWaitlist,
+      //   status: booking.status,
+      //   slotId: booking.slotId,
+      // });
+
+      try {
+        const result = await sendConfirmation({
+          email: booking.email,
+          fullName: booking.fullName,
+          bookingId: booking.id,
+          type: booking.type,
+          seats: booking.seats,
+          slotId: booking.slotId,
+        });
+
+        // debug("resendConfirmation", `email result`, result);
+
+        if (!result.success) {
+          throw new Error("Email send returned failure");
+        }
+      } catch (err) {
+        // debug(
+        //   "resendConfirmation",
+        //   `error`,
+        //   err instanceof Error ? err.message : err,
+        // );
+        console.error("[bookings.resendConfirmation] email send failed:", {
+          bookingId: booking.id,
+          email: booking.email,
+          err,
+        });
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message:
+            "Could not send confirmation email — try again or check logs.",
+        });
+      }
+
+      await ctx.db
+        .update(bookings)
+        .set({ confirmationEmailSentAt: new Date(), updatedAt: new Date() })
+        .where(eq(bookings.id, input.bookingId));
     }),
 
   cancel: protectedProcedure
