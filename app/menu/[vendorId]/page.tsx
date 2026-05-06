@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { IconArrowLeft } from "@tabler/icons-react";
@@ -11,6 +12,16 @@ import { euro } from "@/lib/utils/format-currency";
 
 interface Props {
   params: Promise<{ vendorId: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { vendorId } = await params;
+  const vendor = MENU_VENDORS.find((v) => v.id === vendorId);
+  if (!vendor) return { title: "Vendor Not Found" };
+  return {
+    title: vendor.name,
+    description: `${vendor.cuisine} by ${vendor.name} at Chef's Kiss Festival.`,
+  };
 }
 
 export default async function VendorPage({ params }: Props) {

@@ -28,7 +28,7 @@ export async function generateMetadata({
   if (!workshop) return {};
 
   return {
-    title: `${workshop.title} | Chef's Kiss Festival`,
+    title: workshop.title,
     description: workshop.tagline,
   };
 }

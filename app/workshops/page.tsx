@@ -19,7 +19,7 @@ import { getWorkshopImage } from "@/lib/images/workshop-images";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Workshops | Chef's Kiss Festival",
+  title: "Workshops",
   description:
     "Browse and book hands-on workshops at the Chef's Kiss Festival.",
 };

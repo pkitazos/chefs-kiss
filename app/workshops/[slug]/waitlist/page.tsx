@@ -7,7 +7,8 @@ import { getWorkshopBySlug, getWorkshopSlotById } from "@/lib/config/workshops";
 import { WorkshopWaitlistForm } from "./waitlist-form";
 
 export const metadata: Metadata = {
-  title: "Join Waitlist | Chef's Kiss Festival",
+  // maybe add slot title
+  title: "Join Waitlist",
   description: "Join the waitlist for a workshop session.",
 };
 

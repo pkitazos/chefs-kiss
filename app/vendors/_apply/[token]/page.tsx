@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { env } from "@/lib/env/server";
 import { VendorApplicationForm } from "../vendor-application-form";
+
+export const metadata: Metadata = {
+  title: "Vendor Application",
+  robots: "noindex, nofollow",
+};
 
 export default async function LateVendorApplicationPage({
   params,

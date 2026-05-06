@@ -6,7 +6,7 @@ import { PageLayout } from "@/components/page-layout";
 import { PrivateDiningWaitlistForm } from "./waitlist-form";
 
 export const metadata: Metadata = {
-  title: "Join Waitlist | Chef's Kiss Festival",
+  title: "Join Waitlist",
   description: "Join the waitlist for a private dining session.",
 };
 
