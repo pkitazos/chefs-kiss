@@ -12,6 +12,7 @@ const clientEnvSchema = z.object({
   // App URLs - Available on client side
   NEXT_PUBLIC_APP_URL: z
     .url()
+    .transform((s) => s.replace(/\/+$/, ""))
     .default("http://localhost:3000")
     .describe("Public URL of the application"),
 

@@ -39,6 +39,12 @@ export async function initBookingPayment({
   const lastName = restName.join(" ") || firstName;
 
   try {
+    console.log(`[${logTag}] ${booking.id} initiating payabl`, {
+      amount: (booking.totalAmount / 100).toFixed(2),
+      notification_url: buildNotificationUrl(booking.id),
+      url_return: urlReturn,
+    });
+
     const initResult = await initPayablTransaction({
       amount: (booking.totalAmount / 100).toFixed(2),
       currency: "EUR",
@@ -73,6 +79,10 @@ export async function initBookingPayment({
           "Could not initiate payment. Please try again or contact support.",
       });
     }
+
+    console.log(
+      `[${logTag}] ${booking.id} init ok, transactionid=${initResult.transactionid}`,
+    );
 
     await database
       .update(bookings)
