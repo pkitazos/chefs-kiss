@@ -24,6 +24,7 @@ import { api } from "@/lib/trpc/client";
 import { formatDate } from "@/lib/utils/format-date";
 import { getDiningSessionById } from "@/lib/config/private-dining";
 import { getWorkshopSlotById } from "@/lib/config/workshops";
+import { EditableNameCell } from "../editable-name-cell";
 import { EmailSentIndicator } from "../email-sent-indicator";
 import { BookingRowActions } from "../slots/booking-row-actions";
 
@@ -163,7 +164,12 @@ export function BookingsTable() {
                         {typeLabels[booking.type]}
                       </Badge>
                     </TableCell>
-                    <TableCell>{booking.fullName}</TableCell>
+                    <TableCell>
+                      <EditableNameCell
+                        bookingId={booking.id}
+                        fullName={booking.fullName}
+                      />
+                    </TableCell>
                     <TableCell className="text-muted-foreground">
                       {booking.email}
                     </TableCell>

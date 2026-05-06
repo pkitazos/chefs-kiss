@@ -25,6 +25,7 @@ import { IconArrowLeft, IconLoader2 } from "@tabler/icons-react";
 
 import { BookingRowActions } from "../booking-row-actions";
 import { CapacityInfoIcon } from "../capacity-info";
+import { EditableNameCell } from "../../editable-name-cell";
 import { EmailSentIndicator } from "../../email-sent-indicator";
 import { HoldsSection } from "../holds-section";
 import { WaitlistTable } from "../waitlist-table";
@@ -142,7 +143,12 @@ export function SlotDetail(props: SlotDetailProps) {
                         <TableCell className="font-mono text-xs">
                           {booking.id}
                         </TableCell>
-                        <TableCell>{booking.fullName}</TableCell>
+                        <TableCell>
+                          <EditableNameCell
+                            bookingId={booking.id}
+                            fullName={booking.fullName}
+                          />
+                        </TableCell>
                         <TableCell className="text-muted-foreground">
                           {booking.email}
                         </TableCell>

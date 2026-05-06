@@ -227,6 +227,30 @@ export const bookingsRouter = createTRPCRouter({
       });
     }),
 
+  updateName: protectedProcedure
+    .input(
+      z.object({
+        bookingId: z.string().min(1),
+        fullName: z.string().trim().min(1).max(200),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const [updated] = await ctx.db
+        .update(bookings)
+        .set({ fullName: input.fullName, updatedAt: new Date() })
+        .where(eq(bookings.id, input.bookingId))
+        .returning();
+
+      if (!updated) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Booking not found.",
+        });
+      }
+
+      return updated;
+    }),
+
   resendConfirmation: protectedProcedure
     .input(z.object({ bookingId: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
