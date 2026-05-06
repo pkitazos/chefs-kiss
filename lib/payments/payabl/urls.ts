@@ -1,5 +1,9 @@
 import { env as clientEnv } from "@/lib/env/client";
 
+function getAppBase(): string {
+  return clientEnv.NEXT_PUBLIC_APP_URL.replace(/\/+$/, "");
+}
+
 /**
  * Returns the URL that payabl (or the sim) will POST the callback to
  * when a payment completes.
@@ -11,7 +15,7 @@ import { env as clientEnv } from "@/lib/env/client";
  *      callback is for, without parsing request bodies.
  */
 export function buildNotificationUrl(bookingId: string): string {
-  return `${clientEnv.NEXT_PUBLIC_APP_URL}/api/payments/callback/${bookingId}`;
+  return `${getAppBase()}/api/payments/callback/${bookingId}`;
 }
 
 /**

@@ -56,6 +56,10 @@ export async function POST(
 ) {
   const { bookingId } = await params;
 
+  console.log(
+    `[callback] ${bookingId} received POST from ${request.headers.get("user-agent") ?? "unknown"}`,
+  );
+
   const rawBody = await request.text();
   const notification = parseNotification(rawBody);
 
@@ -63,6 +67,8 @@ export async function POST(
     console.warn(`[callback] ${bookingId} malformed body: ${rawBody}`);
     return new Response("Bad Request", { status: 400 });
   }
+
+  console.log(`[callback] ${bookingId} body:`, rawBody);
 
   const signatureValid = verifyNotification(
     {
