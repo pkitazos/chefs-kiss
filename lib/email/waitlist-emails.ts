@@ -34,7 +34,6 @@ export async function sendWaitlistConfirmation({
 
   const html = await render(
     WaitlistConfirmationEmail({
-      baseUrl: clientEnv.NEXT_PUBLIC_APP_URL,
       fullName,
       waitlistId,
       sessionTitle: slot.title,
@@ -86,7 +85,6 @@ export async function sendWaitlistPromotion({
 
   const html = await render(
     WaitlistPromotionEmail({
-      baseUrl: clientEnv.NEXT_PUBLIC_APP_URL,
       fullName,
       claimUrl,
       sessionTitle: slot.title,
@@ -137,7 +135,6 @@ export async function sendWaitlistPaymentConfirmation({
 
   const html = await render(
     WaitlistPaymentConfirmationEmail({
-      baseUrl: clientEnv.NEXT_PUBLIC_APP_URL,
       fullName,
       bookingId,
       type,

@@ -12,7 +12,6 @@ import { Header } from "./components/header";
 import { Signature } from "./components/signature";
 
 interface WaitlistPaymentConfirmationEmailProps {
-  baseUrl: string;
   fullName: string;
   bookingId: string;
   type: "private-dining" | "workshop";

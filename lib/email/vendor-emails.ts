@@ -19,7 +19,6 @@ export async function sendVendorConfirmation({
 }: SendVendorConfirmationParams) {
   const html = await render(
     VendorConfirmationEmail({
-      baseUrl: clientEnv.NEXT_PUBLIC_APP_URL,
       businessName,
       applicationId,
       submissionDate: new Date().toLocaleDateString("en-GB", {
@@ -60,7 +59,6 @@ export async function sendVendorAcceptance({
 }: SendVendorAcceptanceParams) {
   const html = await render(
     VendorAcceptanceEmail({
-      baseUrl: clientEnv.NEXT_PUBLIC_APP_URL,
       businessName,
       applicationId,
       festivalDate: eventDateFormat.range(),
@@ -97,7 +95,6 @@ export async function sendVendorRejection({
 }: SendVendorRejectionParams) {
   const html = await render(
     VendorRejectionEmail({
-      baseUrl: clientEnv.NEXT_PUBLIC_APP_URL,
       businessName,
       reason,
     }),

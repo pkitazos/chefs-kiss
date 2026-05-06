@@ -22,7 +22,6 @@ export async function sendWorkshopConfirmation({
 }: SendWorkshopConfirmationParams) {
   const html = await render(
     WorkshopConfirmationEmail({
-      baseUrl: clientEnv.NEXT_PUBLIC_APP_URL,
       contactPerson,
       workshopTitle,
       applicationId,
@@ -71,7 +70,6 @@ export async function sendWorkshopAcceptance({
 }: SendWorkshopAcceptanceParams) {
   const html = await render(
     WorkshopAcceptanceEmail({
-      baseUrl: clientEnv.NEXT_PUBLIC_APP_URL,
       contactPerson,
       workshopTitle,
       applicationId,
@@ -112,7 +110,6 @@ export async function sendWorkshopRejection({
 }: SendWorkshopRejectionParams) {
   const html = await render(
     WorkshopRejectionEmail({
-      baseUrl: clientEnv.NEXT_PUBLIC_APP_URL,
       contactPerson,
       reason,
     }),

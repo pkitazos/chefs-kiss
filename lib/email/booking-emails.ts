@@ -87,7 +87,6 @@ export async function sendBookingConfirmation({
 
   const html = await render(
     BookingConfirmationEmail({
-      baseUrl: clientEnv.NEXT_PUBLIC_APP_URL,
       fullName,
       bookingId,
       type,
@@ -139,7 +138,6 @@ export async function sendBookingCancellation({
 
   const html = await render(
     BookingCancellationEmail({
-      baseUrl: clientEnv.NEXT_PUBLIC_APP_URL,
       fullName,
       bookingId,
       type,
