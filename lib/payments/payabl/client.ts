@@ -37,9 +37,9 @@ export async function initPayablTransaction(
 
   const body = new URLSearchParams({ ...signedParams, signature });
 
-  const url = `${env.PAYABL_BASE_URL}/pay/payment/init`;
+  const INIT_URL = `${env.PAYABL_BASE_URL}/pay/payment/init`;
 
-  const response = await fetch(url, {
+  const response = await fetch(INIT_URL, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: body.toString(),
