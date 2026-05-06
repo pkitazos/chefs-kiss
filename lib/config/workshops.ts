@@ -357,13 +357,13 @@ export const WORKSHOPS = [
             capacity: 12,
             price: 20,
           },
-          {
-            id: "WS-CM-D1-TEST",
-            time: "21:00 - 22:00",
-            capacity: 2,
-            price: 0.01,
-            shortDescription: "TESTING",
-          },
+          // {
+          //   id: "WS-CM-D1-TEST",
+          //   time: "21:00 - 22:00",
+          //   capacity: 2,
+          //   price: 0.01,
+          //   shortDescription: "TESTING",
+          // },
         ],
       },
       {
