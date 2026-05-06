@@ -17,3 +17,5 @@ export const eventDateFormat = {
   range: () =>
     `${format(CURRENT_EVENT.startDate, "d")} · ${format(CURRENT_EVENT.endDate, "d MMMM yyyy")}`,
 };
+
+export const EVENT_DESCRIPTION = `Workshops, private dining, and street food at ${CURRENT_EVENT.locationName}. ${eventDateFormat.range()}.`;
