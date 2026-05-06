@@ -18,4 +18,4 @@ export const eventDateFormat = {
     `${format(CURRENT_EVENT.startDate, "d")} · ${format(CURRENT_EVENT.endDate, "d MMMM yyyy")}`,
 };
 
-export const EVENT_DESCRIPTION = `Workshops, private dining, and street food at ${CURRENT_EVENT.locationName}. ${eventDateFormat.range()}.`;
+export const EVENT_DESCRIPTION = `The wait is over. Cyprus's biggest food experience lands at Ayia Napa Marina, May 16–17. Free entrance. 30+ food concepts. DJ sets. Workshops. Good vibes all around. TASTE THE EXPERIENCE!`;

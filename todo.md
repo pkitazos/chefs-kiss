@@ -14,10 +14,10 @@
 
 - [ ] event program (might not even be a thing)
 - [ ] venue map [blocked]
-- [ ] sponsors (might also not be a thing?)
+- [x] sponsors
 
 ## SEO
 
-- [ ] `/public/og-image.png`
-- [ ] `/app/opengraph-image.png`
+- [x] `/public/og-image.png`
+- [x] `/app/opengraph-image.png`
 - [ ] revisit point 5 - JSON-LD
