@@ -370,7 +370,7 @@ export const WORKSHOPS = [
         date: CURRENT_EVENT.endDate,
         slots: [
           {
-            id: "WS-CM-D@-1700",
+            id: "WS-CM-D1-1700",
             time: "17:00 - 18:00",
             capacity: 12,
             price: 20,
