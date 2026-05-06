@@ -361,7 +361,7 @@ export const WORKSHOPS = [
             id: "WS-CM-D1-TEST",
             time: "21:00 - 22:00",
             capacity: 2,
-            price: 5,
+            price: 0.01,
             shortDescription: "TESTING",
           },
         ],
