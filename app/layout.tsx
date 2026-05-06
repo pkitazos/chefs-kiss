@@ -14,7 +14,13 @@ export const metadata: Metadata = {
     default: CURRENT_EVENT.name,
   },
   description: EVENT_DESCRIPTION,
-  icons: { icon: "/favicon.svg" },
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-96.png", sizes: "96x96", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     type: "website",
     siteName: "Chef's Kiss Festival",
