@@ -1,14 +1,10 @@
 import { Img, Section } from "@react-email/components";
 
-interface HeaderProps {
-  baseUrl: string;
-}
-
-export function Header({ baseUrl }: HeaderProps) {
+export function Header() {
   return (
     <Section className="mb-6 text-center">
       <Img
-        src={`${baseUrl}/assets/logo.png`}
+        src={"cid:logo"}
         width="28"
         height="48"
         alt="Chef's Kiss"

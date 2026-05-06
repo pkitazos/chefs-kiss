@@ -24,7 +24,6 @@ interface WaitlistPaymentConfirmationEmailProps {
 }
 
 export default function WaitlistPaymentConfirmationEmail({
-  baseUrl,
   fullName,
   bookingId,
   type,
@@ -43,7 +42,7 @@ export default function WaitlistPaymentConfirmationEmail({
         <Body className="bg-white font-sans leading-relaxed text-[#333]">
           <Container className="mx-auto max-w-150 p-5">
             <div className="mb-5 rounded-lg bg-gray-50 p-7.5">
-              <Header baseUrl={baseUrl} />
+              <Header />
               <Heading className="mb-5 text-2xl text-[#2c3e50]">
                 You&apos;re in!
               </Heading>

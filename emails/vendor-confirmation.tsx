@@ -12,14 +12,12 @@ import { Header } from "./components/header";
 import { Signature } from "./components/signature";
 
 interface VendorConfirmationEmailProps {
-  baseUrl: string;
   businessName: string;
   applicationId: string;
   submissionDate: string;
 }
 
 export default function VendorConfirmationEmail({
-  baseUrl,
   businessName,
   applicationId,
   submissionDate,
@@ -31,7 +29,7 @@ export default function VendorConfirmationEmail({
         <Body className="bg-white font-sans leading-relaxed text-[#333]">
           <Container className="mx-auto max-w-150 p-5">
             <div className="mb-5 rounded-lg bg-gray-50 p-7.5">
-              <Header baseUrl={baseUrl} />
+              <Header />
               <Heading className="mb-5 text-2xl text-[#2c3e50]">
                 Application Received!
               </Heading>

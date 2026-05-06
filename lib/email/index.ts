@@ -20,6 +20,13 @@ export const sendEmail = async ({
       to,
       subject,
       html,
+      attachments: [
+        {
+          path: `${env.NEXT_PUBLIC_APP_URL}/assets/logo.png`,
+          filename: "logo.png",
+          contentId: "logo",
+        },
+      ],
     });
     return { success: true, data };
   } catch (error) {
