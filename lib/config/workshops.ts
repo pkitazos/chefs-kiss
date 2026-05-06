@@ -188,7 +188,7 @@ export const WORKSHOPS = [
           },
           {
             id: "WS-BS-D1-1830",
-            time: "18:30 - 10:00",
+            time: "18:30 - 20:00",
             capacity: 12,
             price: 25,
           },
