@@ -246,6 +246,7 @@ export const WORKSHOPS = [
             time: "18:30 - 20:30",
             capacity: 15,
             price: 35,
+            shortDescription: "Hand-Building Session",
           },
           {
             id: "WS-PW-MG-D1-1730",
