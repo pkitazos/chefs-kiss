@@ -310,6 +310,12 @@ export const WORKSHOPS = [
         date: CURRENT_EVENT.startDate,
         slots: [
           {
+            id: "WS-WC-D1-1530",
+            time: "15:30 - 16:30",
+            capacity: 12,
+            price: 20,
+          },
+          {
             id: "WS-WC-D1-1900",
             time: "19:00 - 20:00",
             capacity: 12,
@@ -320,6 +326,12 @@ export const WORKSHOPS = [
       {
         date: CURRENT_EVENT.endDate,
         slots: [
+          {
+            id: "WS-WC-D2-1530",
+            time: "15:30 - 16:30",
+            capacity: 12,
+            price: 20,
+          },
           {
             id: "WS-WC-D2-1900",
             time: "19:00 - 20:00",
