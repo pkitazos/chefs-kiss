@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useQueryState, parseAsString } from "nuqs";
 import {
   Table,
   TableBody,
@@ -62,8 +62,14 @@ const typeLabels = {
 } as const;
 
 export function BookingsTable() {
-  const [typeFilter, setTypeFilter] = useState<string>("all");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [typeFilter, setTypeFilter] = useQueryState(
+    "type",
+    parseAsString.withDefault("all"),
+  );
+  const [statusFilter, setStatusFilter] = useQueryState(
+    "status",
+    parseAsString.withDefault("all"),
+  );
 
   const {
     data: bookings,

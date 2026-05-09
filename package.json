@@ -39,6 +39,7 @@
     "drizzle-orm": "0.45.1",
     "motion": "12.34.3",
     "next": "16.0.10",
+    "nuqs": "2.8.9",
     "postgres": "3.4.7",
     "radix-ui": "1.4.3",
     "react": "19.2.1",

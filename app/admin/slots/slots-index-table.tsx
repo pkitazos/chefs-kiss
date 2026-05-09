@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useQueryState, parseAsString } from "nuqs";
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
@@ -128,10 +129,14 @@ function buildRows(summary: SummaryMap) {
 }
 
 export function SlotsIndexTable() {
-  const [typeFilter, setTypeFilter] = useState<
-    "all" | "private-dining" | "workshop"
-  >("all");
-  const [workshopFilter, setWorkshopFilter] = useState<string>("all");
+  const [typeFilter, setTypeFilter] = useQueryState(
+    "type",
+    parseAsString.withDefault("all"),
+  );
+  const [workshopFilter, setWorkshopFilter] = useQueryState(
+    "workshop",
+    parseAsString.withDefault("all"),
+  );
 
   const { data: summary, isLoading, error } = api.slots.summary.useQuery();
 
@@ -174,10 +179,7 @@ export function SlotsIndexTable() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap gap-3">
-        <Select
-          value={typeFilter}
-          onValueChange={(v) => setTypeFilter(v as typeof typeFilter)}
-        >
+        <Select value={typeFilter} onValueChange={setTypeFilter}>
           <SelectTrigger className="w-48">
             <SelectValue />
           </SelectTrigger>
