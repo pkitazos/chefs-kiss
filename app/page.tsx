@@ -309,9 +309,9 @@ function PrivateDiningSection() {
 
           <div className="space-y-6">
             <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-              Join us for an intimate dining experience crafted by renowned
-              chefs. Each session features a curated multi-course menu with
-              premium pairings, set in a stunning marina-side venue.
+              A limited-seat fusion tasting experience curated by Chef Frixos
+              Evangelou of Le Gouter. A contemporary multi-course menu with
+              curated wine pairings, limited to just 14 guests.
             </p>
             <Link
               href="/private-dining"
