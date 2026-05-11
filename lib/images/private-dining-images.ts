@@ -9,7 +9,7 @@ import i5 from "@/public/images/private-dining/5.jpg";
 import i6 from "@/public/images/private-dining/6.jpg";
 import i7 from "@/public/images/private-dining/7.jpg";
 import i8 from "@/public/images/private-dining/8.jpg";
-import i9 from "@/public/images/private-dining/9.jpg";
+import i9 from "@/public/images/private-dining/menu.jpg";
 
 export const PRIVATE_DINING_IMAGES: StaticImageData[] = [
   i1,
