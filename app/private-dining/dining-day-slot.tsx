@@ -20,6 +20,10 @@ export function DiningDaySlot({ day }: { day: DiningDay }) {
       {day.sessions.map((session) => (
         <DiningSessionRow key={session.id} day={day} session={session} />
       ))}
+      <p className="text-muted-foreground text-xs">
+        *Location: Private Dining Room above Le Deli Robuchon, previously known
+        as L&apos;Atelier Robuchon.
+      </p>
     </div>
   );
 }
@@ -39,6 +43,7 @@ function DiningSessionRow({
         </h3>
         <p className="text-muted-foreground text-sm">
           {session.time} &middot; {session.location}
+          <sup>*</sup>
         </p>
       </div>
       <div className="flex shrink-0 items-center gap-4">

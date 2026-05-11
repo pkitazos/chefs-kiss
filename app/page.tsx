@@ -37,6 +37,8 @@ import {
   WorkshopCarouselCard,
   type WorkshopCarouselCardVariant,
 } from "@/components/workshop-carousel-card";
+import { GalleryMosaic } from "@/components/private-dining-gallery";
+import { PRIVATE_DINING_IMAGES } from "@/lib/images/private-dining-images";
 
 /* ═══════════════════════════════════════════════
    SVG UTENSIL
@@ -281,6 +283,10 @@ function VendorMarquee() {
    PRIVATE DINING
    ═══════════════════════════════════════════════ */
 
+function PrivateDiningGallery() {
+  return <GalleryMosaic images={PRIVATE_DINING_IMAGES} />;
+}
+
 function PrivateDiningSection() {
   return (
     <motion.section
@@ -295,17 +301,11 @@ function PrivateDiningSection() {
           Private Dining
         </h2>
         <SectionLabel className="mt-3 block">
-          An Exclusive Culinary Experience
+          An Exclusive Fusion Tasting Experience
         </SectionLabel>
 
         <div className="mt-10 sm:mt-14 grid grid-cols-1 items-center gap-8 md:grid-cols-[1.3fr_1fr] md:gap-12">
-          <div className="relative aspect-4/3 overflow-hidden rounded-2xl bg-sky-500">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="font-display text-4xl sm:text-5xl md:text-6xl tracking-tight text-white drop-shadow-sm">
-                Sea &amp; Fire
-              </span>
-            </div>
-          </div>
+          <PrivateDiningGallery />
 
           <div className="space-y-6">
             <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">

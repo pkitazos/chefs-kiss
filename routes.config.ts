@@ -41,7 +41,7 @@ export const ROUTES = {
   // PRIVATE DINING
   // ============================================================================
 
-  "private-dining": false, // Private dining landing + booking (enable when bookings open)
+  "private-dining": true, // Private dining landing + booking (enable when bookings open)
 
   // ============================================================================
   // WORKSHOPS

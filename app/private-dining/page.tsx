@@ -4,6 +4,8 @@ import { PageLayout } from "@/components/page-layout";
 import { SectionLabel } from "@/components/ui/section-label";
 import { AnimateIn } from "@/components/animate-in";
 import { DashPattern } from "@/components/brand-pattern";
+import { GalleryMosaicLarge } from "@/components/private-dining-gallery";
+import { PRIVATE_DINING_IMAGES } from "@/lib/images/private-dining-images";
 import { DiningDaySlot } from "./dining-day-slot";
 
 export const metadata: Metadata = {
@@ -36,17 +38,37 @@ export default function PrivateDiningPage() {
       <PageLayout>
         <AnimateIn className="mb-12">
           <div className="grid grid-cols-1 items-start gap-8 sm:grid-cols-2">
-            <div className="flex gap-8 flex-col">
+            <div className="flex gap-4 flex-col">
               <span className="font-display text-4xl sm:text-5xl md:text-6xl tracking-tight text-white drop-shadow-sm">
                 Sea &amp; Fire
               </span>
-              <p className="text-muted-foreground text-lg">
-                Join us for an intimate dining experience crafted by renowned
-                chefs. Each session features a curated multi-course menu with
-                premium pairings, set in a stunning marina-side venue.
+              <p className="text-muted-foreground text-base text-justify tracking-tight">
+                Our Fusion Tasting Experience is a limited-seat private dining
+                format presented within Chef’s Kiss Food Festival, curated and
+                hosted in collaboration with Chef Frixos Evangelou of Le Gouter.
+              </p>
+              <p className="text-muted-foreground text-base text-justify tracking-tight">
+                Limited to 14 guests, the evening features a contemporary
+                multi-course tasting menu inspired by Mediterranean influence,
+                modern technique, and ingredient-led cuisine.
+              </p>
+              <p className="text-muted-foreground text-base text-justify tracking-tight">
+                Each course has been thoughtfully created to explore contrast,
+                texture, balance, and depth of flavour through a progression of
+                carefully composed dishes, accompanied by a curated wine pairing
+                selection to complement the menu.
+              </p>
+              <p className="text-muted-foreground text-base text-justify tracking-tight">
+                Developed exclusively for Chef’s Kiss Food Festival, the
+                experience offers a more intimate expression of contemporary
+                dining through refined execution, and culinary craftsmanship.
+              </p>
+              <p className="text-muted-foreground text-base text-justify tracking-tight">
+                Hosted within an intimate setting at the festival, the
+                experience offers a different side of Chef’s Kiss.
               </p>
             </div>
-            <div className="aspect-4/3 rounded-2xl bg-sky-500" />
+            <GalleryMosaicLarge images={PRIVATE_DINING_IMAGES} />
           </div>
         </AnimateIn>
 
