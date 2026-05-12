@@ -17,6 +17,7 @@ import { Suspense } from "react";
 function LoginContent() {
   const searchParams = useSearchParams();
   const error = searchParams?.get("error");
+  const redirectTo = searchParams?.get("redirect") ?? "/";
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
@@ -40,7 +41,7 @@ function LoginContent() {
             onClick={() =>
               signIn.social({
                 provider: "google",
-                callbackURL: "/admin",
+                callbackURL: redirectTo,
                 errorCallbackURL: "/login?error=unauthorized",
               })
             }

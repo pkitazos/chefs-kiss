@@ -23,7 +23,7 @@ export default async function AdminLayout({
   });
 
   if (!session || !userHasPermission(session.user, "admin.access")) {
-    redirect("/login");
+    redirect("/login?redirect=/admin");
   }
 
   return (
