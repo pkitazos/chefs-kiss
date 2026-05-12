@@ -7,5 +7,6 @@ import { SiteFooter } from "./site-footer";
 export function SiteFooterSlot() {
   const pathname = usePathname();
   if (pathname?.startsWith("/admin")) return null;
+  if (pathname?.startsWith("/checkin")) return null;
   return <SiteFooter />;
 }
