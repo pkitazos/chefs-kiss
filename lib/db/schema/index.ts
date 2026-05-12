@@ -7,3 +7,4 @@ export * from "./enums";
 export * from "./bookings";
 export * from "./waitlist";
 export * from "./seat-holds";
+export * from "./rbac";
