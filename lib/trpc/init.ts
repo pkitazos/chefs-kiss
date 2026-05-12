@@ -1,11 +1,12 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
-import { auth } from "@/lib/auth";
+import { getEnrichedSession } from "@/lib/auth";
+import { type PermissionId, userHasPermission } from "@/lib/auth/permissions";
 import type { FetchCreateContextFnOptions } from "@trpc/server/adapters/fetch";
 import { db } from "../db";
 
 export const createTRPCContext = async (opts: FetchCreateContextFnOptions) => {
-  const session = await auth.api.getSession({
+  const session = await getEnrichedSession({
     headers: opts.req.headers,
   });
 
@@ -35,3 +36,12 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
   }
   return next({ ctx: { session: { ...ctx.session, user: ctx.session.user } } });
 });
+
+export function permissionProcedure(permission: PermissionId) {
+  return protectedProcedure.use(({ ctx, next }) => {
+    if (!userHasPermission(ctx.session.user, permission)) {
+      throw new TRPCError({ code: "FORBIDDEN" });
+    }
+    return next();
+  });
+}

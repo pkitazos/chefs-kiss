@@ -22,7 +22,11 @@ import { categoryFromSlotId, refLikePatternForCategory } from "@/lib/ids";
 import { initBookingPayment } from "@/lib/payments/init-booking-payment";
 import { buildReturnUrl } from "@/lib/payments/payabl";
 import { createBookingSchema } from "@/lib/validations/booking";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../init";
+import {
+  createTRPCRouter,
+  permissionProcedure,
+  publicProcedure,
+} from "../init";
 
 export const bookingsRouter = createTRPCRouter({
   create: publicProcedure
@@ -227,7 +231,7 @@ export const bookingsRouter = createTRPCRouter({
       });
     }),
 
-  updateName: protectedProcedure
+  updateName: permissionProcedure("admin.access")
     .input(
       z.object({
         bookingId: z.string().min(1),
@@ -251,7 +255,7 @@ export const bookingsRouter = createTRPCRouter({
       return updated;
     }),
 
-  resendConfirmation: protectedProcedure
+  resendConfirmation: permissionProcedure("admin.access")
     .input(z.object({ bookingId: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
       const [booking] = await ctx.db
@@ -325,7 +329,7 @@ export const bookingsRouter = createTRPCRouter({
         .where(eq(bookings.id, input.bookingId));
     }),
 
-  cancel: protectedProcedure
+  cancel: permissionProcedure("admin.access")
     .input(
       z.object({
         id: z.string().min(1),
@@ -407,7 +411,7 @@ export const bookingsRouter = createTRPCRouter({
       return result.booking;
     }),
 
-  adminList: protectedProcedure
+  adminList: permissionProcedure("admin.access")
     .input(
       z
         .object({

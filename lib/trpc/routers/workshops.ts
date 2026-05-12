@@ -2,7 +2,7 @@ import { desc, count, eq } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 
 import { workshopCreationFormSchema } from "@/lib/validations/workshop-creation-form";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../init";
+import { createTRPCRouter, permissionProcedure, publicProcedure } from "../init";
 import {
   applicationStatusEnum,
   events,
@@ -17,7 +17,7 @@ import {
 import { z } from "zod";
 
 export const workshopsRouter = createTRPCRouter({
-  getAllApplications: protectedProcedure
+  getAllApplications: permissionProcedure("admin.access")
     .input(z.object({ eventId: z.uuid().optional() }).optional())
     .query(async ({ ctx, input }) => {
       const baseQuery = ctx.db.select().from(workshopApplications);
@@ -32,7 +32,7 @@ export const workshopsRouter = createTRPCRouter({
     }),
 
   // Admin: Get single application by ID
-  getApplicationById: protectedProcedure
+  getApplicationById: permissionProcedure("admin.access")
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const [row] = await ctx.db
@@ -45,7 +45,7 @@ export const workshopsRouter = createTRPCRouter({
     }),
 
   // Admin: Update application status
-  updateApplicationStatus: protectedProcedure
+  updateApplicationStatus: permissionProcedure("admin.access")
     .input(
       z.object({
         id: z.string(),

@@ -18,11 +18,11 @@ import {
 } from "@/lib/email/vendor-emails";
 import { buildApplicationRef } from "@/lib/ids";
 import { vendorFormSchema } from "@/lib/validations/vendor-form";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../init";
+import { createTRPCRouter, permissionProcedure, publicProcedure } from "../init";
 
 export const vendorsRouter = createTRPCRouter({
   // Admin: Get all applications with related data (optionally filtered by event)
-  getAllApplications: protectedProcedure
+  getAllApplications: permissionProcedure("admin.access")
     .input(z.object({ eventId: z.string().uuid().optional() }).optional())
     .query(async ({ ctx, input }) => {
       const baseQuery = ctx.db
@@ -82,7 +82,7 @@ export const vendorsRouter = createTRPCRouter({
     }),
 
   // Admin: Get single application by ID
-  getApplicationById: protectedProcedure
+  getApplicationById: permissionProcedure("admin.access")
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const [row] = await ctx.db
@@ -123,7 +123,7 @@ export const vendorsRouter = createTRPCRouter({
     }),
 
   // Admin: Update application status
-  updateApplicationStatus: protectedProcedure
+  updateApplicationStatus: permissionProcedure("admin.access")
     .input(
       z.object({
         id: z.string(),
