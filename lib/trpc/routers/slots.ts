@@ -7,10 +7,10 @@ import {
   getSlotSeatCounts,
 } from "@/lib/db/seat-counting";
 import { bookings, seatHolds, user, waitlistEntries } from "@/lib/db/schema";
-import { createTRPCRouter, protectedProcedure } from "../init";
+import { createTRPCRouter, permissionProcedure } from "../init";
 
 export const slotsRouter = createTRPCRouter({
-  summary: protectedProcedure.query(async ({ ctx }) => {
+  summary: permissionProcedure("admin.access").query(async ({ ctx }) => {
     await expireStalePendingBookings(ctx.db);
 
     const seatCounts = await getAllSlotsSeatCounts(ctx.db);
@@ -62,7 +62,7 @@ export const slotsRouter = createTRPCRouter({
     return Array.from(summaryBySlot.values());
   }),
 
-  bySlot: protectedProcedure
+  bySlot: permissionProcedure("admin.access")
     .input(z.object({ slotId: z.string().min(1) }))
     .query(async ({ ctx, input }) => {
       await expireStalePendingBookings(ctx.db);

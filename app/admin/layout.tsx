@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { auth } from "@/lib/auth";
+import { getEnrichedSession } from "@/lib/auth";
+import { userHasPermission } from "@/lib/auth/permissions";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { ReactNode } from "react";
@@ -17,11 +18,11 @@ export default async function AdminLayout({
 }: {
   children: ReactNode;
 }) {
-  const session = await auth.api.getSession({
+  const session = await getEnrichedSession({
     headers: await headers(),
   });
 
-  if (!session) {
+  if (!session || !userHasPermission(session.user, "admin.access")) {
     redirect("/login");
   }
 

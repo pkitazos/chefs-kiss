@@ -11,7 +11,7 @@ import {
   releaseSeatHoldSchema,
   updateSeatHoldNoteSchema,
 } from "@/lib/validations/seat-hold";
-import { createTRPCRouter, protectedProcedure } from "../init";
+import { createTRPCRouter, permissionProcedure } from "../init";
 
 function getSlotCapacity(slotId: string): number | null {
   const dining = getDiningSessionById(slotId);
@@ -22,7 +22,7 @@ function getSlotCapacity(slotId: string): number | null {
 }
 
 export const seatHoldsRouter = createTRPCRouter({
-  hold: protectedProcedure
+  hold: permissionProcedure("admin.access")
     .input(createSeatHoldSchema)
     .mutation(async ({ ctx, input }) => {
       const adminUserId = ctx.session.user.id;
@@ -79,7 +79,7 @@ export const seatHoldsRouter = createTRPCRouter({
       });
     }),
 
-  release: protectedProcedure
+  release: permissionProcedure("admin.access")
     .input(releaseSeatHoldSchema)
     .mutation(async ({ ctx, input }) => {
       return ctx.db.transaction(async (tx) => {
@@ -118,7 +118,7 @@ export const seatHoldsRouter = createTRPCRouter({
       });
     }),
 
-  update: protectedProcedure
+  update: permissionProcedure("admin.access")
     .input(updateSeatHoldNoteSchema)
     .mutation(async ({ ctx, input }) => {
       const [hold] = await ctx.db

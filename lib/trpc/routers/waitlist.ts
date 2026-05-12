@@ -20,7 +20,7 @@ import { categoryFromSlotId, refLikePatternForCategory } from "@/lib/ids";
 import { initBookingPayment } from "@/lib/payments/init-booking-payment";
 import { createWaitlistEntrySchema } from "@/lib/validations/waitlist";
 import { verifyClaimToken } from "@/lib/waitlist/claim-token";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../init";
+import { createTRPCRouter, permissionProcedure, publicProcedure } from "../init";
 
 export const waitlistRouter = createTRPCRouter({
   create: publicProcedure
@@ -110,7 +110,7 @@ export const waitlistRouter = createTRPCRouter({
       return { id };
     }),
 
-  listBySlot: protectedProcedure
+  listBySlot: permissionProcedure("admin.access")
     .input(z.object({ slotId: z.string().min(1) }))
     .query(async ({ ctx, input }) => {
       const rows = await ctx.db
@@ -132,7 +132,7 @@ export const waitlistRouter = createTRPCRouter({
       }));
     }),
 
-  promote: protectedProcedure
+  promote: permissionProcedure("admin.access")
     .input(z.object({ id: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db.transaction(async (tx) => {
@@ -481,7 +481,7 @@ export const waitlistRouter = createTRPCRouter({
       });
     }),
 
-  cancel: protectedProcedure
+  cancel: permissionProcedure("admin.access")
     .input(z.object({ id: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
       const [entry] = await ctx.db
@@ -513,7 +513,7 @@ export const waitlistRouter = createTRPCRouter({
       return row;
     }),
 
-  revoke: protectedProcedure
+  revoke: permissionProcedure("admin.access")
     .input(z.object({ id: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
       const adminUserId = ctx.session.user.id;

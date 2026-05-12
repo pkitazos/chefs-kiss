@@ -1,12 +1,12 @@
 import { workshopApplications } from "@/lib/db/schema";
-import { createTRPCRouter, protectedProcedure } from "../init";
+import { createTRPCRouter, permissionProcedure } from "../init";
 import { events } from "@/lib/db/schema/events";
 import { vendorApplications } from "@/lib/db/schema/vendors";
 import { desc, eq, count } from "drizzle-orm";
 
 export const eventsRouter = createTRPCRouter({
   // Get the currently active event
-  getActiveEvent: protectedProcedure.query(async ({ ctx }) => {
+  getActiveEvent: permissionProcedure("admin.access").query(async ({ ctx }) => {
     const [activeEvent] = await ctx.db
       .select()
       .from(events)
@@ -17,7 +17,7 @@ export const eventsRouter = createTRPCRouter({
   }),
 
   // Get all events (past, present, future)
-  getAllEvents: protectedProcedure.query(async ({ ctx }) => {
+  getAllEvents: permissionProcedure("admin.access").query(async ({ ctx }) => {
     const allEvents = await ctx.db
       .select()
       .from(events)
@@ -27,7 +27,7 @@ export const eventsRouter = createTRPCRouter({
   }),
 
   // Get dashboard stats for active event
-  getActiveEventStats: protectedProcedure.query(async ({ ctx }) => {
+  getActiveEventStats: permissionProcedure("admin.access").query(async ({ ctx }) => {
     const [activeEvent] = await ctx.db
       .select()
       .from(events)
