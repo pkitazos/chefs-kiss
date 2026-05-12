@@ -10,7 +10,14 @@ export interface MenuSection {
 }
 
 export type VendorAccent = "amber" | "pink" | "sky" | "orange" | "green";
-export type VendorIcon = "grill" | "meat" | "coffee" | "salad" | "pepper";
+export type VendorIcon =
+  | "burger"
+  | "cake"
+  | "grill"
+  | "meat"
+  | "coffee"
+  | "salad"
+  | "pepper";
 
 export interface Vendor {
   id: string;
@@ -27,13 +34,15 @@ function defineVendor<const Id extends string>(
   return v;
 }
 
+const PLACEHOLDER_PRICE = -1;
+
 export const MENU_VENDORS = [
   defineVendor({
     id: "to-glykatzidiko",
     name: "To Glykatzidiko",
     cuisine: "Desserts",
     accent: "pink",
-    icon: "coffee",
+    icon: "cake",
     menu: [
       {
         section: "Ice Cream",
@@ -56,7 +65,7 @@ export const MENU_VENDORS = [
     name: "Crepaland",
     cuisine: "Crepes",
     accent: "amber",
-    icon: "coffee",
+    icon: "cake",
     menu: [
       {
         section: "Crepes",
@@ -95,7 +104,7 @@ export const MENU_VENDORS = [
     name: "Yozen",
     cuisine: "Desserts",
     accent: "pink",
-    icon: "coffee",
+    icon: "cake",
     menu: [
       {
         section: "Frozen Yoghurt",
@@ -109,9 +118,9 @@ export const MENU_VENDORS = [
       {
         section: "Strawberry Delights",
         items: [
-          { name: "Dubai", price: 9 },
-          { name: "Lotus Biscoff", price: 9 },
-          { name: "Nutella", price: 9 },
+          { name: "Dubai Strawberry Delight", price: 9 },
+          { name: "Lotus Biscoff Strawberry Delight", price: 9 },
+          { name: "Nutella Strawberry Delight", price: 9 },
         ],
       },
       {
@@ -159,7 +168,7 @@ export const MENU_VENDORS = [
     name: "May's Diner",
     cuisine: "Burgers",
     accent: "amber",
-    icon: "grill",
+    icon: "burger",
     menu: [
       {
         section: "Burgers",
@@ -298,11 +307,11 @@ export const MENU_VENDORS = [
           {
             name: "Smoky Arancini (VE)",
             price: 6,
-            description: "3 pieces",
+            description: "5 pieces",
           },
           {
             name: "Truffle Pasta (VE)",
-            price: 10,
+            price: 9,
           },
           {
             name: "Charlotte Black Trumpet",
@@ -320,12 +329,20 @@ export const MENU_VENDORS = [
     icon: "meat",
     menu: [
       {
-        section: "Hot Dogs",
+        section: "Hot Dogs & Buns",
         items: [
           { name: "The Wurst", price: 8 },
           { name: "Italian Wurst", price: 8 },
           { name: "Classic Wurst", price: 7 },
           { name: "Mexican Wurst", price: 8 },
+          { name: "Dirty Chicken Bun", price: 8 },
+        ],
+      },
+      {
+        section: "Sides",
+        items: [
+          { name: "Special Fries Meze", price: 9 },
+          { name: "Crispy Fries", price: 4 },
         ],
       },
     ],
@@ -383,7 +400,7 @@ export const MENU_VENDORS = [
         section: "Wraps & Bowls",
         items: [
           { name: "Falafel Pitta Wrap / Bowl", price: 9 },
-          { name: "Chicken Shawarma Pitta Wrap / Bowl", price: 9 },
+          { name: "Chicken Shawarma Flatbreads / Bowl", price: 9 },
         ],
       },
       {
@@ -392,8 +409,8 @@ export const MENU_VENDORS = [
           { name: "Halloumi Bites", price: 6 },
           {
             name: "Fries",
-            price: 3.5,
-            description: "Upgrade to Loaded Chicken Shawarma fries for +€3.50",
+            price: 4,
+            description: "Upgrade to Loaded Chicken Shawarma fries for +€4.00",
           },
         ],
       },
@@ -433,7 +450,7 @@ export const MENU_VENDORS = [
     name: "My Cookie Dough",
     cuisine: "Desserts",
     accent: "pink",
-    icon: "coffee",
+    icon: "cake",
     menu: [
       {
         section: "Cookie Dough",
@@ -466,7 +483,7 @@ export const MENU_VENDORS = [
   }),
   defineVendor({
     id: "big-bad-wolf",
-    name: "Big Bad Woolf",
+    name: "Big Bad Wolf",
     cuisine: "Greek Grill",
     accent: "amber",
     icon: "meat",
@@ -560,7 +577,30 @@ export const MENU_VENDORS = [
     cuisine: "Steak & Fries",
     accent: "pink",
     icon: "meat",
-    menu: [],
+    menu: [
+      {
+        section: "Mains",
+        items: [
+          {
+            name: "Steak & Fries with Le Entrecote Sauce",
+            price: PLACEHOLDER_PRICE,
+          },
+          {
+            name: "Steak Sandwich with Caramelized Onions and Melted Cheese",
+            price: PLACEHOLDER_PRICE,
+          },
+        ],
+      },
+      {
+        section: "Sides",
+        items: [
+          {
+            name: "Truffle Fries with Parmesan & Chives",
+            price: PLACEHOLDER_PRICE,
+          },
+        ],
+      },
+    ],
   }),
   defineVendor({
     id: "karas-fish-tavern",
@@ -580,7 +620,7 @@ export const MENU_VENDORS = [
     name: "Regrub",
     cuisine: "Burgers",
     accent: "amber",
-    icon: "grill",
+    icon: "burger",
     menu: [
       {
         section: "Burgers",
@@ -606,7 +646,16 @@ export const MENU_VENDORS = [
     cuisine: "Bistro",
     accent: "green",
     icon: "salad",
-    menu: [],
+    menu: [
+      {
+        section: "Menu",
+        items: [
+          { name: "Pulled Pork BBQ with Coleslaw in Brioche", price: 9 },
+          { name: "Beef Brisket Tacos with Pickles", price: 6 },
+          { name: "Nachos", price: 6 },
+        ],
+      },
+    ],
   }),
   defineVendor({
     id: "meraki-taste",
@@ -614,23 +663,81 @@ export const MENU_VENDORS = [
     cuisine: "Greek",
     accent: "amber",
     icon: "meat",
-    menu: [],
+    menu: [
+      {
+        section: "Dishes",
+        items: [
+          {
+            name: "Beef Brisket Kolokasi Flaoutas",
+            price: 4,
+            description:
+              "Kolokasi Flaoutas with Slow-cooked Beef Brisket and Guacamole",
+          },
+          {
+            name: "Tuna Seftalia",
+            price: 4,
+            description:
+              "Tuna Seftalia in a bun with Chimichurri and Mango Tartare",
+          },
+          {
+            name: "Pork Belly in a Bun",
+            price: 4,
+            description:
+              "Double-cooked Cured Pork Belly in a Bun with Pomegranate Glaze and Fig Chutney",
+          },
+        ],
+      },
+      {
+        section: "Meze",
+        items: [
+          {
+            name: "Meraki Meze",
+            price: 10,
+            description: "Taste all three signature dishes",
+          },
+        ],
+      },
+    ],
   }),
   defineVendor({
     id: "taste-of-tradition",
     name: "Taste of Tradition",
     cuisine: "Cypriot",
     accent: "amber",
-    icon: "meat",
-    menu: [],
+    icon: "cake",
+    menu: [
+      {
+        section: "Menu",
+        items: [
+          { name: "Halloumi Baklava", price: 4 },
+          { name: "Halloumi Arancini", price: 4 },
+          { name: "Classic Tiramisu", price: 5 },
+          { name: "Pistachio Tiramisu", price: 5 },
+        ],
+      },
+    ],
   }),
   defineVendor({
     id: "little-chefs",
     name: "Little Chef's",
     cuisine: "Family Friendly",
-    accent: "pink",
-    icon: "pepper",
-    menu: [],
+    accent: "orange",
+    icon: "burger",
+    menu: [
+      {
+        section: "Menu",
+        items: [
+          { name: "Chicken Nuggets", price: 4 },
+          { name: "Burger", price: 4 },
+          { name: "Cheeseburger", price: 5 },
+          { name: "Fries", price: 3 },
+        ],
+      },
+      {
+        section: "Extras",
+        items: [{ name: "Add Fries to Any Meal", price: 2 }],
+      },
+    ],
   }),
   // defineVendor({
   //   id: "chefs-kiss-sliders",

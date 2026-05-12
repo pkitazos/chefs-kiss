@@ -15,6 +15,8 @@ import {
 import { getVendorImage } from "@/lib/images/vendor-images";
 import { cn } from "@/lib/utils";
 import {
+  IconBurger,
+  IconCake,
   IconChevronRight,
   IconCoffee,
   IconGrill,
@@ -22,9 +24,9 @@ import {
   IconPepper,
   IconSalad,
 } from "@tabler/icons-react";
+import Image from "next/image";
 import Link from "next/link";
 import type { ComponentType } from "react";
-import Image from "next/image";
 
 const ACCENT_CLASSES: Record<
   VendorAccent,
@@ -53,6 +55,8 @@ const ICON_MAP: Record<
   VendorIcon,
   ComponentType<{ size?: number; className?: string }>
 > = {
+  burger: IconBurger,
+  cake: IconCake,
   grill: IconGrill,
   meat: IconMeat,
   coffee: IconCoffee,
