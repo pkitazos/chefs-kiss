@@ -113,6 +113,13 @@
       "when": 1778602147775,
       "tag": "0015_rbac_schema",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1778610827382,
+      "tag": "0016_check_in_events",
+      "breakpoints": true
     }
   ]
 }
