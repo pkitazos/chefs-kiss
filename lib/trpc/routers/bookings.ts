@@ -10,7 +10,7 @@ import {
   CapacityExceededError,
   insertPendingBooking,
 } from "@/lib/db/insert-pending-booking";
-import { bookings, events, seatHolds } from "@/lib/db/schema";
+import { bookings, checkInEvents, events, seatHolds } from "@/lib/db/schema";
 import { getSlotSeatBreakdown } from "@/lib/db/seat-counting";
 import { lockSlotForWrite } from "@/lib/db/seat-locks";
 import {
@@ -441,6 +441,59 @@ export const bookingsRouter = createTRPCRouter({
         .orderBy(desc(bookings.createdAt));
 
       return result;
+    }),
+
+  toggleCheckIn: permissionProcedure("check_in.toggle")
+    .input(z.object({ bookingId: z.string().min(1) }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.transaction(async (tx) => {
+        const [booking] = await tx
+          .select()
+          .from(bookings)
+          .where(eq(bookings.id, input.bookingId))
+          .limit(1)
+          .for("update");
+
+        if (!booking) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Booking not found.",
+          });
+        }
+
+        if (booking.status !== "confirmed") {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Only confirmed bookings can be checked in.",
+          });
+        }
+
+        const [lastEvent] = await tx
+          .select()
+          .from(checkInEvents)
+          .where(eq(checkInEvents.bookingId, input.bookingId))
+          .orderBy(desc(checkInEvents.createdAt))
+          .limit(1);
+
+        const newAction =
+          !lastEvent || lastEvent.action === "checked_out"
+            ? "checked_in"
+            : "checked_out";
+
+        const [event] = await tx
+          .insert(checkInEvents)
+          .values({
+            bookingId: input.bookingId,
+            action: newAction,
+            performedBy: ctx.session.user.id,
+          })
+          .returning();
+
+        return {
+          event,
+          isCheckedIn: newAction === "checked_in",
+        };
+      });
     }),
 });
 

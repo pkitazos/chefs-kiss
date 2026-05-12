@@ -8,3 +8,4 @@ export * from "./bookings";
 export * from "./waitlist";
 export * from "./seat-holds";
 export * from "./rbac";
+export * from "./check-in-events";
