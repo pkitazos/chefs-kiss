@@ -4,10 +4,12 @@ import { CURRENT_EVENT } from "@/lib/config/event";
 import { DINING_DAYS } from "@/lib/config/private-dining";
 import { WORKSHOPS } from "@/lib/config/workshops";
 import { cn } from "@/lib/utils";
+import { IconSearch, IconX } from "@tabler/icons-react";
 import { eachDayOfInterval, format, isSameDay } from "date-fns";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { LayoutGroup, motion } from "motion/react";
+import { SearchResults, type SlotContext } from "./search-results";
 import { SlotSection } from "./slot-section";
 import { WorkshopGroup } from "./workshop-group";
 
@@ -20,8 +22,11 @@ export default function CheckInPage() {
   const today = new Date();
   const defaultDay = EVENT_DAYS.findIndex((d) => isSameDay(d, today));
   const [dayIndex, setDayIndex] = useState(defaultDay >= 0 ? defaultDay : 0);
+  const [searchQuery, setSearchQuery] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const selectedDate = EVENT_DAYS[dayIndex];
+  const isSearching = searchQuery.trim().length > 0;
 
   const workshopsForDay = useMemo(
     () =>
@@ -42,6 +47,27 @@ export default function CheckInPage() {
       ),
     [selectedDate],
   );
+
+  const allSlots = useMemo<SlotContext[]>(() => {
+    const slots: SlotContext[] = [];
+    for (const { workshop, slots: workshopSlots } of workshopsForDay) {
+      for (const slot of workshopSlots) {
+        slots.push({
+          slotId: slot.id,
+          slotLabel: slot.time,
+          parentLabel: workshop.title,
+        });
+      }
+    }
+    for (const session of diningForDay) {
+      slots.push({
+        slotId: session.id,
+        slotLabel: session.time,
+        parentLabel: session.title,
+      });
+    }
+    return slots;
+  }, [workshopsForDay, diningForDay]);
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
@@ -89,39 +115,74 @@ export default function CheckInPage() {
         <SignOutButton />
       </header>
 
-      {workshopsForDay.length > 0 && (
-        <section>
-          <h2 className="mb-3 text-lg font-semibold text-muted-foreground">
-            Workshops
-          </h2>
-          <div className="space-y-2">
-            {workshopsForDay.map(({ workshop, slots }) => (
-              <WorkshopGroup
-                key={workshop.slug}
-                workshop={workshop}
-                slots={slots}
-              />
-            ))}
-          </div>
-        </section>
-      )}
+      <div className="relative">
+        <IconSearch className="absolute left-3 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
+        <input
+          ref={inputRef}
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              setSearchQuery("");
+              inputRef.current?.blur();
+            }
+          }}
+          placeholder="Search by booking ID..."
+          className="w-full rounded-full border bg-card py-3 pl-10 pr-10 text-base placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+        />
+        {isSearching && (
+          <button
+            onClick={() => {
+              setSearchQuery("");
+              inputRef.current?.focus();
+            }}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+          >
+            <IconX className="size-5" />
+          </button>
+        )}
+      </div>
 
-      {diningForDay.length > 0 && (
-        <section>
-          <h2 className="mb-3 text-lg font-semibold text-muted-foreground">
-            Private Dining
-          </h2>
-          <div className="space-y-2">
-            {diningForDay.map((session) => (
-              <SlotSection
-                key={session.id}
-                slotId={session.id}
-                label={session.title}
-                sublabel={session.time}
-              />
-            ))}
-          </div>
-        </section>
+      {isSearching ? (
+        <SearchResults slots={allSlots} query={searchQuery} />
+      ) : (
+        <>
+          {workshopsForDay.length > 0 && (
+            <section>
+              <h2 className="mb-3 text-lg font-semibold text-muted-foreground">
+                Workshops
+              </h2>
+              <div className="space-y-2">
+                {workshopsForDay.map(({ workshop, slots }) => (
+                  <WorkshopGroup
+                    key={workshop.slug}
+                    workshop={workshop}
+                    slots={slots}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
+
+          {diningForDay.length > 0 && (
+            <section>
+              <h2 className="mb-3 text-lg font-semibold text-muted-foreground">
+                Private Dining
+              </h2>
+              <div className="space-y-2">
+                {diningForDay.map((session) => (
+                  <SlotSection
+                    key={session.id}
+                    slotId={session.id}
+                    label={session.title}
+                    sublabel={session.time}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
+        </>
       )}
     </div>
   );
