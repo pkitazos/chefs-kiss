@@ -35,7 +35,7 @@ export default async function VendorPage({ params }: Props) {
 function VendorMenu({ vendorId }: { vendorId: string }) {
   const vendor = MENU_VENDORS.find((v) => v.id === vendorId);
 
-  if (!vendor) {
+  if (!vendor || vendor.menu.length === 0) {
     return (
       <PageLayout className="max-w-2xl">
         <p className="text-muted-foreground text-lg">Vendor not found.</p>

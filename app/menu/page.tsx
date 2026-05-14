@@ -99,6 +99,7 @@ export default function MenuPage() {
               const a = ACCENT_CLASSES[vendor.accent];
               const Icon = ICON_MAP[vendor.icon];
               const img = getVendorImage(vendor.id);
+              const hasMenu = vendor.menu.length > 0;
               const inner = (
                 <>
                   <div
@@ -124,7 +125,7 @@ export default function MenuPage() {
                     </p>
                     <p className={cn("text-sm", a.text)}>{vendor.cuisine}</p>
                   </div>
-                  {VENDOR_DETAIL_VISIBLE && (
+                  {VENDOR_DETAIL_VISIBLE && hasMenu && (
                     <IconChevronRight
                       size={18}
                       className="text-muted-foreground shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:text-primary"
@@ -132,7 +133,7 @@ export default function MenuPage() {
                   )}
                 </>
               );
-              if (!VENDOR_DETAIL_VISIBLE) {
+              if (!VENDOR_DETAIL_VISIBLE || !hasMenu) {
                 return (
                   <div key={vendor.id} className="flex items-center gap-4 py-5">
                     {inner}
@@ -158,6 +159,7 @@ export default function MenuPage() {
             const a = ACCENT_CLASSES[vendor.accent];
             const Icon = ICON_MAP[vendor.icon];
             const img = getVendorImage(vendor.id);
+            const hasMenu = vendor.menu.length > 0;
             const inner = (
               <>
                 <ImagePlaceholder className={cn("aspect-video", a.card)}>
@@ -184,7 +186,7 @@ export default function MenuPage() {
                   <p className="font-display text-xl tracking-tight">
                     {vendor.name}
                   </p>
-                  {VENDOR_DETAIL_VISIBLE && (
+                  {VENDOR_DETAIL_VISIBLE && hasMenu && (
                     <div className="mt-auto pt-3">
                       <span
                         className={cn(
@@ -199,7 +201,7 @@ export default function MenuPage() {
                 </div>
               </>
             );
-            if (!VENDOR_DETAIL_VISIBLE) {
+            if (!VENDOR_DETAIL_VISIBLE || !hasMenu) {
               return (
                 <div
                   key={vendor.id}
