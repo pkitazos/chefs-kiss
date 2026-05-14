@@ -428,15 +428,30 @@ export const MENU_VENDORS = [
         items: [
           { name: "Spicy Tuna roll", price: 8, description: "4 pieces" },
           { name: "Salmon roll", price: 8, description: "4 pieces" },
-          { name: "Duck bao bun", price: 7 },
+          { name: "Duck bao bun", price: 7, description: "1 piece" },
         ],
       },
       {
         section: "Nikkei Smash",
         items: [
-          { name: "Street signature", price: 12 },
-          { name: "1976", price: 12 },
-          { name: "The classic", price: 12 },
+          {
+            name: "Street signature",
+            price: 12,
+            description:
+              "Super soft bun, smashed Australian beef patty, crispy bacon, American cheese, crunchy lettuce, juicy pickles, tomatoes, magic sauce",
+          },
+          {
+            name: "1976",
+            price: 12,
+            description:
+              "Super soft bun, smashed Australian beef patty, caramelized onions, American cheese, crunchy lettuce, Mexican jalapenos, juicy pickles, homemade sriracha mayo",
+          },
+          {
+            name: "The classic",
+            price: 12,
+            description:
+              "Super soft bun, smashed Australian beef patty, diced crispy onions, double American cheese, juicy pickles, ketchup, mustard",
+          },
         ],
       },
       {
