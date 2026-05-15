@@ -25,7 +25,18 @@ import { eventDateFormat } from "@/lib/config/event";
 import { DINING_DAYS } from "@/lib/config/private-dining";
 import { formatHostNames, WORKSHOPS } from "@/lib/config/workshops";
 import { api } from "@/lib/trpc/client";
-import { IconChevronRight, IconLoader2 } from "@tabler/icons-react";
+import {
+  IconChevronDown,
+  IconChevronRight,
+  IconDownload,
+  IconLoader2,
+} from "@tabler/icons-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 import { CapacityInfoIcon } from "./capacity-info";
 
@@ -320,9 +331,34 @@ function WorkshopBlockView({ block }: { block: WorkshopBlock }) {
             {block.totalCapacity} filled
           </p>
         </div>
-        <Button asChild variant="outline" size="sm">
-          <Link href={`/admin/workshops/${block.slug}`}>View workshop</Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center">
+            <Button asChild variant="outline" size="sm" className="rounded-r-none border-r-0">
+              <a href={`/admin/workshops/${block.slug}/csv`}>
+                <IconDownload className="size-3.5" />
+                CSV
+              </a>
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="rounded-l-none px-1.5">
+                  <IconChevronDown className="size-3.5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <a href={`/admin/workshops/${block.slug}/csv?includeWaitlist=true`}>
+                    <IconDownload className="size-3.5" />
+                    Include waitlist
+                  </a>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <Button asChild variant="outline" size="sm">
+            <Link href={`/admin/workshops/${block.slug}`}>View workshop</Link>
+          </Button>
+        </div>
       </div>
       <Table>
         <TableHeader>
