@@ -4,4 +4,4 @@
 // Flip a flag and redeploy.
 
 export const PRIVATE_DINING_VISIBLE = true;
-export const VENDOR_DETAIL_VISIBLE = true;
+export const VENDOR_DETAIL_VISIBLE = false;
