@@ -412,22 +412,22 @@ export const WORKSHOPS = [
       {
         date: CURRENT_EVENT.startDate,
         slots: [
-          {
-            id: "WS-KC-PK-D1-1200",
-            variantId: "PK",
-            time: "12:00 - 12:45",
-            capacity: 6,
-            price: 25,
-            shortDescription: "Pork mince",
-          },
-          {
-            id: "WS-KC-VG-D1-1300",
-            variantId: "VG",
-            time: "13:00 - 13:45",
-            capacity: 6,
-            price: 25,
-            shortDescription: "Vegetarian / Vegan",
-          },
+          // {
+          //   id: "WS-KC-PK-D1-1200",
+          //   variantId: "PK",
+          //   time: "12:00 - 12:45",
+          //   capacity: 6,
+          //   price: 25,
+          //   shortDescription: "Pork mince",
+          // },
+          // {
+          //   id: "WS-KC-VG-D1-1300",
+          //   variantId: "VG",
+          //   time: "13:00 - 13:45",
+          //   capacity: 6,
+          //   price: 25,
+          //   shortDescription: "Vegetarian / Vegan",
+          // },
           {
             id: "WS-KC-PK-D1-1400",
             variantId: "PK",
@@ -448,7 +448,7 @@ export const WORKSHOPS = [
             id: "WS-KC-PK-D1-1715",
             variantId: "PK",
             time: "17:15 - 18:00",
-            capacity: 6,
+            capacity: 7,
             price: 25,
             shortDescription: "Pork mince",
           },
