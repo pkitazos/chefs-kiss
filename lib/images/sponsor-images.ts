@@ -3,6 +3,7 @@ import type { StaticImageData } from "next/image";
 import r1Siginia from "@/public/images/sponsors/r1-siginia.png";
 import r2Axnagal from "@/public/images/sponsors/r2-axnagal.png";
 import r2KitchenIsland from "@/public/images/sponsors/r2-kitchen-island.png";
+import r2Intergaz from "@/public/images/sponsors/r2-intergaz.png";
 import r3Alphamega from "@/public/images/sponsors/r3-alphamega.png";
 
 export const SPONSOR_ROW_0 = {
@@ -25,6 +26,7 @@ export const SPONSOR_ROW_2: { src: string | StaticImageData; alt: string }[] = [
   { src: "/images/sponsors/r2-delicacy-foods.svg", alt: "Delicacy Foods" },
   { src: r2KitchenIsland, alt: "Kitchen Island" },
   { src: "/images/sponsors/r2-serano-x-snips.svg", alt: "Serano × Snips" },
+  { src: r2Intergaz, alt: "Intergaz" },
   { src: "/images/sponsors/r3-shishalove.svg", alt: "Shisha Love" },
   { src: r3Alphamega, alt: "Alphamega" },
 ];
