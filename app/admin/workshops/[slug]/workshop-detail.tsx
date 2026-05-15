@@ -1,9 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -15,13 +18,13 @@ import { eventDateFormat } from "@/lib/config/event";
 import { buildSeatBreakdown } from "@/lib/db/seat-counting";
 import { api } from "@/lib/trpc/client";
 
-import { CapacityInfoIcon } from "../../slots/capacity-info";
 import {
   IconArrowLeft,
   IconChevronRight,
+  IconDownload,
   IconLoader2,
-  IconMapPin,
 } from "@tabler/icons-react";
+import { CapacityInfoIcon } from "../../slots/capacity-info";
 
 import { WaitlistTable } from "../../slots/waitlist-table";
 
@@ -69,15 +72,16 @@ export function WorkshopDetail({
             Hosted by {hostedBy} · {tagline}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-3">
           <p className="text-xs text-muted-foreground">
             This view focuses on the waitlist queues across this workshop&apos;s
             slots. For the full bookings roster of a specific session, open the
             per-slot detail page.
           </p>
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-xs text-muted-foreground">
             Slug: <span className="font-mono">{slug}</span>
           </p>
+          <ExportCsvControl slug={slug} />
         </CardContent>
       </Card>
 
@@ -85,6 +89,37 @@ export function WorkshopDetail({
         {slots.map((slot) => (
           <SlotSection key={slot.slotId} slot={slot} />
         ))}
+      </div>
+    </div>
+  );
+}
+
+function ExportCsvControl({ slug }: { slug: string }) {
+  const [includeWaitlist, setIncludeWaitlist] = useState(false);
+  const href = includeWaitlist
+    ? `/admin/workshops/${slug}/csv?includeWaitlist=true`
+    : `/admin/workshops/${slug}/csv`;
+
+  return (
+    <div className="flex items-center gap-3">
+      <Button asChild variant="outline" size="sm">
+        <a href={href}>
+          <IconDownload className="size-3.5" />
+          Export CSV
+        </a>
+      </Button>
+      <div className="flex items-center gap-2">
+        <Checkbox
+          id="include-waitlist"
+          checked={includeWaitlist}
+          onCheckedChange={(v) => setIncludeWaitlist(v === true)}
+        />
+        <Label
+          htmlFor="include-waitlist"
+          className="text-xs text-muted-foreground cursor-pointer"
+        >
+          Include waitlist
+        </Label>
       </div>
     </div>
   );
@@ -139,10 +174,7 @@ function SlotSection({ slot }: { slot: SlotInfo }) {
             Failed to load: {error.message}
           </p>
         ) : data ? (
-          <WaitlistTable
-            entries={data.waitlist}
-            breakdown={breakdown}
-          />
+          <WaitlistTable entries={data.waitlist} breakdown={breakdown} />
         ) : null}
       </CardContent>
     </Card>
