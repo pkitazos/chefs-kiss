@@ -1,0 +1,1 @@
+ALTER TABLE "seat_holds" ADD COLUMN "checked_in_at" timestamp;

@@ -120,6 +120,13 @@
       "when": 1778610827382,
       "tag": "0016_check_in_events",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1779011567031,
+      "tag": "0017_add_seat_hold_checked_in_at",
+      "breakpoints": true
     }
   ]
 }
