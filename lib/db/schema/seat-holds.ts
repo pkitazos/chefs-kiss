@@ -37,6 +37,7 @@ export const seatHolds = pgTable(
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
     releasedAt: timestamp("released_at"),
+    checkedInAt: timestamp("checked_in_at"),
   },
   (table) => [
     index("seat_holds_slot_id_idx").on(table.slotId),

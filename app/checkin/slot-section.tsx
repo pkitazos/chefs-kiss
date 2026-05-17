@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { IconChevronRight, IconLoader2 } from "@tabler/icons-react";
 import { useEffect, useMemo, useState } from "react";
 import { BookingRow } from "./booking-row";
+import { HoldRow } from "./hold-row";
 
 export type SlotCounts = { checkedIn: number; total: number };
 
@@ -21,6 +22,7 @@ export function SlotSection({
 }) {
   const [open, setOpen] = useState(false);
   const { data, isLoading } = api.checkin.getSlotBookings.useQuery({ slotId });
+  const { data: holds } = api.checkin.getSlotHolds.useQuery({ slotId });
 
   const checkedIn = useMemo(
     () =>
@@ -33,9 +35,24 @@ export function SlotSection({
     [data],
   );
 
+  const holdsCheckedIn = useMemo(
+    () =>
+      holds
+        ?.filter((h) => h.checkedInAt)
+        .reduce((sum, h) => sum + h.seatCount, 0) ?? 0,
+    [holds],
+  );
+  const holdsTotal = useMemo(
+    () => holds?.reduce((sum, h) => sum + h.seatCount, 0) ?? 0,
+    [holds],
+  );
+
   useEffect(() => {
-    onCountsChange?.(slotId, { checkedIn, total: totalSeats });
-  }, [slotId, checkedIn, totalSeats, onCountsChange]);
+    onCountsChange?.(slotId, {
+      checkedIn: checkedIn + holdsCheckedIn,
+      total: totalSeats + holdsTotal,
+    });
+  }, [slotId, checkedIn, totalSeats, holdsCheckedIn, holdsTotal, onCountsChange]);
 
   return (
     <div>
@@ -63,19 +80,38 @@ export function SlotSection({
         {isLoading ? (
           <IconLoader2 className="size-4 animate-spin text-muted-foreground" />
         ) : (
-          <CountBadge checkedIn={checkedIn} total={totalSeats} />
+          <CountBadge
+            checkedIn={checkedIn + holdsCheckedIn}
+            total={totalSeats + holdsTotal}
+          />
         )}
       </button>
       {open && data && (
         <div className="ml-8 mt-1 space-y-1">
-          {data.length === 0 ? (
+          {data.length === 0 && (!holds || holds.length === 0) ? (
             <p className="py-3 text-sm text-muted-foreground">
               No confirmed bookings
             </p>
           ) : (
-            data.map((booking) => (
-              <BookingRow key={booking.id} booking={booking} slotId={slotId} />
-            ))
+            <>
+              {data.map((booking) => (
+                <BookingRow
+                  key={booking.id}
+                  booking={booking}
+                  slotId={slotId}
+                />
+              ))}
+              {holds && holds.length > 0 && (
+                <>
+                  <p className="pt-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                    Held seats
+                  </p>
+                  {holds.map((hold) => (
+                    <HoldRow key={hold.id} hold={hold} slotId={slotId} />
+                  ))}
+                </>
+              )}
+            </>
           )}
         </div>
       )}
