@@ -3,7 +3,7 @@ import Link from "next/link";
 import { IconClock } from "@tabler/icons-react";
 
 import { HostedBy } from "@/components/hosted-by";
-import { COMING_SOON } from "@/lib/config/mode";
+import { BOOKINGS_DISABLED } from "@/lib/config/mode";
 import type { WorkshopConfig, WorkshopSlug } from "@/lib/config/workshops";
 import { getWorkshopImage } from "@/lib/images/workshop-images";
 import { cn } from "@/lib/utils";
@@ -69,7 +69,7 @@ function OverlayCard({
         <p className="mt-1.5 text-sm text-white/60 line-clamp-2">
           {workshop.tagline}
         </p>
-        {!COMING_SOON && (
+        {!BOOKINGS_DISABLED && (
           <span className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-white/80">
             <IconClock size={14} />
             {workshop.duration}
@@ -115,10 +115,10 @@ function MinimalCard({
           {workshop.hostedBy.length > 0 && (
             <>
               <HostedBy hosts={workshop.hostedBy} />
-              {!COMING_SOON && " · "}
+              {!BOOKINGS_DISABLED && " · "}
             </>
           )}
-          {!COMING_SOON && workshop.duration}
+          {!BOOKINGS_DISABLED && workshop.duration}
         </p>
       </div>
     </Link>
@@ -162,7 +162,7 @@ function DetailedCard({
               by <HostedBy hosts={workshop.hostedBy} />
             </p>
           )}
-          {!COMING_SOON && (
+          {!BOOKINGS_DISABLED && (
             <span className="inline-flex items-center gap-1.5 text-xs font-medium text-primary">
               <IconClock size={14} />
               {workshop.duration}

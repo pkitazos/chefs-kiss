@@ -9,7 +9,7 @@ import { HostedBy } from "@/components/hosted-by";
 import { ImagePlaceholder } from "@/components/image-placeholder";
 import { PageLayout } from "@/components/page-layout";
 import { SectionLabel } from "@/components/ui/section-label";
-import { COMING_SOON } from "@/lib/config/mode";
+import { BOOKINGS_DISABLED, EVENT_OVER } from "@/lib/config/mode";
 import { getWorkshopBySlug, WORKSHOPS } from "@/lib/config/workshops";
 import { getWorkshopImage } from "@/lib/images/workshop-images";
 import { WorkshopSlots } from "./workshop-slots";
@@ -92,15 +92,20 @@ export default async function WorkshopPage({
         </AnimateIn>
 
         <AnimateIn>
-          {COMING_SOON ? (
+          {BOOKINGS_DISABLED ? (
             <div className="rounded-2xl border border-dashed bg-muted/30 p-8 text-center">
-              <SectionLabel>Coming Soon</SectionLabel>
+              <SectionLabel>
+                {EVENT_OVER ? "Event Ended" : "Coming Soon"}
+              </SectionLabel>
               <h2 className="mt-3 font-display text-3xl tracking-tight">
-                Sessions coming soon
+                {EVENT_OVER
+                  ? "This event has concluded"
+                  : "Sessions coming soon"}
               </h2>
               <p className="mx-auto mt-3 max-w-md text-muted-foreground">
-                We&apos;re finalising the workshop schedule. Check back soon to
-                book your spot.
+                {EVENT_OVER
+                  ? "Thank you to everyone who joined us. Stay tuned for future events!"
+                  : "We're finalising the workshop schedule. Check back soon to book your spot."}
               </p>
             </div>
           ) : (

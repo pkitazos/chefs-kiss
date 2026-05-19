@@ -9,7 +9,7 @@ import {
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { eventDateFormat } from "@/lib/config/event";
-import { COMING_SOON } from "@/lib/config/mode";
+import { BOOKINGS_DISABLED, EVENT_OVER } from "@/lib/config/mode";
 import type { DiningDay, DiningSession } from "@/lib/config/private-dining";
 import { api } from "@/lib/trpc/client";
 import { cn } from "@/lib/utils";
@@ -47,13 +47,13 @@ function DiningSessionRow({
         </p>
       </div>
       <div className="flex shrink-0 items-center gap-4">
-        {!COMING_SOON && (
+        {!BOOKINGS_DISABLED && (
           <span className="text-sm font-semibold text-primary">
             &euro;{session.price}
             <span className="text-muted-foreground font-normal">/person</span>
           </span>
         )}
-        {COMING_SOON ? (
+        {BOOKINGS_DISABLED ? (
           <button
             type="button"
             disabled
@@ -62,7 +62,7 @@ function DiningSessionRow({
               "cursor-not-allowed opacity-60",
             )}
           >
-            Reservations opening soon…
+            {EVENT_OVER ? "Event has ended" : "Reservations opening soon…"}
           </button>
         ) : (
           <SessionActionButton sessionId={session.id} />

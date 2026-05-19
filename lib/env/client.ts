@@ -24,6 +24,14 @@ const clientEnvSchema = z.object({
     .describe(
       "When 'true', hides booking CTAs/forms and blocks booking endpoints",
     ),
+
+  NEXT_PUBLIC_EVENT_OVER: z
+    .string()
+    .optional()
+    .transform((v) => v === "true")
+    .describe(
+      "When 'true', disables bookings and shows post-event messaging",
+    ),
 });
 
 /**
@@ -33,6 +41,7 @@ function validateClientEnv() {
   const parsed = clientEnvSchema.safeParse({
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     NEXT_PUBLIC_COMING_SOON: process.env.NEXT_PUBLIC_COMING_SOON,
+    NEXT_PUBLIC_EVENT_OVER: process.env.NEXT_PUBLIC_EVENT_OVER,
   });
 
   if (!parsed.success) {

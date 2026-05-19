@@ -23,7 +23,7 @@ import { SectionLabel } from "@/components/ui/section-label";
 import { CURRENT_EVENT, eventDateFormat } from "@/lib/config/event";
 import { PRIVATE_DINING_VISIBLE } from "@/lib/config/features";
 import { MENU_VENDORS } from "@/lib/config/menu";
-import { COMING_SOON } from "@/lib/config/mode";
+import { BOOKINGS_DISABLED, EVENT_OVER } from "@/lib/config/mode";
 import { INSTAGRAM_HANDLE, INSTAGRAM_URL } from "@/lib/config/socials";
 import { WORKSHOPS } from "@/lib/config/workshops";
 import { cn } from "@/lib/utils";
@@ -219,7 +219,7 @@ function HeroSection() {
               "hover:scale-105 transition-transform duration-200",
             )}
           >
-            {COMING_SOON ? "Explore Workshops" : "Book a Workshop"}
+            {BOOKINGS_DISABLED ? "Explore Workshops" : "Book a Workshop"}
           </Link>
           {PRIVATE_DINING_VISIBLE && (
             <Link
@@ -229,7 +229,7 @@ function HeroSection() {
                 "hover:scale-105 transition-transform duration-200",
               )}
             >
-              {COMING_SOON
+              {BOOKINGS_DISABLED
                 ? "Explore Private Dining"
                 : "Reserve Private Dining"}
             </Link>
@@ -320,7 +320,7 @@ function PrivateDiningSection() {
                 "hover:scale-105 transition-transform duration-200",
               )}
             >
-              {COMING_SOON ? "Learn More" : "Reserve Your Seat"}
+              {BOOKINGS_DISABLED ? "Learn More" : "Reserve Your Seat"}
               <IconArrowRight />
             </Link>
           </div>

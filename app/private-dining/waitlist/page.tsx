@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getDiningSessionById } from "@/lib/config/private-dining";
-import { COMING_SOON } from "@/lib/config/mode";
+import { BOOKINGS_DISABLED } from "@/lib/config/mode";
 import { PageLayout } from "@/components/page-layout";
 import { PrivateDiningWaitlistForm } from "./waitlist-form";
 
@@ -17,7 +17,7 @@ export default async function PrivateDiningWaitlistPage({
 }) {
   const { session: sessionId } = await searchParams;
 
-  if (COMING_SOON) {
+  if (BOOKINGS_DISABLED) {
     redirect("/private-dining");
   }
 

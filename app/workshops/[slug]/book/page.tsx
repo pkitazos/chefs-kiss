@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { PageLayout } from "@/components/page-layout";
-import { COMING_SOON } from "@/lib/config/mode";
+import { BOOKINGS_DISABLED } from "@/lib/config/mode";
 import { getWorkshopBySlug, getWorkshopSlotById } from "@/lib/config/workshops";
 import { WorkshopBookingForm } from "./booking-form";
 
@@ -21,7 +21,7 @@ export default async function WorkshopBookPage({
   const { slug } = await params;
   const { slot: slotId } = await searchParams;
 
-  if (COMING_SOON) {
+  if (BOOKINGS_DISABLED) {
     redirect(`/workshops/${slug}`);
   }
 

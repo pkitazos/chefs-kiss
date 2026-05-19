@@ -2,7 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { and, desc, eq, inArray } from "drizzle-orm";
 import { z } from "zod";
 
-import { COMING_SOON } from "@/lib/config/mode";
+import { BOOKINGS_DISABLED } from "@/lib/config/mode";
 import { getDiningSessionById } from "@/lib/config/private-dining";
 import { getWorkshopSlotById } from "@/lib/config/workshops";
 import { expireStalePendingBookings } from "@/lib/db/expire-stale-bookings";
@@ -32,10 +32,10 @@ export const bookingsRouter = createTRPCRouter({
   create: publicProcedure
     .input(createBookingSchema)
     .mutation(async ({ ctx, input }) => {
-      if (COMING_SOON) {
+      if (BOOKINGS_DISABLED) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "Bookings are not open yet.",
+          message: "Bookings are not available.",
         });
       }
 
